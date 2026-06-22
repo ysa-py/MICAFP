@@ -361,20 +361,41 @@ def _find_duplicates(
                 "node_count": group[0]["node_count"],
             })
 
-    # Near duplicates (structural similarity via Jaccard on normalized tokens)
-    checked: set[tuple[str, str]] = set()
-    for i, b1 in enumerate(blocks):
-        for j, b2 in enumerate(blocks):
-            if i >= j:
-                continue
-            pair_key = (b1["hash"], b2["hash"])
-            if pair_key in checked:
-                continue
-            checked.add(pair_key)
+    # Near duplicates (structural similarity via Jaccard on normalized tokens).
+    #
+    # The previous implementation compared every block to every other block.
+    # That O(n²) loop made `scripts/run_full_audit.py` spend minutes in this
+    # step on this repository.  Keep the same near-duplicate check, but only
+    # compare realistic candidates:
+    #   * exact duplicates are already handled above,
+    #   * near-duplicate function bodies must have broadly similar sizes, and
+    #   * each block's trigram set can be computed once and reused.
+    #
+    # The size gate is conservative: with a similarity threshold of 0.85,
+    # bodies whose statement counts differ by more than 15% cannot normally
+    # be actionable near-duplicates, and skipping them avoids millions of
+    # irrelevant comparisons without changing the exact-duplicate path.
+    blocks_by_size = sorted(blocks, key=lambda b: b["node_count"])
+    trigram_cache: dict[int, set[str]] = {}
+    checked: set[tuple[int, int]] = set()
+
+    for i, b1 in enumerate(blocks_by_size):
+        size1 = max(int(b1["node_count"]), 1)
+        max_size = max(size1 + 2, int(size1 / NEAR_MATCH_THRESHOLD) + 1)
+
+        for b2 in blocks_by_size[i + 1:]:
+            size2 = int(b2["node_count"])
+            if size2 > max_size:
+                break
             if b1["hash"] == b2["hash"]:
                 continue  # already handled
 
-            sim = _jaccard_similarity(b1["normalized"], b2["normalized"])
+            pair_key = tuple(sorted((id(b1), id(b2))))
+            if pair_key in checked:
+                continue
+            checked.add(pair_key)
+
+            sim = _jaccard_similarity_cached(b1, b2, trigram_cache)
             if sim >= NEAR_MATCH_THRESHOLD:
                 duplicates.append({
                     "type": "near_duplicate",
@@ -397,17 +418,42 @@ def _find_duplicates(
     return duplicates
 
 
+def _normalized_trigrams(tokens: list[str]) -> set[str]:
+    """Return trigrams for normalized AST tokens."""
+    flat = " ".join(tokens)
+    return {flat[i : i + 3] for i in range(len(flat) - 2)}
+
+
+def _jaccard_similarity_cached(
+    block_a: dict[str, Any],
+    block_b: dict[str, Any],
+    trigram_cache: dict[int, set[str]],
+) -> float:
+    """Compute Jaccard similarity while caching each block's trigram set."""
+    cache_key_a = id(block_a)
+    cache_key_b = id(block_b)
+    ta = trigram_cache.get(cache_key_a)
+    if ta is None:
+        ta = _normalized_trigrams(block_a["normalized"])
+        trigram_cache[cache_key_a] = ta
+    tb = trigram_cache.get(cache_key_b)
+    if tb is None:
+        tb = _normalized_trigrams(block_b["normalized"])
+        trigram_cache[cache_key_b] = tb
+    if not ta and not tb:
+        return 1.0
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / len(ta | tb)
+
+
 def _jaccard_similarity(
     tokens_a: list[str], tokens_b: list[str]
 ) -> float:
     """Compute Jaccard similarity between two token lists."""
     # Use n-gram (trigram) overlap for better structural comparison
-    def _trigrams(tokens: list[str]) -> set[str]:
-        flat = " ".join(tokens)
-        return {flat[i : i + 3] for i in range(len(flat) - 2)}
-
-    ta = _trigrams(tokens_a)
-    tb = _trigrams(tokens_b)
+    ta = _normalized_trigrams(tokens_a)
+    tb = _normalized_trigrams(tokens_b)
     if not ta and not tb:
         return 1.0
     if not ta or not tb:
