@@ -70,6 +70,7 @@ packages = [
     "circuit_breaker",
     "recovery",
     "monitoring",
+    "reports",
     "health",
     "gateway",
     "registry",
