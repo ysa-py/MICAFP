@@ -243,17 +243,18 @@ jobs:
             echo "✓ YAML OK"
       - run:
           name: "ruff (lint)"
-          command: ruff check . --exclude .venv --exclude build || true
+          command: ruff check . --exclude .venv --exclude build
       - run:
           name: "mypy (type-check)"
-          command: mypy . --ignore-missing-imports --no-error-summary || true
+          command: mypy . --ignore-missing-imports --no-error-summary
       - run:
           name: "pytest + coverage"
           command: |
+            mkdir -p reports
             pytest --cov=. --cov-report=xml:reports/coverage.xml \
                    --cov-report=html:reports/coverage_html \
                    --junitxml=reports/junit.xml \
-                   -ra -q || true
+                   -ra -q
       - store_test_results:
           path: reports
       - store_artifacts:
@@ -274,7 +275,7 @@ jobs:
       - run:
           name: "go vet"
           command: |
-            go vet ./... || true
+            go vet ./...
       - run:
           name: "gofmt -l (should print nothing)"
           command: |
@@ -283,14 +284,18 @@ jobs:
       - run:
           name: "go test (short)"
           command: |
-            go test -short -count=1 ./... 2>&1 | tee reports/go-test.log || true
+            set -euo pipefail
+            mkdir -p reports
+            go test -short -count=1 ./... 2>&1 | tee reports/go-test.log
       - run:
           name: "go_tester quality gate (REMEDIATION 2026-06-21 — was invisible to ./... before go.work existed; kept explicit here as defense in depth)"
           command: |
+            set -euo pipefail
+            mkdir -p reports
             cd go_tester
             go vet ./... 2>&1 | tee ../reports/go-tester-vet.log
             go build ./... 2>&1 | tee ../reports/go-tester-build.log
-            go test -count=1 ./... 2>&1 | tee ../reports/go-tester-test.log || true
+            go test -count=1 ./... 2>&1 | tee ../reports/go-tester-test.log
       - save_cache:
           key: go-mod-{{ checksum "go.sum" }}-v1
           paths:
@@ -320,7 +325,7 @@ jobs:
           name: "Rust unit tests"
           command: |
             cd bridge-probe
-            cargo test --release || true
+            cargo test --release
       - save_cache:
           key: cargo-{{ checksum "bridge-probe/Cargo.toml" }}-v1
           paths:
@@ -420,7 +425,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "AI bridge re-ranker v9.0"
+          name: "AI bridge re-ranker v9.0 (non-blocking)"
           command: |
             set -euo pipefail
             python scripts/ai_bridge_reranker.py    2>&1 | tee logs/ai_rerank.log    || true
@@ -444,7 +449,7 @@ jobs:
       - install-python-deps
       - attach-env
       - run:
-          name: "AI Gateway health check (all 11 slots)"
+          name: "AI Gateway health check (all 11 slots, non-blocking)"
           no_output_timeout: 20m
           command: |
             set -euo pipefail
