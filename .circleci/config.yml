@@ -385,7 +385,8 @@ jobs:
           no_output_timeout: 45m
           command: |
             set -euo pipefail
-            python main.py --mode full 2>&1 | tee logs/scrape.log
+            # Valid modes: all|collect|test|score|export|notify
+            python main.py --mode all 2>&1 | tee logs/scrape.log
       - run:
           name: "OONI correlator"
           command: |
