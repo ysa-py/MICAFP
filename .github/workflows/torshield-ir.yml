@@ -187,8 +187,11 @@ jobs:
       # ── Unit tests with coverage ──────────────────────────────────────────
       - name: Run unit tests with coverage
         run: |
+          set -euo pipefail
           echo "═══ Unit Tests with Coverage ═══"
           pip install pytest-cov --quiet 2>/dev/null || true
+          PYTEST_LOG=$(mktemp)
+          set +e
           python -m pytest tests/ \
             --cov=torshield_ai_gateway \
             --cov=core \
@@ -196,7 +199,13 @@ jobs:
             --cov-report=term-missing \
             --cov-report=html:reports/coverage_html \
             --tb=short \
-            -q 2>&1 | tail -50
+            -q 2>&1 | tee "$PYTEST_LOG"
+          PYTEST_STATUS=${PIPESTATUS[0]}
+          set -e
+          tail -50 "$PYTEST_LOG"
+          if [ "$PYTEST_STATUS" -ne 0 ]; then
+            exit "$PYTEST_STATUS"
+          fi
           echo "  ✓ Test suite completed"
           echo "  Coverage report: reports/coverage_html/index.html"
 
