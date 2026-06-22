@@ -1,0 +1,385 @@
+[
+  {
+    "triggered_at": "2026-06-17T01:54:15.561678+00:00",
+    "triggered_by": "smoke_test",
+    "diagnoses_run": [
+      "DIAG-1",
+      "DIAG-2",
+      "DIAG-3",
+      "DIAG-4",
+      "DIAG-5",
+      "DIAG-6"
+    ],
+    "actions_taken": [
+      "DIAG-1: no CF slots configured \u2014 recommend populating CF_ACCOUNT_ID_*/CF_API_TOKEN_*",
+      "DIAG-2: no cache file \u2014 recommending rerun of scrape stage",
+      "DIAG-3: AntiDPIV4 engine loaded \u2014 escalate threat level to HIGH",
+      "DIAG-4: Rust binary missing \u2014 fallback to core.tester (Python)",
+      "DIAG-5: Go binaries present \u2014 no fallback needed",
+      "DIAG-6: quarantine list ready (0 entries) at data/quarantined_tests.json"
+    ],
+    "errors_found": [],
+    "fixes_applied": [
+      {
+        "diag": "DIAG-3",
+        "action": "v4_anti_dpi_loaded",
+        "v3_wrapped": true
+      },
+      {
+        "diag": "DIAG-4",
+        "action": "fallback_to_python_prober",
+        "module": "core.tester"
+      },
+      {
+        "diag": "DIAG-6",
+        "action": "quarantine_list_ready",
+        "currently_quarantined": 0,
+        "path": "data/quarantined_tests.json"
+      }
+    ],
+    "v1_invoked": true,
+    "v1_result": {
+      "triggered_at": 1781661255.5616825,
+      "trigger_reason": "manual_force",
+      "actions_taken": [
+        "revalidate_env",
+        "probe_endpoints",
+        "rebuild_model_registry",
+        "reset_circuit_breakers",
+        "log_diagnostic_snapshot"
+      ],
+      "slots_revalidated": 0,
+      "slots_recovered": 0,
+      "endpoints_probed": 0,
+      "endpoints_reachable": 0,
+      "models_discovered": 12,
+      "circuit_breakers_reset": 0,
+      "errors_found": [],
+      "diagnostic_snapshot": {
+        "heal_cycle": 1,
+        "trigger_reason": "manual_force",
+        "timestamp": "2026-06-17T01:54:15.955868+00:00",
+        "env_vars_status": {
+          "slot_1": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_2": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_3": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_4": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_5": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_6": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_7": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_8": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_9": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_10": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          },
+          "slot_11": {
+            "has_account_id": false,
+            "has_api_token": false,
+            "has_gateway_url": false,
+            "gateway_uses_compat": false,
+            "gateway_uses_workers_ai": false
+          }
+        },
+        "circuit_breaker_status": {
+          "total_slots": 11,
+          "configured_slots": 0,
+          "skipped_slots": 11,
+          "available_slots": 0,
+          "failure_threshold": 3,
+          "cooldown_secs": 60.0,
+          "slots": {
+            "1": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "2": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "3": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "4": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "5": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "6": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "7": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "8": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "9": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "10": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            },
+            "11": {
+              "configured": false,
+              "skipped": true,
+              "skip_reason": "missing credentials",
+              "state": "closed",
+              "consecutive_failures": 0,
+              "total_failures": 0,
+              "total_successes": 0,
+              "success_rate": 1.0,
+              "health_score": 0.049,
+              "avg_latency_ms": 200.0,
+              "last_failure_error": "",
+              "recovery_time": 0.0
+            }
+          }
+        },
+        "model_registry_status": {
+          "total_models": 12,
+          "available_models": 12,
+          "last_refresh": "2026-06-17T01:28:12.980721+00:00",
+          "refresh_count": 1,
+          "top_5_models": [
+            {
+              "model_id": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+              "source": "cf_workers_ai",
+              "display_name": "Llama 3.3 70B Instruct (Fast)",
+              "dpi_resistance_index": 0.85,
+              "response_latency": 0.9,
+              "context_window_utility": 0.75,
+              "fitness_score": 0.845,
+              "parameter_count": "70b",
+              "context_window": 8192,
+              "slot_index": 0,
+              "is_available": true
+            },
+            {
+              "model_id": "@cf/meta/llama-3.1-8b-instruct",
+              "source": "cf_workers_ai",
+              "display_name": "Llama 3.1 8B Instruct",
+              "dpi_resistance_index": 0.9,
+              "response_latency": 0.95,
+              "context_window_utility": 0.5,
+              "fitness_score": 0.835,
+              "parameter_count": "8b",
+              "context_window": 8192,
+              "slot_index": 0,
+              "is_available": true
+            },
+            {
+              "model_id": "@cf/mistralai/mistral-7b-instruct-v0.2-lora",
+              "source": "cf_workers_ai",
+              "display_name": "Mistral 7B Instruct v0.2 LoRA",
+              "dpi_resistance_index": 0.92,
+              "response_latency": 0.95,
+              "context_window_utility": 0.45,
+              "fitness_score": 0.835,
+              "parameter_count": "7b",
+              "context_window": 4096,
+              "slot_index": 0,
+              "is_available": true
+            },
+            {
+              "model_id": "@cf/meta/llama-3.3-70b-instruct",
+              "source": "cf_workers_ai",
+              "display_name": "Llama 3.3 70B Instruct",
+              "dpi_resistance_index": 0.85,
+              "response_latency": 0.8,
+              "context_window_utility": 0.8,
+              "fitness_score": 0.825,
+              "parameter_count": "70b",
+              "context_window": 8192,
+              "slot_index": 0,
+              "is_available": true
+            },
+            {
+              "model_id": "@cf/meta/llama-4-scout-17b-16e-instruct",
+              "source": "cf_workers_ai",
+              "display_name": "Llama 4 Scout 17B MoE",
+              "dpi_resistance_index": 0.8,
+              "response_latency": 0.85,
+              "context_window_utility": 0.7,
+              "fitness_score": 0.795,
+              "parameter_count": "17b-moe",
+              "context_window": 8192,
+              "slot_index": 0,
+              "is_available": true
+            }
+          ],
+          "static_baseline_count": 12,
+          "cache_age_hours": 0.4
+        }
+      },
+      "success": true
+    },
+    "success": true
+  }
+]

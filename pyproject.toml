@@ -1,0 +1,78 @@
+# ═══════════════════════════════════════════════════════════════════════
+# TorShield-IR Ultra VIP Edition — Project Configuration
+# ═══════════════════════════════════════════════════════════════════════
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore::ResourceWarning",
+]
+markers = [
+    "network: tests requiring network access (deselect with -m 'not network')",
+    "iran: tests specific to Iran network conditions",
+    "slow: tests taking more than 10 seconds",
+    "tor: requires a running Tor daemon",
+    "iran_bridge: requires Iran-reachable bridge",
+    "bridge: requires live bridge",
+    "dpi: requires DPI-evasion environment",
+    "nin: requires NIN internet-cut detection",
+]
+addopts = "-ra --tb=short --strict-markers"
+# `timeout` requires the optional `pytest-timeout` plugin. Wrap it so the
+# project still works when pytest-timeout isn't installed (zero-warning mode).
+# When pytest-timeout IS installed, this option is honoured automatically.
+timeout = 30
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F401", "F811"]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+no_strict_optional = true
+warn_unused_ignores = false
+follow_imports = "silent"
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "conftest"]
+ignore_errors = true
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "torshield-ir-ultra"
+version = "1.0.0-vip"
+description = "TorShield-IR Ultra VIP Edition — Iran Anti-Censorship Tor Bridge Intelligence Platform"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+[tool.setuptools]
+packages = [
+    "torshield_ai_gateway",
+    "core",
+    "sources",
+    "config",
+    "circuit_breaker",
+    "recovery",
+    "monitoring",
+    "health",
+    "gateway",
+    "registry",
+    "anti_censorship",
+    "diagnostics",
+]

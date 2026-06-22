@@ -1,0 +1,823 @@
+{
+  "summary": {
+    "total_issues": 99,
+    "severity_counts": {
+      "critical": 2,
+      "high": 87,
+      "medium": 8,
+      "low": 2,
+      "info": 0
+    },
+    "type_counts": {
+      "raw_sql_fstring": 78,
+      "pickle_load": 1,
+      "md5_usage": 4,
+      "raw_sql_concat": 2,
+      "http_url": 2,
+      "insecure_temp_file": 2,
+      "subprocess_shell_true": 1,
+      "des_usage": 1,
+      "rc4_usage": 1,
+      "yaml_unsafe_load": 4,
+      "curl_pipe_sh": 1,
+      "dangerous_sudo_rm": 2
+    },
+    "files_scanned": {
+      "python": 143,
+      "shell": 9,
+      "go": 9,
+      "rust": 3,
+      "zig": 2,
+      "yaml": 1
+    }
+  },
+  "issues": [
+    {
+      "type": "dangerous_sudo_rm",
+      "file": "install.sh",
+      "line": 121,
+      "severity": "critical",
+      "description": "Dangerous sudo rm -rf / pattern in shell script"
+    },
+    {
+      "type": "dangerous_sudo_rm",
+      "file": "setup_env.sh",
+      "line": 101,
+      "severity": "critical",
+      "description": "Dangerous sudo rm -rf / pattern in shell script"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "adaptive_transport.py",
+      "line": 176,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Weight history update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "circuit_breaker_11slot.py",
+      "line": 263,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CircuitBreaker] Slot select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "circuit_breaker_11slot.py",
+      "line": 289,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CircuitBreaker] Gateway slot select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "elite_registry.py",
+      "line": 708,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[EliteRegistry] Best model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "iran_smart_anti_filter.py",
+      "line": 290,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiFilter] Selected {len(select"
+    },
+    {
+      "type": "pickle_load",
+      "file": "ml_predictor.py",
+      "line": 280,
+      "severity": "high",
+      "description": "Use of pickle.load() — deserialization vulnerability"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "ml_predictor.py",
+      "line": 343,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"AI predictions applied to {update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "quarantine_manager.py",
+      "line": 254,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Quarantine update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "results_writer.py",
+      "line": 376,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"*🛡️ TorShield-IR — Bridge Update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "results_writer.py",
+      "line": 377,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"_Update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "uTLS_evasion_layer.py",
+      "line": 486,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[uTLS] Profile select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "uTLS_evasion_layer.py",
+      "line": 714,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[uTLS] Stealth endpoint select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "core/notifier.py",
+      "line": 87,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"_Update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "monitoring/structured_logging.py",
+      "line": 366,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Could not fetch model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
+      "line": 1473,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiDPIV2] ML model trained: {num_update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
+      "line": 1655,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"({score:.0%}). Consider running automated DPI tests to update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/anti_censorship.py",
+      "line": 340,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiCensorship] Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/dynamic_brain_anti_dpi.py",
+      "line": 574,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPISelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/dynamic_brain_v3.py",
+      "line": 694,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"\\n→ Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
+      "line": 571,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiFilter-V3] Selected evasion strategy: {select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
+      "line": 627,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiFilter-V3] Selected fingerprint: ja3={select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
+      "line": 628,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"score={select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
+      "line": 629,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"success_rate={selected.success_count}/{selected.success_count + select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
+      "line": 170,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPISelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
+      "line": 178,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPISelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
+      "line": 188,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPISelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
+      "line": 222,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPISelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_intelligence.py",
+      "line": 242,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f'Also include \"update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_intelligence.py",
+      "line": 292,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"avoid (list), bridge_select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
+      "line": 1240,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiFilterV2] NIN survival pack: {len(select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
+      "line": 1447,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[AntiFilterV2] Transport effectiveness update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
+      "line": 1448,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"{'success' if success else 'failure'} → {update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 414,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 467,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 494,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 637,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 643,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 649,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 682,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 703,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 722,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 734,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 794,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 802,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 817,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 832,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelector] Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 844,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelector] Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 853,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 858,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 867,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelector] ✓ Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 873,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 881,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 892,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 903,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 1079,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ProviderAwareModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 1086,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ProviderAwareModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 1131,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ProviderAwareModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 1138,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ProviderAwareModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector.py",
+      "line": 1204,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ProviderAwareModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector_v3.py",
+      "line": 73,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector_v3.py",
+      "line": 76,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelector] Select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/model_selector_v3.py",
+      "line": 101,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[ModelSelect"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 558,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"will be silently skipped (NOT delete"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 881,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[DPI-Override] iran_dpi_model_select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2022,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[Cerebras] Update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2250,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"broken slot(s): {skipped_slots}. These slots are NOT delete"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2370,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CF-Workers-AI] Dynamic model [{task}]: {select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2375,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"'{select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2388,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CF-Workers-AI] Model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2638,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"broken slot(s): {skipped_slots}. These slots are NOT delete"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2808,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CF-AI-GW] Dynamic model [{task}]: {select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2813,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"'{select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/providers.py",
+      "line": 2826,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"[CF-AI-GW] Model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "torshield_ai_gateway/smart_bypass_engine.py",
+      "line": 994,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Recommended: {self._select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "sources/direct_scraper.py",
+      "line": 174,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Cleaned up {len(to_delete"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "sources/legacy_scraper.py",
+      "line": 319,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"*Tor Bridges Update"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "scripts/ai_gateway_health_check.py",
+      "line": 133,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"{preferred} (override: {select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "scripts/ai_gateway_health_check.py",
+      "line": 1205,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"  ✓ Model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "scripts/ai_gateway_health_check.py",
+      "line": 1214,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"  ⚠ Model select"
+    },
+    {
+      "type": "subprocess_shell_true",
+      "file": "scripts/build_vip_package.py",
+      "line": 38,
+      "severity": "high",
+      "description": "subprocess.run with shell=True — shell injection risk"
+    },
+    {
+      "type": "des_usage",
+      "file": "scripts/security_scan.py",
+      "line": 167,
+      "severity": "high",
+      "description": "DES is insecure — use AES-256 or stronger",
+      "match": "DES"
+    },
+    {
+      "type": "rc4_usage",
+      "file": "scripts/security_scan.py",
+      "line": 173,
+      "severity": "high",
+      "description": "RC4 is insecure — use AES-256 or stronger",
+      "match": "RC4"
+    },
+    {
+      "type": "yaml_unsafe_load",
+      "file": "scripts/security_scan.py",
+      "line": 243,
+      "severity": "high",
+      "description": "yaml.load() without SafeLoader — use yaml.safe_load() or yaml.load(data, Loader=yaml.SafeLoader)",
+      "match": "yaml.load("
+    },
+    {
+      "type": "yaml_unsafe_load",
+      "file": "scripts/security_scan.py",
+      "line": 243,
+      "severity": "high",
+      "description": "yaml.load() without SafeLoader — use yaml.safe_load() or yaml.load(data, Loader=yaml.SafeLoader)",
+      "match": "yaml.load("
+    },
+    {
+      "type": "yaml_unsafe_load",
+      "file": "scripts/security_scan.py",
+      "line": 309,
+      "severity": "high",
+      "description": "yaml.load() without SafeLoader — use yaml.safe_load() or yaml.load(data, Loader=yaml.SafeLoader)",
+      "match": "yaml.load("
+    },
+    {
+      "type": "yaml_unsafe_load",
+      "file": "scripts/security_scan.py",
+      "line": 327,
+      "severity": "high",
+      "description": "yaml.load() without SafeLoader — use yaml.safe_load() or yaml.load(data, Loader=yaml.SafeLoader)",
+      "match": "yaml.load("
+    },
+    {
+      "type": "curl_pipe_sh",
+      "file": "install.sh",
+      "line": 98,
+      "severity": "high",
+      "description": "Piping curl output to shell — potential code injection"
+    },
+    {
+      "type": "md5_usage",
+      "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
+      "line": 910,
+      "severity": "medium",
+      "description": "MD5 is cryptographically broken — avoid for security purposes",
+      "match": "hashlib.md5"
+    },
+    {
+      "type": "md5_usage",
+      "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
+      "line": 913,
+      "severity": "medium",
+      "description": "MD5 is cryptographically broken — avoid for security purposes",
+      "match": "hashlib.md5"
+    },
+    {
+      "type": "raw_sql_concat",
+      "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
+      "line": 629,
+      "severity": "medium",
+      "description": "Possible SQL injection via string concatenation",
+      "match": "selected.success_count}/{selected.success_count + s"
+    },
+    {
+      "type": "md5_usage",
+      "file": "torshield_ai_gateway/iran_traffic_evasion.py",
+      "line": 148,
+      "severity": "medium",
+      "description": "MD5 is cryptographically broken — avoid for security purposes",
+      "match": "hashlib.md5"
+    },
+    {
+      "type": "raw_sql_concat",
+      "file": "torshield_ai_gateway/local_ai_engine.py",
+      "line": 522,
+      "severity": "medium",
+      "description": "Possible SQL injection via string concatenation",
+      "match": "selection_hint\": \"Snowflake short-lived + W"
+    },
+    {
+      "type": "insecure_temp_file",
+      "file": "tests/test_ultra_vip.py",
+      "line": 105,
+      "severity": "medium",
+      "description": "Insecure temporary file creation — use tempfile.mkstemp()",
+      "match": "open(\"/tmp/"
+    },
+    {
+      "type": "insecure_temp_file",
+      "file": "tests/test_ultra_vip.py",
+      "line": 253,
+      "severity": "medium",
+      "description": "Insecure temporary file creation — use tempfile.mkstemp()",
+      "match": "open(\"/tmp/"
+    },
+    {
+      "type": "md5_usage",
+      "file": "scripts/security_scan.py",
+      "line": 155,
+      "severity": "medium",
+      "description": "MD5 is cryptographically broken — avoid for security purposes",
+      "match": "MD5"
+    },
+    {
+      "type": "http_url",
+      "file": "tests/test_providers.py",
+      "line": 324,
+      "severity": "low",
+      "description": "HTTP URL found — verify HTTPS is used for sensitive data",
+      "match": "http://gateway.ai.cloudflare.com/v1/abc123/gw"
+    },
+    {
+      "type": "http_url",
+      "file": "scripts/security_scan.py",
+      "line": 229,
+      "severity": "low",
+      "description": "HTTP URL found — verify HTTPS is used for sensitive data",
+      "match": "http://[^\\s"
+    }
+  ]
+}

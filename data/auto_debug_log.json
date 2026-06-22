@@ -1,0 +1,118 @@
+[
+  {
+    "timestamp": "2026-06-19T13:41:43.835720+00:00",
+    "duration_seconds": 0.94,
+    "summary": {
+      "total_checks": 12,
+      "ok": 10,
+      "warnings": 2,
+      "errors": 0,
+      "fixed": 0,
+      "auto_fixes_applied": 0,
+      "overall_status": "healthy"
+    },
+    "results": [
+      {
+        "category": "python_syntax",
+        "status": "ok",
+        "message": "All 143 Python files have valid syntax"
+      },
+      {
+        "category": "python_imports",
+        "status": "ok",
+        "message": "All 30 project modules import successfully"
+      },
+      {
+        "category": "yaml_workflows",
+        "status": "ok",
+        "message": "All 5 workflow files are valid"
+      },
+      {
+        "category": "config_integrity",
+        "status": "ok",
+        "message": "All 6 config checks passed"
+      },
+      {
+        "category": "ai_gateway",
+        "status": "warning",
+        "message": "No external AI providers available — LocalAIEngine fallback will be used (DEGRADED)",
+        "details": {
+          "external_providers": 0,
+          "fallback": "local_ai_engine",
+          "degraded": true
+        }
+      },
+      {
+        "category": "ai_gateway",
+        "status": "ok",
+        "message": "Gateway stats: 0 primary, 0 degraded, rate=0%",
+        "details": {
+          "total_requests": 0,
+          "primary_successes": 0,
+          "local_fallback_uses": 0,
+          "all_primary_failed": 0,
+          "primary_success_rate": 0.0,
+          "degraded_rate": 0.0,
+          "provider_attempts": {},
+          "available_providers": []
+        }
+      },
+      {
+        "category": "ai_gateway",
+        "status": "ok",
+        "message": "LocalAIEngine fallback is operational",
+        "details": {
+          "test_score": 0.454
+        }
+      },
+      {
+        "category": "anti_dpi",
+        "status": "ok",
+        "message": "Smart Bypass Engine ready: 5 DPI systems, 5 ISP profiles",
+        "details": {
+          "version": "1.0-ultra-quantum",
+          "dpi_systems_known": 5,
+          "isp_profiles": 5,
+          "evasion_profiles": 5,
+          "cached_strategies": 0,
+          "allowed_ja3_fingerprints": 4,
+          "source": "smart_bypass_engine"
+        }
+      },
+      {
+        "category": "bridge_pipeline",
+        "status": "ok",
+        "message": "Bridge collection pipeline operational (0 bridges collected)",
+        "details": {
+          "bridges_collected": 0
+        }
+      },
+      {
+        "category": "dependencies",
+        "status": "warning",
+        "message": "Missing packages: beautifulsoup4",
+        "details": {
+          "missing": [
+            "beautifulsoup4"
+          ]
+        }
+      },
+      {
+        "category": "file_integrity",
+        "status": "ok",
+        "message": "All 13 critical files present"
+      },
+      {
+        "category": "directory_structure",
+        "status": "ok",
+        "message": "All 8 required directories exist"
+      }
+    ],
+    "fixes": [],
+    "recommendations": [
+      "AI Gateway: External providers unavailable. LocalAIEngine fallback is active. Update API keys in GitHub Secrets when available.",
+      "Missing dependencies. Run 'pip install -r requirements.txt' to install.",
+      "All systems operational. No action required."
+    ]
+  }
+]

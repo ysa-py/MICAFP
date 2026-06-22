@@ -1,0 +1,22 @@
+{
+  "level": 3,
+  "label": "Elevated — Tor Blocked",
+  "confidence": 0.838,
+  "detected_at": "2026-06-19T15:43:35.144773+00:00",
+  "isp_tier": "unknown",
+  "nin_active": false,
+  "dpi_systems_active": [
+    "sni_inspector",
+    "traffic_classifier",
+    "cert_validator"
+  ],
+  "recommended_transports": [
+    "webtunnel",
+    "snowflake",
+    "obfs4_443",
+    "meek_lite"
+  ],
+  "recommended_pack": "export/iran_pack.txt",
+  "urgency": "high",
+  "auto_switch_enabled": true
+}
