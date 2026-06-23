@@ -30,7 +30,7 @@ needs before cutting over.
 |---|---|
 | **CircleCI** (active) | `scripts/circleci_env_bootstrap.sh` walks `configs/env_template.sh` line by line and pulls a matching value from the `torshield-ir-secrets` CircleCI **Context** for every key found, writing the result to a runtime `.env`. If a key isn't in the template, it is never bootstrapped — this is exactly the bug this remediation fixed. |
 | **GitLab CI** (dormant fallback) | GitLab CI/CD **Project Variables** are auto-exported as real process environment variables for every job — no YAML reference needed per key. Whatever is configured in *Settings → CI/CD → Variables* with these exact names is automatically visible to `os.getenv()`. |
-| **GitHub Actions** (dormant fallback) | Each workflow YAML explicitly interpolates `${{ secrets.KEY_NAME }}` — only keys that are *both* listed below *and* explicitly referenced in a workflow file are actually wired on this platform. |
+| **GitHub Actions** (dormant fallback) | Every checkout job now runs `scripts/github_actions_env_bootstrap.sh`, which reuses the shared template bootstrap, writes `.env`, and exports the same defaults through `$GITHUB_ENV` for later steps. Secrets still must be explicitly mapped in YAML when a workflow needs GitHub repository secrets, because GitHub does not expose all secrets dynamically by name. |
 
 ---
 
@@ -99,10 +99,11 @@ Categories below mirror the template's own section headers.
   block) as a Project CI/CD Variable with the exact same name. No YAML
   edits needed — `.gitlab-ci.yml` / `.gitlab/ci/*.yml` already expect
   `os.getenv()` to find them via GitLab's automatic export.
-- **GitHub Actions:** configure every key above as a Repository Secret,
-  *and* verify each workflow file actually interpolates
-  `${{ secrets.KEY_NAME }}` for the keys it needs — a secret existing in
-  the repo settings does nothing if the workflow YAML never references it.
+- **GitHub Actions:** non-secret defaults are now exported automatically by
+  `scripts/github_actions_env_bootstrap.sh` after checkout. Configure sensitive
+  keys above as Repository Secrets and explicitly map them in workflow `env:`
+  blocks for jobs that need real secret values — GitHub still does not expose
+  all repository secrets dynamically by name.
 - **CircleCI:** add/update the `torshield-ir-secrets` Context with every
   key above; `scripts/circleci_env_bootstrap.sh` + the now-complete
   `configs/env_template.sh` handle the rest automatically.

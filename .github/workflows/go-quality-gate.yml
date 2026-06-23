@@ -34,6 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Bootstrap environment defaults
+        run: |
+          set -euo pipefail
+          bash scripts/github_actions_env_bootstrap.sh
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -83,6 +88,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Bootstrap environment defaults
+        run: |
+          set -euo pipefail
+          bash scripts/github_actions_env_bootstrap.sh
 
       - name: Set up Python
         uses: actions/setup-python@v5
