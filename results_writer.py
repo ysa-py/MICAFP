@@ -247,8 +247,8 @@ def update_readme(iran_data: dict[str, Any], stats: dict[str, int]) -> None:
     template = """\
 # 🛡️ TorShield-IR — Tor Bridge Intelligence for Iran
 
-> Polyglot (Python · Go · Rust) bridge collector with 8-layer Iran DPI analysis.  
-> OONI-verified · ASN-filtered · Composite-scored · Auto-updated hourly.  
+> Polyglot (Python · Go · Rust) bridge collector with 8-layer Iran DPI analysis.<br>
+> OONI-verified · ASN-filtered · Composite-scored · Auto-updated hourly.<br>
 > **Last update:** `{ts}`
 
 ---
