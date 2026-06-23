@@ -15,16 +15,16 @@ import (
 )
 
 const (
-	atlasBase     = "https://atlas.ripe.net/api/v2"
-	pollInterval  = 15 * time.Second
-	maxPollWait   = 10 * time.Minute
+	atlasBase    = "https://atlas.ripe.net/api/v2"
+	pollInterval = 15 * time.Second
+	maxPollWait  = 10 * time.Minute
 )
 
 // MeasurementDefinition describes a single RIPE Atlas measurement target.
 type measurementDef struct {
-	Type    string `json:"type"`
-	Target  string `json:"target"`
-	Port    int    `json:"port,omitempty"`
+	Type     string `json:"type"`
+	Target   string `json:"target"`
+	Port     int    `json:"port,omitempty"`
 	Protocol string `json:"protocol,omitempty"`
 }
 
@@ -56,9 +56,9 @@ type measurementStatus struct {
 
 // measurementResult is one probe result from GET /measurements/{id}/results/.
 type measurementResult struct {
-	From    string `json:"from"`
-	RTTAVG  float64 `json:"avg,omitempty"`
-	Result  interface{} `json:"result"`
+	From   string      `json:"from"`
+	RTTAVG float64     `json:"avg,omitempty"`
+	Result interface{} `json:"result"`
 }
 
 // Client submits and polls RIPE Atlas measurements.

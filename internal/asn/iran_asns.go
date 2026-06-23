@@ -50,9 +50,9 @@ var IranianASNs = map[string]string{
 // SSL stripping, or bridge/relay impersonation observed in OONI data.
 // Bridges in these ASNs receive an immediate honeypot_risk exclusion.
 var HoneypotRiskASNs = map[string]string{
-	"AS58224": "TCI — documented TLS interception in OONI web_connectivity (IR)",
-	"AS12880": "ITC — SSL stripping observed (OONI tcp_blocking annotations)",
-	"AS48159": "TIC — infrastructure-level DPI, BGP hijacking history",
+	"AS58224":  "TCI — documented TLS interception in OONI web_connectivity (IR)",
+	"AS12880":  "ITC — SSL stripping observed (OONI tcp_blocking annotations)",
+	"AS48159":  "TIC — infrastructure-level DPI, BGP hijacking history",
 	"AS197207": "MCI — confirmed packet injection in mobile data path",
 }
 

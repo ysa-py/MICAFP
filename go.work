@@ -1,6 +1,6 @@
 // REMEDIATION 2026-06-21: go_tester/ has its own go.mod (separate module,
 // placeholder path github.com/user/tor-bridge-tester — now renamed to
-// github.com/py-vip/ultra-tor-bridge-tester). Without this workspace file,
+// github.com/ysa-py/MICAFP-tor-bridge-tester). Without this workspace file,
 // `go build ./...` / `go vet ./...` / `go test ./...` run from repo root
 // silently skip go_tester entirely, including in .circleci/config.yml's
 // go-quality-gate job and in .githooks/pre-push. This file makes the Go

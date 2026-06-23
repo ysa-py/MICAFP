@@ -134,8 +134,8 @@ Every push to `main` and every pull request triggers:
 
 ```bash
 # Clone and set up
-git clone https://github.com/py-vip/ultra.git
-cd ultra
+git clone https://github.com/ysa-py/MICAFP.git
+cd MICAFP
 git config core.hooksPath .githooks
 
 # Install Go dependencies
@@ -154,7 +154,7 @@ go test ./... -short
 The `internal/bridge` package provides parsing and testing for Tor bridge lines:
 
 ```go
-import "github.com/py-vip/ultra/internal/bridge"
+import "github.com/ysa-py/MICAFP/internal/bridge"
 
 // Parse a bridge line
 b, err := bridge.Parse("obfs4 1.2.3.4:9999 cert=abc123 iat-mode=0")

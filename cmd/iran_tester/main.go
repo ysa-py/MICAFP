@@ -27,10 +27,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/py-vip/ultra/internal/asn"
-	"github.com/py-vip/ultra/internal/bridge"
-	"github.com/py-vip/ultra/internal/ipinfo"
-	"github.com/py-vip/ultra/internal/ooni"
+	"github.com/ysa-py/MICAFP/internal/asn"
+	"github.com/ysa-py/MICAFP/internal/bridge"
+	"github.com/ysa-py/MICAFP/internal/ipinfo"
+	"github.com/ysa-py/MICAFP/internal/ooni"
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -79,13 +79,13 @@ type BridgeResult struct {
 
 // Summary aggregates the full run statistics.
 type Summary struct {
-	TotalTested         int `json:"total_tested"`
-	GlobalReachable     int `json:"global_reachable"`
-	IranLikelyWorking   int `json:"iran_likely_working"`
-	IranLikelyBlocked   int `json:"iran_likely_blocked"`
-	IranUnknown         int `json:"iran_unknown"`
-	IranASNBlocked      int `json:"iran_asn_blocked"`
-	IranFreqBlocked     int `json:"iran_frequently_blocked"`
+	TotalTested       int `json:"total_tested"`
+	GlobalReachable   int `json:"global_reachable"`
+	IranLikelyWorking int `json:"iran_likely_working"`
+	IranLikelyBlocked int `json:"iran_likely_blocked"`
+	IranUnknown       int `json:"iran_unknown"`
+	IranASNBlocked    int `json:"iran_asn_blocked"`
+	IranFreqBlocked   int `json:"iran_frequently_blocked"`
 }
 
 // Report is the top-level output JSON document.
@@ -301,10 +301,10 @@ func classifyBridge(
 }
 
 func main() {
-	inputFlag   := flag.String("input",   "bridge/bridge_list_for_testing.json", "JSON array of bridge strings")
-	outputFlag  := flag.String("output",  "bridge/iran_results.json",            "Output JSON report path")
-	workersFlag := flag.Int("workers",    100,                                   "Parallel worker count")
-	timeoutFlag := flag.Duration("timeout", 8*time.Second,                       "Per-bridge TCP timeout")
+	inputFlag := flag.String("input", "bridge/bridge_list_for_testing.json", "JSON array of bridge strings")
+	outputFlag := flag.String("output", "bridge/iran_results.json", "Output JSON report path")
+	workersFlag := flag.Int("workers", 100, "Parallel worker count")
+	timeoutFlag := flag.Duration("timeout", 8*time.Second, "Per-bridge TCP timeout")
 	flag.Parse()
 
 	// ── Read input ────────────────────────────────────────────────────────
@@ -320,15 +320,15 @@ func main() {
 		len(bridgeLines), *workersFlag, *timeoutFlag)
 
 	// ── Shared clients ────────────────────────────────────────────────────
-	ipClient   := ipinfo.New()
+	ipClient := ipinfo.New()
 	ooniClient := ooni.New()
 	defer ooniClient.Close()
 
 	// ── Parallel classification ───────────────────────────────────────────
-	sem     := make(chan struct{}, *workersFlag)
+	sem := make(chan struct{}, *workersFlag)
 	results := make(chan BridgeResult, len(bridgeLines))
 	var wg sync.WaitGroup
-	ctx    := context.Background()
+	ctx := context.Background()
 
 	for _, line := range bridgeLines {
 		if strings.TrimSpace(line) == "" {

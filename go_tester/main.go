@@ -5,15 +5,17 @@ Uses Go's native goroutines and net/tls for massively parallel TCP/TLS probing.
 10–20× faster than the Python tester for large bridge sets.
 
 Build:
-  cd go_tester && go build -o ../tor-bridge-tester .
+
+	cd go_tester && go build -o ../tor-bridge-tester .
 
 Usage:
-  # Pipe from stdin, get working bridges on stdout
-  cat bridge/obfs4.txt | ./tor-bridge-tester
 
-  # File mode with options
-  ./tor-bridge-tester -input bridge/obfs4.txt -output bridge/obfs4_tested.txt \
-                      -workers 200 -timeout 6 -verbose
+	# Pipe from stdin, get working bridges on stdout
+	cat bridge/obfs4.txt | ./tor-bridge-tester
+
+	# File mode with options
+	./tor-bridge-tester -input bridge/obfs4.txt -output bridge/obfs4_tested.txt \
+	                    -workers 200 -timeout 6 -verbose
 */
 package main
 
@@ -35,9 +37,9 @@ import (
 // ─────────────────────────────────────────────────────────────────────────────
 
 var (
-	ip4PortRe  = regexp.MustCompile(`(\d{1,3}(?:\.\d{1,3}){3}):(\d{1,5})`)
-	ip6PortRe  = regexp.MustCompile(`\[([0-9a-fA-F:]+)\]:(\d{1,5})`)
-	httpsRe    = regexp.MustCompile(`(?i)https?://([^/:\s]+)(?::(\d+))?`)
+	ip4PortRe = regexp.MustCompile(`(\d{1,3}(?:\.\d{1,3}){3}):(\d{1,5})`)
+	ip6PortRe = regexp.MustCompile(`\[([0-9a-fA-F:]+)\]:(\d{1,5})`)
+	httpsRe   = regexp.MustCompile(`(?i)https?://([^/:\s]+)(?::(\d+))?`)
 )
 
 type endpoint struct {
@@ -156,11 +158,11 @@ func testEndpoint(ep *endpoint, timeout time.Duration) bool {
 // ─────────────────────────────────────────────────────────────────────────────
 
 func main() {
-	inputFile  := flag.String("input",   "",    "Input bridge file (default: stdin)")
-	outputFile := flag.String("output",  "",    "Output file for working bridges (default: stdout)")
-	workers    := flag.Int("workers",    150,   "Number of parallel workers")
-	timeoutSec := flag.Float64("timeout", 8.0,  "TCP/TLS connection timeout (seconds)")
-	verbose    := flag.Bool("verbose",   false, "Print per-bridge results to stderr")
+	inputFile := flag.String("input", "", "Input bridge file (default: stdin)")
+	outputFile := flag.String("output", "", "Output file for working bridges (default: stdout)")
+	workers := flag.Int("workers", 150, "Number of parallel workers")
+	timeoutSec := flag.Float64("timeout", 8.0, "TCP/TLS connection timeout (seconds)")
+	verbose := flag.Bool("verbose", false, "Print per-bridge results to stderr")
 	flag.Parse()
 
 	timeout := time.Duration(*timeoutSec * float64(time.Second))
@@ -205,8 +207,8 @@ func main() {
 		len(lines), *workers, *timeoutSec)
 
 	// ── Parallel testing ──────────────────────────────────────────────────
-	sem    := make(chan struct{}, *workers)
-	mu     := &sync.Mutex{}
+	sem := make(chan struct{}, *workers)
+	mu := &sync.Mutex{}
 	var passing []string
 	var wg sync.WaitGroup
 

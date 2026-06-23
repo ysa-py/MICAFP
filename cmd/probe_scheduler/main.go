@@ -29,8 +29,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/py-vip/ultra/internal/bridge"
-	"github.com/py-vip/ultra/internal/ripe"
+	"github.com/ysa-py/MICAFP/internal/bridge"
+	"github.com/ysa-py/MICAFP/internal/ripe"
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -49,22 +49,22 @@ type IranBridgeRecord struct {
 // PTResult is one bridge-probe (Rust) result from data/pt_results.json.
 type PTResult struct {
 	Bridge    string `json:"bridge"`
-	Status    string `json:"status"`     // reachable|timeout|refused|error
+	Status    string `json:"status"` // reachable|timeout|refused|error
 	LatencyMs int    `json:"latency_ms"`
 	PTType    string `json:"pt_type"`
 }
 
 // MergedResult is the combined view from RIPE Atlas + PT handshake.
 type MergedResult struct {
-	BridgeLine    string   `json:"bridge_line"`
-	Host          string   `json:"host"`
-	Port          int      `json:"port"`
-	Transport     string   `json:"transport"`
-	RIPEReachable bool     `json:"ripe_reachable"`
-	RIPETested    bool     `json:"ripe_tested"`
-	PTStatus      string   `json:"pt_status"`
-	PTLatencyMs   int      `json:"pt_latency_ms"`
-	Source        string   `json:"source"`
+	BridgeLine    string `json:"bridge_line"`
+	Host          string `json:"host"`
+	Port          int    `json:"port"`
+	Transport     string `json:"transport"`
+	RIPEReachable bool   `json:"ripe_reachable"`
+	RIPETested    bool   `json:"ripe_tested"`
+	PTStatus      string `json:"pt_status"`
+	PTLatencyMs   int    `json:"pt_latency_ms"`
+	Source        string `json:"source"`
 }
 
 // SchedulerReport is the JSON served at /results.
@@ -158,7 +158,7 @@ func fetchMOATBridges(ctx context.Context) ([]string, error) {
 
 func main() {
 	bridgesFlag := flag.String("bridges", "data/iran_bridges.json", "Iran bridge database JSON")
-	portFlag    := flag.Int("port",    8742,                       "HTTP results port")
+	portFlag := flag.Int("port", 8742, "HTTP results port")
 	flag.Parse()
 
 	ripeKey := os.Getenv("RIPE_ATLAS_API_KEY")
