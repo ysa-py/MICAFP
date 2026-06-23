@@ -357,7 +357,7 @@ def write_markdown_report(records: list[dict[str, Any]]) -> None:
 
     report = f"""# {status_emoji} TorShield-IR — Iran Bridge Status Report
 
-**Generated:** `{ts}`  
+**Generated:** `{ts}`<br>
 **Pipeline:** Python scraper → Go iran_tester → Rust bridge-probe → OONI correlator
 
 ---

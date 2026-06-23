@@ -249,8 +249,8 @@ class BridgeFormatter:
 
         content = f"""# 🌐 Tor Bridges Ultra Collector
 
-> Auto-collected, tested, and Iran-scored Tor bridges.  
-> GitHub Actions runs every hour — fresh bridges always available.  
+> Auto-collected, tested, and Iran-scored Tor bridges.<br>
+> GitHub Actions runs every hour — fresh bridges always available.<br>
 > **Last update:** `{ts}`
 
 ## ⚠️ Notes for Iran Users
