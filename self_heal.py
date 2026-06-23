@@ -76,6 +76,7 @@ def iter_python_files(root: Path = Path(".")):
 
 PYTHON_SCRIPTS  = list(iter_python_files())
 YAML_FILES      = list(Path(".github/workflows").glob("*.yml"))
+YAML_VALIDATION_WARNINGS: list[dict[str, Any]] = []
 
 ALLOWED_PATCH_ROOTS = (Path("."), Path("sources"), Path("core"))
 DENIED_PATCH_PARTS = {
@@ -294,10 +295,27 @@ def check_python_syntax() -> list[dict[str, str]]:
 def check_yaml_syntax() -> list[dict[str, str]]:
     """Return list of {file, error} for any YAML syntax errors."""
     errors: list[dict[str, str]] = []
+    YAML_VALIDATION_WARNINGS.clear()
     try:
         import yaml  # type: ignore[import]
-    except ImportError:
-        return []  # PyYAML not installed — skip silently
+    except ImportError as exc:
+        warning = {
+            "type": "yaml_validation_skipped",
+            "message": "YAML validation skipped because PyYAML is not installed.",
+            "missing_dependency": "PyYAML",
+        }
+        YAML_VALIDATION_WARNINGS.append(warning)
+        log.warning(
+            "self_heal: YAML validation skipped; PyYAML is not installed.",
+            extra={"event": warning},
+        )
+        if os.environ.get("SELF_HEAL_STRICT_YAML", "").lower() == "true":
+            return [{
+                "file": ".github/workflows",
+                "error": "PyYAML is required for YAML validation when SELF_HEAL_STRICT_YAML=true.",
+                "snippet": str(exc),
+            }]
+        return []
     for path in YAML_FILES:
         if not path.exists():
             continue
@@ -446,6 +464,11 @@ def write_log(
         "github_sha":      os.environ.get("GITHUB_SHA", "unknown"),
         "errors_found":    len(errors),
         "errors":          errors,
+        "warnings":        list(YAML_VALIDATION_WARNINGS),
+        "yaml_validation_skipped": any(
+            warning.get("type") == "yaml_validation_skipped"
+            for warning in YAML_VALIDATION_WARNINGS
+        ),
         "patched_files":   patched,
         "committed":       committed,
     }
