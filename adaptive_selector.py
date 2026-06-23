@@ -68,15 +68,24 @@ class AdaptiveBridgeSelector:
 
     def _load_iran_results(self) -> dict[str, dict[str, Any]]:
         data = self._load_json(Path("bridge/iran_results.json"), {"bridges": []})
-        return {r.get("line", ""): r for r in data.get("bridges", []) if isinstance(r, dict)}
+        bridges = data.get("bridges") if isinstance(data, dict) else []
+        if not isinstance(bridges, list):
+            bridges = []
+        return {r.get("line", ""): r for r in bridges if isinstance(r, dict)}
 
     def _load_scheduler_results(self) -> dict[str, dict[str, Any]]:
         data = self._load_json(Path("data/scheduler_results.json"), {"results": []})
-        return {r.get("bridge_line", ""): r for r in data.get("results", []) if isinstance(r, dict)}
+        results = data.get("results") if isinstance(data, dict) else []
+        if not isinstance(results, list):
+            results = []
+        return {r.get("bridge_line", ""): r for r in results if isinstance(r, dict)}
 
     def _load_latest_results(self) -> dict[str, dict[str, Any]]:
         data = self._load_json(Path("data/latest-results.json"), {"bridges": []})
-        return {r.get("line", ""): r for r in data.get("bridges", []) if isinstance(r, dict)}
+        bridges = data.get("bridges") if isinstance(data, dict) else []
+        if not isinstance(bridges, list):
+            bridges = []
+        return {r.get("line", ""): r for r in bridges if isinstance(r, dict)}
 
     @staticmethod
     def _is_cdn_good(flags: Iterable[str], asn_org: str) -> bool:
