@@ -300,6 +300,8 @@ class SelfHealingEngineV2:
                 history = json.load(fh)
                 if not isinstance(history, list):
                     history = []
+        except FileNotFoundError:
+            history = []
         except Exception as _remediation_exc:
             from monitoring.structured_logger import record_silent_failure
             record_silent_failure('recovery.self_healing_engine_v2:291', _remediation_exc)

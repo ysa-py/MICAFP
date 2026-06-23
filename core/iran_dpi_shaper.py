@@ -470,6 +470,34 @@ def score_all(
     return results
 
 
+class IranDPIShaper:
+    """
+    Backward-compatible object API for callers that import ``IranDPIShaper``.
+
+    The module's canonical API is function-based (``score_siam_evasion`` and
+    ``score_all``), but integration layers such as Iran auto-defense expect a
+    small service object with ``score_bridge``/``score_bridges`` methods.  This
+    wrapper keeps those integrations additive and avoids falling back to weaker
+    heuristic scoring when the functional scorer is available.
+    """
+
+    def score_bridge(
+        self,
+        bridge_line: str,
+        ja3_hash: str | None = None,
+    ) -> SIAMEvasionScore:
+        """Score one bridge with the SIAM evasion engine."""
+        return score_siam_evasion(bridge_line, ja3_hash=ja3_hash)
+
+    def score_bridges(
+        self,
+        bridge_lines: list[str],
+        ja3_map: dict[str, str] | None = None,
+    ) -> list[SIAMEvasionScore]:
+        """Score and rank multiple bridges with the SIAM evasion engine."""
+        return score_all(bridge_lines, ja3_map=ja3_map)
+
+
 def get_phantom_stealth(results: list[SIAMEvasionScore]) -> list[str]:
     """Return only PHANTOM and STEALTH bridge lines (safest for Iran)."""
     return [
