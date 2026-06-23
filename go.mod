@@ -1,3 +1,3 @@
-module github.com/py-vip/ultra
+module github.com/ysa-py/MICAFP
 
 go 1.22

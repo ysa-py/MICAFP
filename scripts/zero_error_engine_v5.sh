@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════
 #  TorShield-IR  ·  Quantum Zero-Error Auto-Fix Engine  ·  v5.0
-#  Repo  : github.com/py-vip/ultra
+#  Repo  : github.com/ysa-py/MICAFP
 #
 #  ╔══════════════════════════════════════════════════════════════════════╗
 #  ║  ROOT CAUSE of v4.0 failures:                                       ║
@@ -466,7 +466,7 @@ verify_go_build() {
 main() {
     echo -e "\n${BOLD}╔══════════════════════════════════════════════════════════╗"
     echo    "║  TorShield-IR · Quantum Zero-Error Engine · v5.0          ║"
-    echo    "║  github.com/py-vip/ultra               ║"
+    echo    "║  github.com/ysa-py/MICAFP               ║"
     echo    "║                                                            ║"
     echo    "║  Key fixes over v4.0:                                     ║"
     echo    "║    §0 NEW — .gitignore + git index cleanup                ║"
