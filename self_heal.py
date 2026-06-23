@@ -25,6 +25,7 @@ Exit code: always 0 (failures are logged, never abort the pipeline).
 
 import argparse
 import ast
+import difflib
 import json
 import logging
 import os
@@ -46,12 +47,109 @@ logging.basicConfig(
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 HEAL_LOG        = Path("data/self_heal_log.json")
+PATCH_DIFF_DIR  = Path("data/self_heal_patches")
 AI_TIMEOUT      = 30
 MAX_FILE_SIZE   = 64 * 1024   # 64 KB — max script content sent to AI
+MAX_PATCH_BYTES = 16 * 1024   # reject unexpectedly broad AI-generated patches
+MAX_PATCH_LINES = 300         # reject diffs that are too large to review safely
 
 PYTHON_SCRIPTS  = list(Path(".").glob("*.py")) + list(Path("sources").glob("*.py")) \
                 + list(Path("core").glob("*.py"))
 YAML_FILES      = list(Path(".github/workflows").glob("*.yml"))
+
+ALLOWED_PATCH_ROOTS = (Path("."), Path("sources"), Path("core"))
+DENIED_PATCH_PARTS = {
+    ".git",
+    ".github",
+    "configs",
+    "infra",
+    "deploy",
+    "deployment",
+    "secrets",
+}
+SENSITIVE_NAME_RE = re.compile(
+    r"(^|[._-])(secret|secrets|token|credential|credentials|key|keys|env)([._-]|$)",
+    re.IGNORECASE,
+)
+
+
+def _repo_root() -> Path:
+    try:
+        root = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        if root:
+            return Path(root).resolve()
+    except subprocess.CalledProcessError:
+        pass
+    return Path.cwd().resolve()
+
+
+def _relative_repo_path(path: str | Path) -> Path | None:
+    candidate = Path(path)
+    if candidate.is_absolute():
+        resolved = candidate.resolve()
+    else:
+        resolved = (_repo_root() / candidate).resolve()
+    try:
+        return resolved.relative_to(_repo_root())
+    except ValueError:
+        return None
+
+
+def _is_allowed_patch_target(path: str | Path) -> bool:
+    rel = _relative_repo_path(path)
+    if rel is None or rel.suffix != ".py" or len(rel.parts) == 0:
+        return False
+    if any(part in DENIED_PATCH_PARTS for part in rel.parts):
+        return False
+    if any(SENSITIVE_NAME_RE.search(part) for part in rel.parts):
+        return False
+    if len(rel.parts) == 1:
+        return True
+    return any(rel.is_relative_to(root) for root in ALLOWED_PATCH_ROOTS if str(root) != ".")
+
+
+def _redact_secret_text(value: str) -> str:
+    value = re.sub(r"https://[^\s/@]+:[^\s/@]+@", "https://***:***@", value)
+    value = re.sub(r"(Authorization:\s*Bearer\s+)[^\s]+", r"\1***", value, flags=re.IGNORECASE)
+    value = re.sub(r"(x-access-token:)[^@\s]+", r"\1***", value, flags=re.IGNORECASE)
+    return value
+
+
+def _build_limited_diff(path: Path, original: str, fixed: str) -> str | None:
+    diff = "".join(difflib.unified_diff(
+        original.splitlines(keepends=True),
+        fixed.splitlines(keepends=True),
+        fromfile=f"a/{path.as_posix()}",
+        tofile=f"b/{path.as_posix()}",
+        lineterm="\n",
+    ))
+    if not diff:
+        return None
+    changed_lines = sum(
+        1 for line in diff.splitlines()
+        if line.startswith(("+", "-")) and not line.startswith(("+++", "---"))
+    )
+    if len(diff.encode("utf-8")) > MAX_PATCH_BYTES or changed_lines > MAX_PATCH_LINES:
+        log.warning(
+            "self_heal: rejecting AI patch for %s; diff too large (%d bytes, %d changed lines).",
+            path, len(diff.encode("utf-8")), changed_lines,
+        )
+        return None
+    return diff
+
+
+def _save_patch_diff(path: Path, diff: str) -> Path:
+    PATCH_DIFF_DIR.mkdir(parents=True, exist_ok=True)
+    safe_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", path.as_posix())
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    diff_path = PATCH_DIFF_DIR / f"{stamp}_{safe_name}.diff"
+    diff_path.write_text(_redact_secret_text(diff), encoding="utf-8")
+    return diff_path
 
 # ── HTTP helper (stdlib only) ─────────────────────────────────────────────────
 
@@ -223,38 +321,49 @@ def _build_patch_prompt(error: dict[str, str]) -> str:
 
 
 def apply_patch(error: dict[str, str]) -> bool:
-    """Generate and apply an AI patch for a detected syntax error."""
-    prompt = _build_patch_prompt(error)
+    """Generate, review-limit, and apply an AI patch for a detected syntax error."""
+    rel_path = _relative_repo_path(error["file"])
+    if rel_path is None or not _is_allowed_patch_target(rel_path):
+        log.warning("self_heal: refusing to patch non-allowlisted file %s.", error["file"])
+        return False
+
+    target = _repo_root() / rel_path
+    prompt = _build_patch_prompt({**error, "file": str(rel_path)})
     if not prompt:
         return False
-    log.info("self_heal: requesting AI patch for %s ...", error["file"])
+    log.info("self_heal: requesting AI patch for %s ...", rel_path)
     fixed_code = _ask_ai(prompt)
     if not fixed_code:
         return False
     # Strip markdown fences if AI included them despite instructions
     fixed_code = re.sub(r"^```(?:python)?\s*", "", fixed_code, flags=re.MULTILINE)
     fixed_code = re.sub(r"^```\s*$", "", fixed_code, flags=re.MULTILINE)
-    fixed_code = fixed_code.strip()
+    fixed_code = fixed_code.strip() + "\n"
     # Validate the AI-generated code before writing
     try:
         ast.parse(fixed_code)
     except SyntaxError as exc:
         log.warning("self_heal: AI patch itself has syntax error: %s -- discarding.", exc)
         return False
-    Path(error["file"]).write_text(fixed_code, encoding="utf-8")
-    log.info("self_heal: patch applied to %s.", error["file"])
+
+    original = target.read_text(encoding="utf-8", errors="replace")
+    diff = _build_limited_diff(rel_path, original, fixed_code)
+    if diff is None:
+        log.warning("self_heal: no safe diff produced for %s; discarding patch.", rel_path)
+        return False
+    diff_path = _save_patch_diff(rel_path, diff)
+    target.write_text(fixed_code, encoding="utf-8")
+    log.info("self_heal: patch applied to %s; diff saved to %s.", rel_path, diff_path)
     return True
 
 
 # ── Git commit ────────────────────────────────────────────────────────────────
 
 def commit_patches(patched_files: list[str]) -> bool:
-    """Commit patched files back to the repository using GITHUB_TOKEN."""
+    """Commit patched files and optionally push when explicitly enabled."""
     token = os.environ.get("GITHUB_TOKEN", "")
     repo  = os.environ.get("GITHUB_REPOSITORY", "")
-    if not token or not repo:
-        log.info("self_heal: GITHUB_TOKEN or GITHUB_REPOSITORY not set — skipping commit.")
-        return False
+    allow_push = os.environ.get("SELF_HEAL_ALLOW_PUSH", "").lower() == "true"
     try:
         subprocess.run(
             ["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"],
@@ -264,11 +373,10 @@ def commit_patches(patched_files: list[str]) -> bool:
             ["git", "config", "--global", "user.name", "TorShield-SelfHeal"],
             check=True, capture_output=True,
         )
-        remote_url = f"https://x-access-token:{token}@github.com/{repo}.git"
-        subprocess.run(["git", "remote", "set-url", "origin", remote_url],
-                       check=True, capture_output=True)
         for f in patched_files:
-            subprocess.run(["git", "add", f], check=True, capture_output=True)
+            rel = _relative_repo_path(f)
+            if rel is not None and _is_allowed_patch_target(rel):
+                subprocess.run(["git", "add", rel.as_posix()], check=True, capture_output=True)
         result = subprocess.run(
             ["git", "diff", "--staged", "--quiet"],
             capture_output=True,
@@ -280,14 +388,28 @@ def commit_patches(patched_files: list[str]) -> bool:
             ["git", "commit", "-m", "fix(self-heal): autonomous syntax patch [skip ci]"],
             check=True, capture_output=True,
         )
-        subprocess.run(
-            ["git", "push", "origin", "HEAD"],
-            check=True, capture_output=True,
-        )
-        log.info("self_heal: committed and pushed %d patched file(s).", len(patched_files))
+        if allow_push:
+            if not token or not repo:
+                log.info("self_heal: push requested but GITHUB_TOKEN or GITHUB_REPOSITORY is unset — skipping push.")
+            else:
+                subprocess.run(
+                    [
+                        "git",
+                        "-c",
+                        f"http.https://github.com/.extraheader=Authorization: Bearer {token}",
+                        "push",
+                        "https://github.com/" + repo + ".git",
+                        "HEAD",
+                    ],
+                    check=True, capture_output=True,
+                )
+                log.info("self_heal: committed and pushed %d patched file(s).", len(patched_files))
+                return True
+        else:
+            log.info("self_heal: committed %d patched file(s); push disabled (set SELF_HEAL_ALLOW_PUSH=true to enable).", len(patched_files))
         return True
     except subprocess.CalledProcessError as exc:
-        log.warning("self_heal: git operation failed: %s", exc)
+        log.warning("self_heal: git operation failed: %s", _redact_secret_text(str(exc)))
         return False
 
 
