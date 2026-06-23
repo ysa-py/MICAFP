@@ -13,7 +13,10 @@
 ai-gateway-health-check:
   stage: healthcheck
   extends: .python-base
-  rules: !reference [.rules-scheduled-or-manual, rules]
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
   script:
     - python scripts/ai_gateway_health_check.py || true
   artifacts:
