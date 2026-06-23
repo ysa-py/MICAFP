@@ -29,8 +29,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ysa-py/MICAFP/internal/bridge"
-	"github.com/ysa-py/MICAFP/internal/ripe"
+	"github.com/py-vip/ultra/internal/bridge"
+	"github.com/py-vip/ultra/internal/ripe"
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
