@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"context"
+	"net"
 	"testing"
 	"time"
 )
@@ -104,4 +105,33 @@ func TestTestWithContext_InvalidBridge(t *testing.T) {
 	if result {
 		t.Error("TestWithContext should return false for nil bridge")
 	}
+}
+
+func TestTestTLSRequiresTLSHandshake(t *testing.T) {
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("Listen failed: %v", err)
+	}
+	defer listener.Close()
+
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		conn, err := listener.Accept()
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+		_, _ = conn.Write([]byte("not tls"))
+	}()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	addr := listener.Addr().(*net.TCPAddr)
+	if testTLS(ctx, "127.0.0.1", addr.Port) {
+		t.Fatal("testTLS returned true for a plain TCP listener without a TLS handshake")
+	}
+
+	<-done
 }
