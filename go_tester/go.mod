@@ -1,3 +1,3 @@
-module github.com/ysa-py/MICAFP-tor-bridge-tester
+module github.com/py-vip/ultra-tor-bridge-tester
 
 go 1.21

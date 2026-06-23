@@ -27,10 +27,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ysa-py/MICAFP/internal/asn"
-	"github.com/ysa-py/MICAFP/internal/bridge"
-	"github.com/ysa-py/MICAFP/internal/ipinfo"
-	"github.com/ysa-py/MICAFP/internal/ooni"
+	"github.com/py-vip/ultra/internal/asn"
+	"github.com/py-vip/ultra/internal/bridge"
+	"github.com/py-vip/ultra/internal/ipinfo"
+	"github.com/py-vip/ultra/internal/ooni"
 )
 
 // ─────────────────────────────────────────────────────────────────────────────
