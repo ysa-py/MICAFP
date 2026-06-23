@@ -72,6 +72,18 @@ class TestIranSmartAntiFilter(unittest.TestCase):
         }
         result = saf.get_optimized_bridges(bridges_dict)
         self.assertIsNotNone(result)
+        self.assertGreaterEqual(len(result), 1)
+        self.assertTrue(any(line.startswith("webtunnel") for line in result))
+
+    def test_environment_profile_is_automatic_and_bounded(self):
+        """Test automatic Iran network-risk profiling for anti-filter selection."""
+        saf = self._get_class()()
+        profile = saf.get_environment_profile(transport="webtunnel")
+        self.assertEqual(profile["automation"], "local-deterministic")
+        self.assertGreaterEqual(profile["risk_score"], 0.0)
+        self.assertLessEqual(profile["risk_score"], 1.0)
+        self.assertIn("webtunnel", profile["preferred_transports"])
+        self.assertIsNotNone(profile["survival_probability"])
 
     def test_rotate_bridges(self):
         """Test bridge rotation returns a reordered list."""
