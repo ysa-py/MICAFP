@@ -40,6 +40,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from generated_json_loader import load_generated_json
+
 log = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -189,19 +191,12 @@ def _load_all_records() -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     seen: set = set()
     for path in (LATEST_RESULTS_PATH, IRAN_RESULTS_PATH):
-        if not path.exists():
-            continue
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-            for r in data.get("bridges", []):
-                key = r.get("line") or r.get("bridge_line") or r.get("raw", "")
-                if key and key not in seen:
-                    seen.add(key)
-                    records.append(r)
-        except Exception as exc:
-            from monitoring.structured_logger import record_silent_failure
-            record_silent_failure('core.nin_selector:201', exc)
-            log.warning("Cannot read %s: %s", path, exc)
+        data = load_generated_json(path, {"bridges": []})
+        for r in data["bridges"]:
+            key = r.get("line") or r.get("bridge_line") or r.get("raw", "")
+            if key and key not in seen:
+                seen.add(key)
+                records.append(r)
     return records
 
 

@@ -8,11 +8,12 @@ removes source bridges; callers pass the final candidate records and, when
 enabled, receive those records ranked and filtered by a composite adaptive score.
 """
 
-import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
+
+from generated_json_loader import load_generated_json
 
 
 def _env_bool(name: str, default: bool = False) -> bool:
@@ -57,31 +58,22 @@ class AdaptiveBridgeSelector:
         self.scheduler_by_line = self._load_scheduler_results()
         self.latest_by_line = self._load_latest_results()
 
-    @staticmethod
-    def _load_json(path: Path, fallback: Any) -> Any:
-        try:
-            if path.exists():
-                return json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            return fallback
-        return fallback
-
     def _load_iran_results(self) -> dict[str, dict[str, Any]]:
-        data = self._load_json(Path("bridge/iran_results.json"), {"bridges": []})
+        data = load_generated_json(Path("bridge/iran_results.json"), {"bridges": []})
         bridges = data.get("bridges") if isinstance(data, dict) else []
         if not isinstance(bridges, list):
             bridges = []
         return {r.get("line", ""): r for r in bridges if isinstance(r, dict)}
 
     def _load_scheduler_results(self) -> dict[str, dict[str, Any]]:
-        data = self._load_json(Path("data/scheduler_results.json"), {"results": []})
+        data = load_generated_json(Path("data/scheduler_results.json"), {"results": []})
         results = data.get("results") if isinstance(data, dict) else []
         if not isinstance(results, list):
             results = []
         return {r.get("bridge_line", ""): r for r in results if isinstance(r, dict)}
 
     def _load_latest_results(self) -> dict[str, dict[str, Any]]:
-        data = self._load_json(Path("data/latest-results.json"), {"bridges": []})
+        data = load_generated_json(Path("data/latest-results.json"), {"bridges": []})
         bridges = data.get("bridges") if isinstance(data, dict) else []
         if not isinstance(bridges, list):
             bridges = []

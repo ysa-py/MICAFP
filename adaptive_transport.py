@@ -31,6 +31,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from generated_json_loader import load_generated_json
+
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] %(levelname)-8s %(message)s",
@@ -246,14 +248,8 @@ def main() -> None:
     # Load bridge records from one or both result files
     records: list[dict[str, Any]] = []
     for path in (IRAN_RESULTS_PATH, LATEST_RESULTS_PATH):
-        if path.exists():
-            try:
-                data = json.loads(path.read_text(encoding="utf-8"))
-                records.extend(data.get("bridges", []))
-            except Exception as exc:
-                from monitoring.structured_logger import record_silent_failure
-                record_silent_failure('adaptive_transport:251', exc)
-                log.warning(f"Cannot read {path}: {exc}")
+        data = load_generated_json(path, {"bridges": []})
+        records.extend(data["bridges"])
 
     if not records:
         log.warning("No bridge records found — keeping existing weights unchanged.")
