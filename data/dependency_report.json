@@ -262,7 +262,7 @@
     "modules": [
       {
         "file": "go.mod",
-        "module_path": "github.com/py-vip/ultra",
+        "module_path": "github.com/ysa-py/MICAFP",
         "go_version": "1.22",
         "path_valid": true,
         "dependencies": [],
