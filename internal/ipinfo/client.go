@@ -35,9 +35,9 @@ func (r *Response) ASN() string {
 
 // Client is a cached, concurrency-safe ipinfo.io lookup client.
 type Client struct {
-	mu     sync.Mutex
-	cache  map[string]*Response
-	hc     *http.Client
+	mu    sync.Mutex
+	cache map[string]*Response
+	hc    *http.Client
 }
 
 // New creates a new Client with a pre-allocated cache and an HTTP client

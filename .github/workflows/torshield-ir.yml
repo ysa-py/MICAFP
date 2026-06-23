@@ -336,14 +336,14 @@ jobs:
       # account's URL. Since this workflow is dormant (GitHub Actions is no
       # longer the active CI — see CircleCI), that hardcoded value was never
       # caught failing, but if this workflow is ever reactivated it would
-      # have force-rewritten the real, working go.mod (github.com/py-vip/ultra)
+      # have force-rewritten the real, working go.mod (github.com/ysa-py/MICAFP)
       # back to a dead path. CANONICAL now matches the actual current go.mod
       # module declaration, so this step is a no-op consistency check rather
       # than a destructive rewrite.
       - name: Lock canonical Go module path (fixes internal-package errors)
         run: |
           set -euo pipefail
-          CANONICAL="github.com/py-vip/ultra"
+          CANONICAL="github.com/ysa-py/MICAFP"
           CURRENT=$(grep '^module ' go.mod | awk '{print $2}')
           echo "Canonical : $CANONICAL"
           echo "Current   : $CURRENT"
