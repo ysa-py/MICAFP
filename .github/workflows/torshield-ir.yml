@@ -88,14 +88,43 @@ jobs:
       - name: YAML linting
         run: |
           echo "═══ YAML Lint ═══"
+          cat > /tmp/_yaml_lint.py << 'ENDSCRIPT'
+          import sys
+          import yaml
+
+
+          class GitLabCISafeLoader(yaml.SafeLoader):
+              pass
+
+
+          def construct_reference(loader, node):
+              return loader.construct_sequence(node)
+
+
+          def construct_unknown_tag(loader, tag_suffix, node):
+              if isinstance(node, yaml.ScalarNode):
+                  return loader.construct_scalar(node)
+              if isinstance(node, yaml.SequenceNode):
+                  return loader.construct_sequence(node)
+              if isinstance(node, yaml.MappingNode):
+                  return loader.construct_mapping(node)
+              return None
+
+
+          GitLabCISafeLoader.add_constructor("!reference", construct_reference)
+          GitLabCISafeLoader.add_multi_constructor("!", construct_unknown_tag)
+
+          with open(sys.argv[1]) as stream:
+              yaml.load(stream, Loader=GitLabCISafeLoader)
+          ENDSCRIPT
           PASS=0
           FAIL=0
           while IFS= read -r -d '' f; do
-            if python -c "import yaml; yaml.safe_load(open('$f'))" 2>/dev/null; then
+            if python /tmp/_yaml_lint.py "$f" 2>/dev/null; then
               PASS=$((PASS + 1))
             else
               echo "  ✗ YAML ERROR: $f"
-              python -c "import yaml; yaml.safe_load(open('$f'))" 2>&1 || true
+              python /tmp/_yaml_lint.py "$f" 2>&1 || true
               FAIL=$((FAIL + 1))
             fi
           done < <(find . \( -name '*.yml' -o -name '*.yaml' \) -not -path './.git/*' -print0 | sort -z)
