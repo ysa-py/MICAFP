@@ -53,8 +53,28 @@ MAX_FILE_SIZE   = 64 * 1024   # 64 KB — max script content sent to AI
 MAX_PATCH_BYTES = 16 * 1024   # reject unexpectedly broad AI-generated patches
 MAX_PATCH_LINES = 300         # reject diffs that are too large to review safely
 
-PYTHON_SCRIPTS  = list(Path(".").glob("*.py")) + list(Path("sources").glob("*.py")) \
-                + list(Path("core").glob("*.py"))
+EXCLUDED_PYTHON_SCRIPT_DIRS = {
+    ".git",
+    ".venv",
+    "venv",
+    ".tox",
+    "node_modules",
+    "vendor",
+    "build",
+    "dist",
+    "__pycache__",
+}
+
+
+def iter_python_files(root: Path = Path(".")):
+    """Yield Python files under ``root`` while skipping generated/heavy paths."""
+    for path in root.rglob("*.py"):
+        if any(part in EXCLUDED_PYTHON_SCRIPT_DIRS for part in path.parts):
+            continue
+        yield path
+
+
+PYTHON_SCRIPTS  = list(iter_python_files())
 YAML_FILES      = list(Path(".github/workflows").glob("*.yml"))
 
 ALLOWED_PATCH_ROOTS = (Path("."), Path("sources"), Path("core"))
