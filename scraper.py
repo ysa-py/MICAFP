@@ -44,6 +44,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from adaptive_selector import AdaptiveBridgeSelector
+
 import requests
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter, Retry
@@ -422,8 +424,16 @@ def prune_history(history: dict[str, dict[str, Any]]) -> int:
 # File writers
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _write_sorted(path: Path, lines: list[str]) -> None:
-    clean = sorted(set(l for l in lines if l.strip()))
+def _write_sorted(path: Path, lines: list[str], preserve_order: bool = False) -> None:
+    if preserve_order:
+        seen: set[str] = set()
+        clean = []
+        for line in lines:
+            if line.strip() and line not in seen:
+                seen.add(line)
+                clean.append(line)
+    else:
+        clean = sorted(set(l for l in lines if l.strip()))
     path.write_text("\n".join(clean) + ("\n" if clean else ""), encoding="utf-8")
     log.debug(f"  → {path}: {len(clean)} bridges")
 
@@ -438,30 +448,42 @@ def write_bridge_files(history: dict[str, dict[str, Any]]) -> dict[str, int]:
     stats: dict[str, int] = {}
 
     transports = ["obfs4", "webtunnel", "vanilla", "snowflake", "meek_lite"]
+    selector = AdaptiveBridgeSelector()
+    if selector.config.enabled:
+        log.info(
+            "Adaptive IR scoring enabled: min_score=%.2f prefer_webtunnel=%s prefer_obfs4=%s recent_failure_penalty=%.2f",
+            selector.config.min_score,
+            selector.config.prefer_webtunnel,
+            selector.config.prefer_obfs4,
+            selector.config.recent_failure_penalty,
+        )
 
     for transport in transports:
         fname = transport.replace("_", "_")
         records = [v for v in history.values() if v.get("transport") == transport]
 
-        ipv4 = [normalize_for_file(v.get("raw", ""), transport)
-                for v in records if v.get("ip_version", "ipv4") != "ipv6" and v.get("raw")]
-        ipv6 = [normalize_for_file(v.get("raw", ""), transport)
-                for v in records if v.get("ip_version") == "ipv6" and v.get("raw")]
-        ipv4_72h = [normalize_for_file(v.get("raw", ""), transport)
-                    for v in records
-                    if v.get("ip_version") != "ipv6"
-                    and v.get("raw")
-                    and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72]
-        ipv6_72h = [normalize_for_file(v.get("raw", ""), transport)
-                    for v in records
-                    if v.get("ip_version") == "ipv6"
-                    and v.get("raw")
-                    and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72]
+        def selected_lines(candidates: list[dict[str, Any]]) -> list[str]:
+            items = [(normalize_for_history(v.get("raw", ""), transport), v) for v in candidates if v.get("raw")]
+            return [normalize_for_file(v.get("raw", ""), transport) for _, v in selector.select(items)]
 
-        _write_sorted(BRIDGE_DIR / f"{fname}.txt",         ipv4)
-        _write_sorted(BRIDGE_DIR / f"{fname}_ipv6.txt",    ipv6)
-        _write_sorted(BRIDGE_DIR / f"{fname}_{RECENT_HOURS}h.txt",      ipv4_72h)
-        _write_sorted(BRIDGE_DIR / f"{fname}_{RECENT_HOURS}h_ipv6.txt", ipv6_72h)
+        ipv4 = selected_lines([v for v in records if v.get("ip_version", "ipv4") != "ipv6"])
+        ipv6 = selected_lines([v for v in records if v.get("ip_version") == "ipv6"])
+        ipv4_72h = selected_lines([
+            v for v in records
+            if v.get("ip_version") != "ipv6"
+            and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
+        ])
+        ipv6_72h = selected_lines([
+            v for v in records
+            if v.get("ip_version") == "ipv6"
+            and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
+        ])
+
+        preserve_rank = selector.config.enabled
+        _write_sorted(BRIDGE_DIR / f"{fname}.txt",         ipv4, preserve_rank)
+        _write_sorted(BRIDGE_DIR / f"{fname}_ipv6.txt",    ipv6, preserve_rank)
+        _write_sorted(BRIDGE_DIR / f"{fname}_{RECENT_HOURS}h.txt",      ipv4_72h, preserve_rank)
+        _write_sorted(BRIDGE_DIR / f"{fname}_{RECENT_HOURS}h_ipv6.txt", ipv6_72h, preserve_rank)
 
         stats[f"{fname}.txt"]      = len(ipv4)
         stats[f"{fname}_ipv6.txt"] = len(ipv6)
@@ -473,7 +495,8 @@ def write_bridge_files(history: dict[str, dict[str, Any]]) -> dict[str, int]:
 
 def write_testing_json(history: dict[str, dict[str, Any]]) -> int:
     """Write bridge_list_for_testing.json consumed by Go iran_tester."""
-    all_lines = list(history.keys())
+    selector = AdaptiveBridgeSelector()
+    all_lines = [line for line, _ in selector.select([(k, v) for k, v in history.items()])]
     TESTING_JSON.write_text(
         json.dumps(all_lines, indent=2, ensure_ascii=False),
         encoding="utf-8",
