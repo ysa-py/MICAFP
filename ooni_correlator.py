@@ -26,6 +26,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from generated_json_loader import load_generated_json
+
 import requests
 from requests.adapters import HTTPAdapter, Retry
 
@@ -181,19 +183,16 @@ def compute_composite(
 
 def _load_iran_results() -> dict[str, Any]:
     """Load bridge/iran_results.json written by the Go iran_tester."""
+    data = load_generated_json(IRAN_RESULTS_PATH, {"bridges": [], "summary": {}})
     if not IRAN_RESULTS_PATH.exists():
         log.warning(f"{IRAN_RESULTS_PATH} not found — OONI-only mode.")
-        return {"bridges": [], "summary": {}}
-    return json.loads(IRAN_RESULTS_PATH.read_text(encoding="utf-8"))
+    return data
 
 
 def _load_scheduler_results() -> dict[str, dict[str, Any]]:
     """Load data/scheduler_results.json, indexed by bridge_line."""
-    if not SCHEDULER_RESULTS_PATH.exists():
-        return {}
-
-    data = json.loads(SCHEDULER_RESULTS_PATH.read_text(encoding="utf-8"))
-    results = data.get("results") if isinstance(data, dict) else None
+    data = load_generated_json(SCHEDULER_RESULTS_PATH, {"results": []})
+    results = data.get("results")
     if not isinstance(results, list):
         return {}
 
