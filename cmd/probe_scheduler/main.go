@@ -74,6 +74,17 @@ type SchedulerReport struct {
 	Results      []MergedResult `json:"results"`
 }
 
+func normalizeSchedulerResults(results any) []MergedResult {
+	resultsList, ok := results.([]MergedResult)
+	if !ok {
+		return []MergedResult{}
+	}
+	if resultsList == nil {
+		return []MergedResult{}
+	}
+	return resultsList
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────────────────────────────────────
@@ -269,10 +280,11 @@ func main() {
 		merged = append(merged, mr)
 	}
 
+	results := normalizeSchedulerResults(merged)
 	report := SchedulerReport{
 		GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
-		TotalBridges: len(merged),
-		Results:      merged,
+		TotalBridges: len(results),
+		Results:      results,
 	}
 
 	// Persist merged results for Python correlator
