@@ -553,11 +553,18 @@ jobs:
       - name: Set executable permissions
         run: |
           set -euo pipefail
-          if ! (test -x bridge-probe/target/release/bridge-probe || test -f bridge-probe/target/release/bridge-probe); then
-            find bridge-probe -maxdepth 5 -type f -name bridge-probe -print
-            exit 1
-          fi
-          chmod +x bridge-probe/target/release/bridge-probe iran_tester probe_scheduler
+          for file in \
+            bridge-probe/target/release/bridge-probe \
+            iran_tester \
+            probe_scheduler; do
+            if ! test -f "$file"; then
+              echo "::error::Missing expected executable: $file"
+              find bridge-probe -maxdepth 5 -type f -print
+              find . -maxdepth 2 -type f \( -name iran_tester -o -name probe_scheduler \) -print
+              exit 1
+            fi
+            chmod +x "$file"
+          done
 
       - name: Stage 0 — Direct scraper (bridges.torproject.org seed)
         continue-on-error: true
