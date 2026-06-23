@@ -4,6 +4,7 @@ package bridge
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"net"
@@ -321,13 +322,16 @@ func testTLS(ctx context.Context, host string, port int) bool {
 	}
 	defer conn.Close()
 
-	// Upgrade to TLS without certificate verification
-	// This is acceptable for bridge probing as we're only checking connectivity
-	// We don't perform any security-sensitive operations over this connection
-	// (Adapted from net/tls packages, we only care about handshake completion)
-	_ = conn.SetDeadline(time.Now().Add(5 * time.Second))
+	// Keep certificate verification enabled for TLS probes. This function is used
+	// to distinguish real TLS endpoints from plain TCP listeners, and callers that
+	// need unauthenticated probing should add an explicit, separately configured
+	// probe mode instead of silently disabling verification here.
+	tlsConn := tls.Client(conn, &tls.Config{
+		ServerName: host,
+		MinVersion: tls.VersionTLS12,
+	})
 
-	return true // Connection established; TLS would follow
+	return tlsConn.HandshakeContext(ctx) == nil
 }
 
 // isIP checks if a string is a valid IP address.
