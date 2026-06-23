@@ -67,7 +67,7 @@ jobs:
       # what torshield-ir.yml actually uploads (was using "output/" before).
       - name: Download Bridge Artifacts
         if: ${{ github.event_name != 'workflow_dispatch' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: bridge-intelligence-report
           run-id: ${{ github.event.workflow_run.id }}

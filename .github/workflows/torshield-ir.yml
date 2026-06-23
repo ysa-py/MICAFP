@@ -328,7 +328,7 @@ jobs:
             echo "Cargo.lock already present"
           fi
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/registry
@@ -372,7 +372,7 @@ jobs:
           set -euo pipefail
           bash scripts/github_actions_env_bootstrap.sh
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: '1.22'
           cache: true
@@ -534,12 +534,12 @@ jobs:
           GROQ_API_KEY:      ${{ secrets.GROQ_API_KEY }}
         run: python self_heal.py --heal
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: bridge-probe-bin
           path: downloaded-bin/
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: go-bins
           path: .
@@ -1049,7 +1049,7 @@ jobs:
           bash scripts/github_actions_env_bootstrap.sh
 
       - name: Download all stage artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           path: all_artifacts/
 
