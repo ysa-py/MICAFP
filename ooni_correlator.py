@@ -191,8 +191,20 @@ def _load_scheduler_results() -> dict[str, dict[str, Any]]:
     """Load data/scheduler_results.json, indexed by bridge_line."""
     if not SCHEDULER_RESULTS_PATH.exists():
         return {}
+
     data = json.loads(SCHEDULER_RESULTS_PATH.read_text(encoding="utf-8"))
-    return {r["bridge_line"]: r for r in data.get("results", [])}
+    results = data.get("results") if isinstance(data, dict) else None
+    if not isinstance(results, list):
+        return {}
+
+    index: dict[str, dict[str, Any]] = {}
+    for r in results:
+        if not isinstance(r, dict):
+            continue
+        bridge_line = r.get("bridge_line")
+        if isinstance(bridge_line, str) and bridge_line:
+            index[bridge_line] = r
+    return index
 
 
 # ─────────────────────────────────────────────────────────────────────────────
