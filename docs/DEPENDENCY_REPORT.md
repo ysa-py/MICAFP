@@ -117,7 +117,7 @@ The project specifies 18 Python packages across 7 categories:
 | Field | Value |
 |-------|-------|
 | **File** | `go.mod` |
-| **Module Path** | `github.com/ysa-py/MICAFP` |
+| **Module Path** | `github.com/py-vip/ultra` |
 | **Go Version** | 1.22 |
 | **Path Valid** | ✅ |
 | **Dependencies** | 0 (stdlib only) |

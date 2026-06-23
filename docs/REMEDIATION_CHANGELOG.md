@@ -52,7 +52,7 @@ elsewhere).
 
 - **Added:** root `go.work`, `use ( . ./go_tester )`.
 - **Changed:** `go_tester/go.mod` module path
-  `github.com/user/tor-bridge-tester` → `github.com/ysa-py/MICAFP-tor-bridge-tester`
+  `github.com/user/tor-bridge-tester` → `github.com/py-vip/ultra-tor-bridge-tester`
   (no internal imports referenced the old placeholder path — confirmed via
   grep before renaming, zero other files touched).
 - **Changed:** `.circleci/config.yml` `go-quality-gate` job — added an
@@ -101,7 +101,7 @@ elsewhere).
   `docs/DEPLOYMENT_GUIDE.md` — replaced the banned account's URL with
   `CANONICAL_REPO_URL`. `DEPENDENCY_REPORT.md`'s "Module Path" field was
   additionally corrected to the real, current `go.mod` value
-  (`github.com/ysa-py/MICAFP`) since it was stale relative to the actual
+  (`github.com/py-vip/ultra`) since it was stale relative to the actual
   module declaration independent of the ban issue.
 - **Changed:** `.github/workflows/torshield-ir.yml` — the "canonical Go
   module path enforcer" step had the banned account's URL **hardcoded as
