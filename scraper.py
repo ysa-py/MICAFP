@@ -642,9 +642,8 @@ def main() -> None:
         try:
             try:
                 loop = asyncio.get_running_loop()
-            except RuntimeError as _remediation_exc:
-                from monitoring.structured_logger import record_silent_failure
-                record_silent_failure('scraper:616', _remediation_exc)
+            except RuntimeError:
+                log.debug("No running event loop; using asyncio.run for GitHub bridge fetch")
                 loop = None
             if loop and loop.is_running():
                 import concurrent.futures
