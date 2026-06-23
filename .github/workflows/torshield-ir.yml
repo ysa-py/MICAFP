@@ -1061,6 +1061,8 @@ jobs:
               --exclude='__pycache__' \
               --exclude='*.pyc' \
               --exclude='bridge-probe/target' \
+              --exclude='./dist' \
+              --exclude='dist' \
               -czf dist/Tor-Bridges-Collector-main-ultra-quantum-vip-vip-super-ultra-vip-ultra-quantum-ultra-vip-ultra-quantum.tar.gz \
               . all_artifacts/
           echo "Archive size: $(du -sh dist/*.tar.gz | cut -f1)"
