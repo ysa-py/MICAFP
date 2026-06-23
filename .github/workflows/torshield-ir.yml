@@ -912,7 +912,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_UPLOAD:    ${{ github.event.inputs.upload_to_telegram || 'false' }}
-          REPO_URL:           https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/main
+          REPO_URL:           https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/${{ github.ref_name }}
         run: |
           set -euo pipefail
           python results_writer.py
