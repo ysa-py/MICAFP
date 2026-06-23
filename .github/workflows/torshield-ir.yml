@@ -28,6 +28,7 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   NODE_NO_WARNINGS: '1'
+  PYTHONPATH: ${{ github.workspace }}
 
 permissions:
   contents: write
@@ -785,7 +786,8 @@ jobs:
           python scripts/ai_bridge_reranker.py \
             --input  bridge/iran_results.json \
             --output data/smart_iran_results.json \
-            --batch-size 20
+            --batch-size 10 \
+            --ai-top-n "${AI_RERANK_TOP_N:-20}"
           python -c "
           import json, pathlib
           p = pathlib.Path('data/smart_iran_results.json')
