@@ -99,6 +99,9 @@ def _ai_batch_refine(
     Call IranIntelligenceLayer.batch_ai_score on top-100 bridges.
     Returns dict: bridge_line → ai_score_entry.
     """
+    if top_n <= 0:
+        logger.info("[AIRefine] disabled (top_n <= 0); using heuristic scores only")
+        return {}
     try:
         from torshield_ai_gateway.iran_intelligence import IranIntelligenceLayer
         intel = IranIntelligenceLayer()
@@ -115,6 +118,9 @@ def _ai_batch_refine(
                     top_lines.append(b.get("raw", b.get("bridge_line", b.get("line", ""))))
             top_lines = [l for l in top_lines if l.strip()]
 
+        if not top_lines:
+            logger.info("[AIRefine] no bridge lines selected; skipping")
+            return {}
         logger.info(f"[AIRefine] batch_ai_score: {len(top_lines)} bridges …")
         ai_results = intel.batch_ai_score(top_lines, censorship_level=level, batch_size=batch_size)
         return {r["bridge_line"]: r for r in ai_results if "bridge_line" in r}
@@ -245,6 +251,10 @@ def main():
     parser.add_argument("--output",       required=True)
     parser.add_argument("--iran-mode",    default="strict", choices=["strict", "standard"])
     parser.add_argument("--batch-size",   type=int, default=20)
+    parser.add_argument("--ai-top-n",     type=int, default=int(os.getenv("AI_RERANK_TOP_N", "100")),
+                        help="Number of top heuristic bridges to send to AI refinement; 0 disables AI calls")
+    parser.add_argument("--no-ai-refine", action="store_true",
+                        help="Skip external AI refinement and export heuristic-only Iran scores")
     parser.add_argument("--use-probes",   action="store_true",
                         help="Run live censorship probes (slower, more accurate)")
     parser.add_argument("--level",        type=int, default=0,
@@ -278,9 +288,10 @@ def main():
     smart_map     = {r.raw: r for r in smart_results if r.raw.strip()} if smart_results else {}
 
     # ── 4. AI batch refinement ────────────────────────────────────────────
+    ai_top_n = 0 if args.no_ai_refine else max(args.ai_top_n, 0)
     ai_map = _ai_batch_refine(
         records, smart_results, level,
-        batch_size=args.batch_size, top_n=100
+        batch_size=args.batch_size, top_n=ai_top_n
     )
 
     # ── 5. Attach scores ──────────────────────────────────────────────────

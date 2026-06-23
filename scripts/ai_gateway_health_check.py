@@ -62,12 +62,17 @@ import urllib.error
 import urllib.request
 from typing import Any
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Import ProviderConfigurationError for config-level error handling
 try:
     from torshield_ai_gateway.exceptions import BadRequestError, ProviderConfigurationError
 except ImportError as _remediation_exc:
-    from monitoring.structured_logger import record_silent_failure
-    record_silent_failure('scripts.ai_gateway_health_check:68', _remediation_exc)
+    try:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('scripts.ai_gateway_health_check:68', _remediation_exc)
+    except ImportError:
+        pass
     # Fallback if exceptions module not available
     class ProviderConfigurationError(Exception):  # type: ignore[no-redef]
         """Fallback ProviderConfigurationError when torshield_ai_gateway is not available."""
@@ -82,8 +87,6 @@ logging.basicConfig(
     datefmt="%Y-%m-%dT%H:%M:%S",
 )
 logger = logging.getLogger("health_check")
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # ════════════════════════════════════════════════════════════════════════════
