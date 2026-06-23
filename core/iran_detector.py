@@ -23,6 +23,8 @@ import asyncio
 import logging
 import time
 
+import nest_asyncio
+
 log = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -161,24 +163,16 @@ class NINDetector:
         if not force_refresh and (now - self._last_check_ts) < 30.0:
             return self._cached_state
         try:
-            # check_connectivity() is async; run it in a fresh event loop
-            # (or via nest_asyncio if we're already inside one — additive).
+            # check_connectivity() is async. Python 3.14 no longer creates an
+            # implicit current loop for synchronous callers, so use asyncio.run()
+            # when no loop is running and patch only genuinely running loops.
             try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    # We're inside an existing loop — use nest_asyncio if available
-                    try:
-                        import nest_asyncio
-                        nest_asyncio.apply()
-                    except ImportError as _remediation_exc:
-                        from monitoring.structured_logger import record_silent_failure
-                        record_silent_failure('core.iran_detector:171', _remediation_exc)
-                        pass
-                int_ok, nin_active = loop.run_until_complete(check_connectivity())
-            except RuntimeError as _remediation_exc:
-                from monitoring.structured_logger import record_silent_failure
-                record_silent_failure('core.iran_detector:174', _remediation_exc)
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
                 int_ok, nin_active = asyncio.run(check_connectivity())
+            else:
+                nest_asyncio.apply(loop)
+                int_ok, nin_active = loop.run_until_complete(check_connectivity())
             self._cached_state = bool(nin_active)
         except Exception as exc:
             from monitoring.structured_logger import record_silent_failure
