@@ -447,6 +447,17 @@ class DynamicBrainDPIAdapter:
             return self._last_adaptation.max_response_tokens
         return default
 
+    def get_last_assessment(self) -> DPIAssessment | None:
+        """
+        Return the most recent DPI assessment known to the adapter.
+
+        Providers query the adapter directly for the current threat level.  If
+        the adapter has not yet performed an adaptation, fall back to the
+        assessor's cached assessment so callers do not see an AttributeError
+        and can safely default to the environment-provided threat level.
+        """
+        return self._last_adaptation or self._assessor.get_last_assessment()
+
     def get_recommended_model_source(self) -> str:
         """Get the recommended model source based on current DPI threat."""
         if self._last_adaptation:

@@ -199,6 +199,8 @@ class NINDetector:
                 events = _json.load(fh)
                 if not isinstance(events, list):
                     events = []
+        except FileNotFoundError:
+            events = []
         except Exception as _remediation_exc:
             from monitoring.structured_logger import record_silent_failure
             record_silent_failure('core.iran_detector:194', _remediation_exc)

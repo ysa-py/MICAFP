@@ -407,3 +407,9 @@ class IranIntelligenceLayer:
         results.sort(key=lambda x: float(x.get("score", 0)), reverse=True)
         log.info(f"[IranAI] batch_ai_score: {len(results)} bridges scored")
         return results
+
+
+# Backward-compatible public name used by integration modules.  Keep it as an
+# alias instead of a subclass so all existing behavior and isinstance checks for
+# IranIntelligenceLayer remain unchanged.
+IranIntelligence = IranIntelligenceLayer
