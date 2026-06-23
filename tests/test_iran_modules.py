@@ -66,7 +66,7 @@ class TestIranSmartAntiFilter(unittest.TestCase):
         """Test bridge optimization with a dict input (as expected by the API)."""
         saf = self._get_class()()
         bridges_dict = {
-            "obfs4_1": {"line": "obfs4 1.2.3.4:443 cert=fingerprint iat-mode=2", "transport": "obfs4"},
+            "obfs4_1": {"line": "obfs4 1.2.3.4:443 cert=fingerprint iat-mode=1", "transport": "obfs4"},
             "webtunnel_1": {"line": "webtunnel 5.6.7.8:443 url=https://example.com", "transport": "webtunnel"},
             "snowflake_1": {"line": "snowflake 9.10.11.12:443", "transport": "snowflake"},
         }
@@ -89,9 +89,9 @@ class TestIranSmartAntiFilter(unittest.TestCase):
         """Test bridge rotation returns a reordered list."""
         saf = self._get_class()()
         bridges = [
-            "obfs4 1.2.3.4:443 cert=abc iat-mode=2",
+            "obfs4 1.2.3.4:443 cert=abc iat-mode=1",
             "obfs4 5.6.7.8:443 cert=def iat-mode=1",
-            "obfs4 9.10.11.12:443 cert=ghi iat-mode=0",
+            "obfs4 9.10.11.12:443 cert=ghi iat-mode=1",
         ]
         rotated = saf.rotate_bridges(bridges)
         self.assertIsInstance(rotated, list)
@@ -145,7 +145,7 @@ class TestIranAntiDPI(unittest.TestCase):
     def test_get_evasion_strategy(self):
         """Test evasion strategy generation for a bridge."""
         engine = self._get_class()()
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
         strategy = engine.get_evasion_strategy(bridge)
         self.assertIsNotNone(strategy)
 
@@ -170,7 +170,7 @@ class TestIranAntiDPI(unittest.TestCase):
     def test_optimize_bridge(self):
         """Test bridge optimization returns a dict."""
         engine = self._get_class()()
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
         result = engine.optimize_bridge(bridge)
         self.assertIsInstance(result, dict)
 
@@ -183,7 +183,7 @@ class TestIranAntiDPI(unittest.TestCase):
     def test_full_analysis(self):
         """Test full analysis returns a dict."""
         engine = self._get_class()()
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
         result = engine.full_analysis(bridge)
         self.assertIsInstance(result, dict)
 
@@ -249,7 +249,7 @@ class TestIranAutoDefense(unittest.TestCase):
         defense = self._get_class()()
         threats = defense.detect_threats()
         bridges = [
-            "obfs4 1.2.3.4:443 cert=test iat-mode=2",
+            "obfs4 1.2.3.4:443 cert=test iat-mode=1",
             "webtunnel 5.6.7.8:443 url=https://example.com",
         ]
         scores = defense.analyze_bridges(bridges, threats)
@@ -289,7 +289,7 @@ class TestSmartBypassEngine(unittest.TestCase):
     def test_create_stealth_tunnel_config(self):
         """Test stealth tunnel configuration generation."""
         engine = self._get_class()()
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
         strategy = engine.get_bypass_strategy(isp="MCI", censorship_level=3)
         config = engine.create_stealth_tunnel_config(bridge, strategy)
         self.assertIsNotNone(config)
@@ -298,7 +298,7 @@ class TestSmartBypassEngine(unittest.TestCase):
         """Test connection failure diagnosis."""
         engine = self._get_class()()
         result = engine.auto_diagnose_connection_failure(
-            bridge_line="obfs4 1.2.3.4:443 cert=test iat-mode=2",
+            bridge_line="obfs4 1.2.3.4:443 cert=test iat-mode=1",
             error_description="Connection refused",
             isp="MCI",
         )
@@ -358,7 +358,7 @@ class TestAntiAIDPI(unittest.TestCase):
     def test_score_anti_ai_dpi(self):
         """Test anti-AI DPI scoring for bridge lines."""
         from anti_ai_dpi import score_anti_ai_dpi
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
         result = score_anti_ai_dpi(bridge)
         self.assertIsInstance(result, dict)
 

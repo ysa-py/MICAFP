@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-06-23T20:12:09.066618+00:00",
+  "total_tested": 1425,
+  "nin_eligible": 4,
+  "transport_counts": {
+    "snowflake": 4
+  },
+  "recommended_order": [
+    "snowflake",
+    "webtunnel",
+    "meek_lite"
+  ],
+  "pack_path": "export/iran_cut_pack.txt",
+  "note": "هنگام قطع اینترنت بین‌المللی (شبکه ملی)، فقط بریج‌های این فایل کار می‌کنند. During international internet cut, only bridges in this pack are reachable. Use: Snowflake first, then WebTunnel (CDN-fronted), then meek-lite."
+}

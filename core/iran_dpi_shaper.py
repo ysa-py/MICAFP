@@ -164,7 +164,7 @@ def _layer2_iat_analysis(transport: str, line: str) -> float:
     """
     Layer 2 — Inter-arrival time (IAT) analysis.
     Iran SIAM LSTM: classifies traffic rhythm patterns.
-    obfs4 iat-mode=2 is the strongest countermeasure.
+    obfs4 iat-mode=1 is the strongest countermeasure.
     """
     if transport == "snowflake":
         return 0.98  # WebRTC jitter masking + DTLS record boundaries
@@ -441,7 +441,7 @@ def _build_recommendation(
         if "ngfw_blocked_port" in flags:
             return "⚠️ پورت مسدود — سعی کنید از پورت 443 استفاده کنید | Blocked port: try port 443"
         if transport == "obfs4" and "obfs4_iat_mode_0_detectable" in flags:
-            return "⚠️ obfs4 IAT-0 — پیکربندی iat-mode=2 برای عملکرد بهتر | Add iat-mode=2 for better evasion"
+            return "⚠️ obfs4 IAT-0 — پیکربندی iat-mode=1 برای عملکرد بهتر | Add iat-mode=1 for better evasion"
         return "⚠️ متوسط — برخی لایه‌های SIAM تشخیص می‌دهند | Moderate: some SIAM layers detect"
     if tier == BypassTier.EXPOSED:
         return "❌ ضعیف — اکثر لایه‌های SIAM تشخیص می‌دهند | Poor: most SIAM layers detect"
@@ -512,8 +512,8 @@ if __name__ == "__main__":
         "snowflake 192.0.2.3:1 2B280B23E1107BB62ABFC40DDCC8824814F80A72 "
         "url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ "
         "fronts=ftls.googlevideo.com",
-        "obfs4 1.2.3.4:443 FINGERPRINT iat-mode=2",
-        "obfs4 5.6.7.8:9001 FINGERPRINT iat-mode=0",
+        "obfs4 1.2.3.4:443 FINGERPRINT iat-mode=1",
+        "obfs4 5.6.7.8:9001 FINGERPRINT iat-mode=1",
         "192.168.0.1:9001 ABC123",  # vanilla
     ]
     for tl in test_lines:

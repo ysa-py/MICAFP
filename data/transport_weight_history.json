@@ -1,0 +1,20 @@
+[
+  {
+    "ts": "2026-06-23T20:12:08.826124+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.3456495828367103,
+      "obfs4": 0.0,
+      "snowflake": 0.436233611442193,
+      "": 0.2181168057210965
+    },
+    "scores": {
+      "snowflake": 29,
+      "webtunnel": 25,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
+  }
+]

@@ -11,11 +11,11 @@
       "DIAG-6"
     ],
     "actions_taken": [
-      "DIAG-1: no CF slots configured \u2014 recommend populating CF_ACCOUNT_ID_*/CF_API_TOKEN_*",
-      "DIAG-2: no cache file \u2014 recommending rerun of scrape stage",
-      "DIAG-3: AntiDPIV4 engine loaded \u2014 escalate threat level to HIGH",
-      "DIAG-4: Rust binary missing \u2014 fallback to core.tester (Python)",
-      "DIAG-5: Go binaries present \u2014 no fallback needed",
+      "DIAG-1: no CF slots configured — recommend populating CF_ACCOUNT_ID_*/CF_API_TOKEN_*",
+      "DIAG-2: no cache file — recommending rerun of scrape stage",
+      "DIAG-3: AntiDPIV4 engine loaded — escalate threat level to HIGH",
+      "DIAG-4: Rust binary missing — fallback to core.tester (Python)",
+      "DIAG-5: Go binaries present — no fallback needed",
       "DIAG-6: quarantine list ready (0 entries) at data/quarantined_tests.json"
     ],
     "errors_found": [],
@@ -381,5 +381,13 @@
       "success": true
     },
     "success": true
+  },
+  {
+    "timestamp": "2026-06-23T20:03:49.222322+00:00",
+    "github_sha": "081b49fd85d033e591429b6f1070b64448be808b",
+    "errors_found": 0,
+    "errors": [],
+    "patched_files": [],
+    "committed": false
   }
 ]

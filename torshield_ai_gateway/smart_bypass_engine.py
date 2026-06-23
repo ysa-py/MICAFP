@@ -74,7 +74,7 @@ _IRAN_DPI_SYSTEMS_V2 = {
             "WireGuard (detected via handshake)",
         ],
         "bypasses": [
-            "obfs4 port 443 with iat-mode=2",
+            "obfs4 port 443 with iat-mode=1",
             "WebTunnel CDN-fronted via Arvan/Cloudflare",
             "Snowflake with AMP cache",
             "meek-lite via Azure CDN",
@@ -105,7 +105,7 @@ _IRAN_DPI_SYSTEMS_V2 = {
             "WebTunnel via CDN (HTTPS-like traffic)",
             "Snowflake with WebRTC camouflage",
             "VLESS-Reality with perfect forward secrecy",
-            "obfs4 with iat-mode=2 + port 443",
+            "obfs4 with iat-mode=1 + port 443",
         ],
         "active_since": "2024-Q1",
         "last_updated": "2026-06",
@@ -155,7 +155,7 @@ _IRAN_DPI_SYSTEMS_V2 = {
             "Known VPN server IPs",
         ],
         "bypasses": [
-            "obfs4 with iat-mode=2 (entropy randomization)",
+            "obfs4 with iat-mode=1 (entropy randomization)",
             "WebTunnel HTTPS (looks like normal web traffic)",
             "XTLS-Reality (perfect TLS mimicry)",
             "Bridge addresses not in known lists",
@@ -460,7 +460,7 @@ class SmartBypassEngine:
             evasion_methods=[
                 "Entropy control: match normal HTTPS entropy range",
                 "Active probing resistance: respond like a normal web server",
-                "obfs4 iat-mode=2: spread inter-arrival times",
+                "obfs4 iat-mode=1: spread inter-arrival times",
                 "WebTunnel: full HTTPS mimicry",
             ],
             tls_mutation="normal_https_mimic",
@@ -759,7 +759,7 @@ class SmartBypassEngine:
                     "for persistent connections."
                 )
                 recs.append(
-                    "obfs4 on port 443 with iat-mode=2 is viable but "
+                    "obfs4 on port 443 with iat-mode=1 is viable but "
                     "may be degraded by SIAM's ML analysis."
                 )
                 recs.append("Avoid vanilla Tor and non-443 port obfs4.")
@@ -878,7 +878,7 @@ class SmartBypassEngine:
                 pass
 
         if transport == "obfs4":
-            iat_in_line = "iat-mode=2" in bridge_line
+            iat_in_line = "iat-mode=1" in bridge_line
             if strategy.iat_mode == 2 and not iat_in_line:
                 needs_iat_change = True
 
@@ -992,7 +992,7 @@ class SmartBypassEngine:
         fixes = []
         if fix_type == "port_change":
             fixes.append(f"Change port from {port} to 443 (HTTPS port — DPI allows)")
-            fixes.append("Ensure iat-mode=2 is set for obfs4 bridges")
+            fixes.append("Ensure iat-mode=1 is set for obfs4 bridges")
         elif fix_type == "transport_change":
             fixes.append("Switch from vanilla Tor to obfs4, WebTunnel, or Snowflake")
             fixes.append(f"Recommended: {self._select_transport(_ISP_PROFILES.get(isp, {}), censorship_level, False, 12)['primary']}")

@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-06-23T20:05:40.521216+00:00",
+  "total_bridges": 1425,
+  "by_transport": {
+    "obfs4": 513,
+    "webtunnel": 179,
+    "snowflake": 4,
+    "vanilla": 447,
+    "meek_lite": 2
+  },
+  "bridges": [],
+  "ml_model_applied": true,
+  "ml_ai_weight": 0.25,
+  "ml_applied_at": "2026-06-23T20:12:08.597530+00:00"
+}
