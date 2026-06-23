@@ -124,6 +124,15 @@ _ROTATION_CONFIG = {
     "rotation_jitter_seconds": 60,    # Random jitter to avoid patterns
 }
 
+_ISP_RISK_PROFILES = {
+    "mci": {"base_risk": 0.16, "mobile": True, "peak_penalty": 0.10, "preferred": ["snowflake", "webtunnel"]},
+    "irancell": {"base_risk": 0.14, "mobile": True, "peak_penalty": 0.08, "preferred": ["webtunnel", "snowflake"]},
+    "rightel": {"base_risk": 0.11, "mobile": True, "peak_penalty": 0.06, "preferred": ["webtunnel", "obfs4_iat2"]},
+    "shatel": {"base_risk": 0.09, "mobile": False, "peak_penalty": 0.05, "preferred": ["obfs4_443", "webtunnel"]},
+    "asiatech": {"base_risk": 0.10, "mobile": False, "peak_penalty": 0.05, "preferred": ["webtunnel", "obfs4_443"]},
+    "unknown": {"base_risk": 0.12, "mobile": False, "peak_penalty": 0.07, "preferred": ["webtunnel", "snowflake"]},
+}
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # IRAN SMART ANTI-FILTER ENGINE
@@ -237,7 +246,7 @@ class IranSmartAntiFilter:
         candidates = []
 
         for key, info in all_bridges.items():
-            bridge_line = info.get("raw", "")
+            bridge_line = self._bridge_line_from_info(info)
             if not bridge_line:
                 continue
 
@@ -256,14 +265,27 @@ class IranSmartAntiFilter:
             # Test pass bonus
             test_bonus = 1.0 if info.get("test_pass") else 0.5
 
+            # Iran-aware environmental bonus/penalty. This keeps selection
+            # automatic and adaptive without removing any candidate bridge.
+            environment = self.get_environment_profile(transport=transport)
+            adaptive_bonus = 1.0 - environment["risk_score"]
+            preferred_bonus = 1.0 if transport in environment["preferred_transports"] else 0.7
+
             # Composite score
-            score = survival_prob * 0.5 + port_bonus * 0.25 + test_bonus * 0.25
+            score = (
+                survival_prob * 0.45
+                + port_bonus * 0.20
+                + test_bonus * 0.20
+                + adaptive_bonus * 0.10
+                + preferred_bonus * 0.05
+            )
 
             candidates.append({
                 "line": bridge_line,
                 "transport": transport,
                 "score": score,
                 "survival_prob": survival_prob,
+                "environment_risk": environment["risk_score"],
             })
 
         # Sort by score descending
@@ -295,6 +317,47 @@ class IranSmartAntiFilter:
             f"for Level {level} (diversity: {transport_count})"
         )
         return selected
+
+    def get_environment_profile(self, transport: str | None = None) -> dict[str, Any]:
+        """
+        Build an automatic Iran network-risk profile for bridge selection.
+
+        The profile is deterministic and local-only: it combines the detected
+        censorship level, ISP tier, NIN state, Iran local time, and optional
+        transport survival data. Callers can use it to make safer transport
+        choices without live probes or external AI services.
+        """
+        isp_key = (self._state.isp_tier or "unknown").lower()
+        profile = _ISP_RISK_PROFILES.get(isp_key, _ISP_RISK_PROFILES["unknown"])
+        window = self.get_best_connection_window()
+
+        risk = min(max((self._state.level - 1) / 4, 0.0), 1.0)
+        risk += profile["base_risk"]
+        if self._state.nin_active:
+            risk += 0.20
+        if window["current_intensity"] == "heavy":
+            risk += profile["peak_penalty"]
+        elif window["current_intensity"] == "light":
+            risk -= 0.08
+
+        survival = None
+        if transport:
+            rates = _TRANSPORT_SURVIVAL.get(transport, [0.5] * 5)
+            survival = rates[min(max(self._state.level, 1) - 1, 4)]
+            risk += (1.0 - survival) * 0.15
+
+        risk = round(min(max(risk, 0.0), 1.0), 3)
+        preferred = list(dict.fromkeys([*profile["preferred"], *self._state.recommended_transports]))
+        return {
+            "isp_tier": isp_key,
+            "censorship_level": self._state.level,
+            "nin_active": self._state.nin_active,
+            "time_intensity": window["current_intensity"],
+            "risk_score": risk,
+            "survival_probability": survival,
+            "preferred_transports": preferred,
+            "automation": "local-deterministic",
+        }
 
     # ── Bridge Rotation ───────────────────────────────────────────────────
 
@@ -442,6 +505,7 @@ class IranSmartAntiFilter:
             "censorship": self._state.to_dict(),
             "best_cdn_front": self.get_best_cdn_front(),
             "connection_window": self.get_best_connection_window(),
+            "environment_profile": self.get_environment_profile(),
             "rotation_counter": self._rotation_counter,
             "dpi_systems_active": self._state.dpi_systems_active,
         }
@@ -468,6 +532,15 @@ class IranSmartAntiFilter:
                     return "obfs4_443"
             return transport
         return "vanilla"
+
+    @staticmethod
+    def _bridge_line_from_info(info: dict[str, Any]) -> str:
+        """Normalize bridge dictionaries from legacy and current collectors."""
+        for field_name in ("raw", "line", "bridge", "bridge_line"):
+            value = info.get(field_name)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        return ""
 
     @staticmethod
     def _extract_port(bridge_line: str) -> int:
