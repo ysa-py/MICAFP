@@ -59,7 +59,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "torshield-ir-ultra"
-version = "1.0.0-vip"
+version = "1.0.0+vip"
 description = "TorShield-IR Ultra VIP Edition — Iran Anti-Censorship Tor Bridge Intelligence Platform"
 readme = "README.md"
 requires-python = ">=3.12"
