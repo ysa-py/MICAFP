@@ -19,6 +19,8 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
+import xml.etree.ElementTree as ET
 import tarfile
 import time
 from datetime import UTC, datetime
@@ -32,62 +34,113 @@ TARBALL_PATH = DIST_DIR / TARBALL_NAME
 CHECKSUMS_PATH = DIST_DIR / "checksums.sha256"
 
 
-def _run(cmd: str, timeout: int = 240) -> tuple[bool, str]:
-    """Run a shell command, return (ok, combined_output)."""
+def _run(
+    cmd: list[str],
+    timeout: int = 240,
+    env: dict[str, str] | None = None,
+) -> tuple[bool, str, int]:
+    """Run a command without a shell, return (ok, combined_output, returncode)."""
     try:
+        run_env = os.environ.copy()
+        if env:
+            run_env.update(env)
         r = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True,
-            timeout=timeout, cwd=str(PROJECT_ROOT),
+            cmd,
+            shell=False,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=str(PROJECT_ROOT),
+            env=run_env,
         )
-        return r.returncode == 0, (r.stdout or "") + (r.stderr or "")
+        return r.returncode == 0, (r.stdout or "") + (r.stderr or ""), r.returncode
     except Exception as exc:
-        return False, str(exc)
+        return False, str(exc), 1
+
+
+def _is_excluded_path(path: Path) -> bool:
+    """Return whether a path should be skipped by package checks."""
+    excluded_parts = {".git", "vendor", "coverage", "coverage_html", "htmlcov"}
+    return any(part in excluded_parts for part in path.relative_to(PROJECT_ROOT).parts)
+
+
+def _python_files_for_syntax_check() -> list[Path]:
+    """Collect Python files for syntax checks without shell pipelines."""
+    return sorted(
+        path
+        for path in PROJECT_ROOT.rglob("*.py")
+        if path.is_file() and not _is_excluded_path(path)
+    )
 
 
 def count_syntax_errors() -> int:
-    ok, log = _run(
-        "find . -name '*.py' -not -path './.git/*' -not -path './vendor/*' "
-        "-not -path './reports/coverage_html/*' -exec python -m py_compile {} + "
-        "2>&1 | grep -E 'SyntaxError|Error' | head -200",
-        timeout=120,
-    )
-    if not log.strip():
-        return 0
-    return len([l for l in log.splitlines() if l.strip()])
+    errors = 0
+    files = _python_files_for_syntax_check()
+    chunk_size = 100
+    for idx in range(0, len(files), chunk_size):
+        chunk = files[idx:idx + chunk_size]
+        cmd = [sys.executable, "-m", "py_compile", *[str(path) for path in chunk]]
+        ok, log, _ = _run(cmd, timeout=120)
+        if ok:
+            continue
+        errors += sum(
+            1
+            for line in log.splitlines()
+            if "SyntaxError" in line or "Error" in line
+        ) or 1
+    return errors
 
 
 def count_test_failures() -> int:
-    ok, log = _run(
-        "SKIP_NETWORK_TESTS=true python -m pytest tests/ -q --tb=line "
-        "-m 'not network and not tor and not iran_bridge and not bridge "
-        "and not dpi and not nin and not iran and not slow' --timeout=30 "
-        "-p no:cacheprovider 2>&1 | tail -5",
+    with tempfile.NamedTemporaryFile(suffix=".xml", delete=False) as junit_file:
+        junit_path = Path(junit_file.name)
+
+    cmd = [
+        sys.executable, "-m", "pytest", "tests/", "-q", "--tb=line",
+        "-m",
+        "not network and not tor and not iran_bridge and not bridge "
+        "and not dpi and not nin and not iran and not slow",
+        "--timeout=30", "-p", "no:cacheprovider",
+        f"--junitxml={junit_path}",
+    ]
+    ok, _log, returncode = _run(
+        cmd,
         timeout=300,
+        env={"SKIP_NETWORK_TESTS": "true"},
     )
-    # Look for "X failed" in the last 5 lines
-    last_lines = (log or "").splitlines()[-5:]
-    for line in last_lines:
-        if "failed" in line and "passed" in line:
-            # Format: "===== 5 failed, 349 passed in 30.80s ====="
-            try:
-                failed_part = line.split("failed")[0].split()[-1]
-                return int(failed_part)
-            except Exception as _remediation_exc:
-                from monitoring.structured_logger import record_silent_failure
-                record_silent_failure('scripts.build_vip_package:75', _remediation_exc)
-                pass
-        if "failed" in line.lower() and "error" in line.lower():
-            return 1
-    return 0 if ok else 1
+    try:
+        if junit_path.exists():
+            root = ET.parse(junit_path).getroot()
+            if root.tag == "testsuites":
+                suites = list(root)
+                failures = sum(int(suite.attrib.get("failures", 0)) for suite in suites)
+                errors = sum(int(suite.attrib.get("errors", 0)) for suite in suites)
+            else:
+                failures = int(root.attrib.get("failures", 0))
+                errors = int(root.attrib.get("errors", 0))
+            return failures + errors
+    except Exception as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('scripts.build_vip_package:88', _remediation_exc)
+    finally:
+        try:
+            junit_path.unlink(missing_ok=True)
+        except Exception as _remediation_exc:
+            from monitoring.structured_logger import record_silent_failure
+            record_silent_failure('scripts.build_vip_package:93', _remediation_exc)
+
+    return 0 if ok else max(returncode, 1)
 
 
 def count_yaml_errors() -> int:
-    ok, _ = _run(
-        "python -c \"import yaml,glob; "
-        "[yaml.safe_load(open(f)) for f in glob.glob('**/*.y*ml', recursive=True) "
-        "if '/.git/' not in f and 'reports/coverage_html' not in f]\"",
-        timeout=30,
+    yaml_script = (
+        "from pathlib import Path; import yaml; "
+        "excluded={'.git','vendor','coverage','coverage_html'}; "
+        "paths=list(Path('.').rglob('*.yml'))+list(Path('.').rglob('*.yaml')); "
+        "[yaml.safe_load(path.open(encoding='utf-8')) for path in paths "
+        "if not any(part in excluded for part in path.parts)]"
     )
+    ok, _, _ = _run([sys.executable, "-c", yaml_script], timeout=30)
     return 0 if ok else 1
 
 
@@ -130,7 +183,7 @@ def count_import_errors() -> int:
     ]
     errors = 0
     for mod in modules_to_check:
-        ok, _ = _run(f"python -c 'import {mod}'", timeout=15)
+        ok, _, _ = _run([sys.executable, "-c", f"import {mod}"], timeout=15)
         if not ok:
             errors += 1
     return errors
