@@ -55,6 +55,13 @@ mkdir -p \
   "$DEST_DIR/data" \
   "$DEST_DIR/docs" \
   "$DEST_DIR/core" \
+  "$DEST_DIR/monitoring" \
+  "$DEST_DIR/gateway" \
+  "$DEST_DIR/health" \
+  "$DEST_DIR/recovery" \
+  "$DEST_DIR/circuit_breaker" \
+  "$DEST_DIR/reports" \
+  "$DEST_DIR/tests" \
   "$DEST_DIR/internal/asn" \
   "$DEST_DIR/internal/ooni" \
   "$DEST_DIR/internal/ipinfo" \
@@ -128,6 +135,24 @@ done
 # Core directory
 [[ -d "$SRC_DIR/core" ]] && cp -r "$SRC_DIR/core/"* "$DEST_DIR/core/" \
   && info "  Copied: core/"
+
+# Runtime support packages and QA assets
+[[ -d "$SRC_DIR/monitoring" ]] && cp -r "$SRC_DIR/monitoring/"* "$DEST_DIR/monitoring/" \
+  && info "  Copied: monitoring/"
+[[ -d "$SRC_DIR/gateway" ]] && cp -r "$SRC_DIR/gateway/"* "$DEST_DIR/gateway/" \
+  && info "  Copied: gateway/"
+[[ -d "$SRC_DIR/health" ]] && cp -r "$SRC_DIR/health/"* "$DEST_DIR/health/" \
+  && info "  Copied: health/"
+[[ -d "$SRC_DIR/recovery" ]] && cp -r "$SRC_DIR/recovery/"* "$DEST_DIR/recovery/" \
+  && info "  Copied: recovery/"
+[[ -d "$SRC_DIR/circuit_breaker" ]] && cp -r "$SRC_DIR/circuit_breaker/"* "$DEST_DIR/circuit_breaker/" \
+  && info "  Copied: circuit_breaker/"
+[[ -d "$SRC_DIR/reports" ]] && cp -r "$SRC_DIR/reports/"* "$DEST_DIR/reports/" \
+  && info "  Copied: reports/"
+[[ -d "$SRC_DIR/scripts" ]] && cp -r "$SRC_DIR/scripts/"* "$DEST_DIR/scripts/" \
+  && info "  Copied: scripts/"
+[[ -d "$SRC_DIR/tests" ]] && cp -r "$SRC_DIR/tests/"* "$DEST_DIR/tests/" \
+  && info "  Copied: tests/"
 
 # GitHub Actions workflow
 cp "$SRC_DIR/.github/workflows/torshield-ir.yml" \
