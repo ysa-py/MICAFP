@@ -22,6 +22,7 @@ import json
 import logging
 import socket
 import ssl
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -39,6 +40,7 @@ def _check_ech(host: str, port: int, timeout: float = 8.0) -> dict[str, Any]:
         "host": host, "port": port,
         "tls_reachable": False, "tls_version": None,
         "ech_supported": False, "ech_grease": False,
+        "tls_probe_status": "not_attempted", "tls_error_type": None,
     }
     try:
         ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
@@ -53,10 +55,25 @@ def _check_ech(host: str, port: int, timeout: float = 8.0) -> dict[str, Any]:
                 cert = tls.getpeercert(binary_form=True)
                 if cert and b"ech" in cert.lower():
                     result["ech_supported"] = True
+                result["tls_probe_status"] = "reachable"
+    except (socket.timeout, TimeoutError) as exc:
+        result["tls_probe_status"] = "timeout"
+        result["tls_error_type"] = type(exc).__name__
+    except ConnectionRefusedError as exc:
+        result["tls_probe_status"] = "connection_refused"
+        result["tls_error_type"] = type(exc).__name__
+    except ssl.SSLError as exc:
+        result["tls_probe_status"] = "ssl_error"
+        result["tls_error_type"] = type(exc).__name__
+    except OSError as exc:
+        result["tls_probe_status"] = "unreachable"
+        result["tls_error_type"] = type(exc).__name__
     except Exception as _remediation_exc:
+        log.exception("Unexpected ECH probe failure for %s:%s", host, port)
         from monitoring.structured_logger import record_silent_failure
         record_silent_failure('ech_fingerprint_evasion:56', _remediation_exc)
-        pass
+        result["tls_probe_status"] = "unexpected_error"
+        result["tls_error_type"] = type(_remediation_exc).__name__
     return result
 
 
@@ -116,10 +133,19 @@ def main() -> None:
     log.info("ECH/fingerprint scan: %d bridges", len(bridges))
 
     results = []
+    probe_status_counts: Counter[str] = Counter()
     for line in bridges[:200]:  # cap to avoid CI timeout
         r = score_bridge(line)
         results.append(r)
+        if r.get("tls_probe_status"):
+            probe_status_counts[str(r["tls_probe_status"])] += 1
         log.info("[%.3f] %s %s", r["iran_dpi_evasion_score"], r["transport"], r.get("flags", []))
+
+    expected_unreachable = {"timeout", "connection_refused", "ssl_error", "unreachable"}
+    expected_count = sum(probe_status_counts[status] for status in expected_unreachable)
+    if expected_count:
+        log.info("ECH probe expected unreachable/refused/timeout/SSL outcomes: %d (%s)",
+                 expected_count, dict(probe_status_counts))
 
     results.sort(key=lambda x: x["iran_dpi_evasion_score"], reverse=True)
     out = Path("data") / "ech_report.json"
