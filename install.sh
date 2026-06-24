@@ -113,20 +113,61 @@ fi
 # ── 5. Go ────────────────────────────────────────────────────────────────────
 if [[ "$NO_GO" == "false" ]]; then
   log_info "Checking Go 1.22+…"
-  if ! command -v go &>/dev/null; then
-    log_warn "Go not found. Installing Go 1.22…"
-    if [[ "$OS" == "Linux" ]]; then
-      GO_URL="https://go.dev/dl/go1.22.4.linux-amd64.tar.gz"
-      curl -fsSL "$GO_URL" -o /tmp/go.tar.gz
-      sudo rm -rf /usr/local/go
-      sudo tar -C /usr/local -xzf /tmp/go.tar.gz
-      export PATH="/usr/local/go/bin:$PATH"
+  MIN_GO_VER="1.22"
+
+  install_go_linux() {
+    log_info "Installing Go ${MIN_GO_VER}+…"
+    GO_URL="https://go.dev/dl/go1.22.4.linux-amd64.tar.gz"
+    curl -fsSL "$GO_URL" -o /tmp/go.tar.gz
+    sudo rm -rf /usr/local/go
+    sudo tar -C /usr/local -xzf /tmp/go.tar.gz
+    export PATH="/usr/local/go/bin:$PATH"
+    if ! grep -qxF 'export PATH="/usr/local/go/bin:$PATH"' "$HOME/.bashrc" 2>/dev/null; then
       echo 'export PATH="/usr/local/go/bin:$PATH"' >> "$HOME/.bashrc"
-    else
-      log_err "Please install Go 1.22+ manually from https://go.dev/dl/"
     fi
+  }
+
+  validate_go_version() {
+    GO_VERSION_OUTPUT=$(go version 2>/dev/null || true)
+    GO_VER=$(echo "$GO_VERSION_OUTPUT" | grep -oE 'go[0-9]+\.[0-9]+' | head -1 | sed 's/^go//')
+    if [[ -z "$GO_VER" ]]; then
+      log_err "Go ${MIN_GO_VER}+ required. Found: ${GO_VERSION_OUTPUT:-unknown}."
+    fi
+
+    GO_MAJOR=$(echo "$GO_VER" | cut -d. -f1)
+    GO_MINOR=$(echo "$GO_VER" | cut -d. -f2)
+    if [[ "$GO_MAJOR" -lt 1 || ("$GO_MAJOR" -eq 1 && "$GO_MINOR" -lt 22) ]]; then
+      return 1
+    fi
+    return 0
+  }
+
+  NEED_GO=false
+  if ! command -v go &>/dev/null; then
+    log_warn "Go not found. Installing Go ${MIN_GO_VER}+…"
+    NEED_GO=true
+  elif ! validate_go_version; then
+    log_warn "Go $GO_VER found — need ${MIN_GO_VER}+. Upgrading…"
+    NEED_GO=true
   fi
-  GO_VER=$(go version | grep -oE 'go[0-9]+\.[0-9]+' | head -1 | tr -d go)
+
+  if [[ "$NEED_GO" == "true" ]]; then
+    if [[ "$OS" == "Linux" ]]; then
+      install_go_linux
+      if ! command -v go &>/dev/null; then
+        log_err "Go ${MIN_GO_VER}+ required. Found: not installed after automatic installation."
+      fi
+      if ! validate_go_version; then
+        log_err "Go ${MIN_GO_VER}+ required. Found $GO_VER after automatic installation."
+      fi
+    else
+      FOUND_GO="${GO_VER:-not installed}"
+      log_err "Go ${MIN_GO_VER}+ required. Found $FOUND_GO. Please install Go ${MIN_GO_VER}+ manually from https://go.dev/dl/"
+    fi
+  else
+    validate_go_version
+  fi
+
   log_ok "Go $GO_VER"
 
   log_info "Building Go binaries…"
