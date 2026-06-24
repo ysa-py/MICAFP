@@ -288,8 +288,13 @@ func main() {
 	}
 
 	// Persist merged results for Python correlator
-	if out, err := json.MarshalIndent(report, "", "  "); err == nil {
-		_ = os.WriteFile("data/scheduler_results.json", out, 0644)
+	const schedulerResultsPath = "data/scheduler_results.json"
+	if err := os.MkdirAll("data", 0755); err != nil {
+		log.Printf("Cannot create scheduler results directory (non-fatal): %v", err)
+	} else if out, err := json.MarshalIndent(report, "", "  "); err != nil {
+		log.Printf("Cannot marshal scheduler results (non-fatal): %v", err)
+	} else if err := os.WriteFile(schedulerResultsPath, out, 0644); err != nil {
+		log.Printf("Cannot write scheduler results to %s (non-fatal): %v", schedulerResultsPath, err)
 	}
 
 	// ── Step 4: HTTP exposure ─────────────────────────────────────────────
