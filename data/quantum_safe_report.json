@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-24T16:35:20.750759+00:00",
-  "total_bridges": 1432,
+  "generated_at": "2026-06-24T19:05:03.913699+00:00",
+  "total_bridges": 1433,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -8712,6 +8712,15 @@
     },
     {
       "bridge_line": "obfs4 96.43.207.162:8877 6E2620AEDD466CC1542CBC8B85F45FE04AC126EC cert=O9j5SLu3FYxUGj0hvbC72FE5q0eXUOCmdhjwLr7lZvKTTQakPCgPjAVgoMK7y48g1T3yHw iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "obfs4 97.115.72.184:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",

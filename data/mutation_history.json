@@ -40,5 +40,10 @@
     "event": "ai_waterfall_failure",
     "local_score": 0.0,
     "final_score": 0.0
+  },
+  {
+    "timestamp": "2026-06-24T19:24:58.456332+00:00",
+    "strategy": "port_rotation+obfs4_iat_boost",
+    "blocking_score": 0.92
   }
 ]

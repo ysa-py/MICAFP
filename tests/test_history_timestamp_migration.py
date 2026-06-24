@@ -9,7 +9,7 @@ def _sample_history() -> dict[str, object]:
     return {
         "legacy-bridge": "2026-06-05T07:45:38",
         "dict-bridge": {
-            "raw": "obfs4 203.0.113.1:443 cert=abc iat-mode=0",
+            "raw": "obfs4 203.0.113.1:443 cert=abc iat-mode=2",
             "transport": "obfs4",
             "ip_version": "ipv4",
             "first_seen": "2026-06-05T07:45:38",
@@ -27,7 +27,7 @@ def _assert_normalized(history: dict[str, object]) -> None:
     assert isinstance(entry, dict)
     assert entry["first_seen"] == "2026-06-05T07:45:38+00:00"
     assert entry["last_seen"] == "2026-06-05T05:15:38+00:00"
-    assert entry["raw"] == "obfs4 203.0.113.1:443 cert=abc iat-mode=0"
+    assert entry["raw"] == "obfs4 203.0.113.1:443 cert=abc iat-mode=2"
     assert entry["transport"] == "obfs4"
     assert entry["ip_version"] == "ipv4"
     assert entry["tcp_reachable"] is True
@@ -64,7 +64,7 @@ def test_direct_and_legacy_cleanup_use_same_last_seen_behavior(monkeypatch) -> N
         "stale": "2026-05-01T00:00:00",
         "fresh": "2026-06-23T00:00:00",
         "old-first-new-last": {
-            "raw": "obfs4 203.0.113.2:443 cert=def iat-mode=0",
+            "raw": "obfs4 203.0.113.2:443 cert=def iat-mode=2",
             "transport": "obfs4",
             "ip_version": "ipv4",
             "first_seen": "2026-05-01T00:00:00+00:00",
@@ -83,7 +83,7 @@ def test_direct_and_legacy_cleanup_use_same_last_seen_behavior(monkeypatch) -> N
     assert "old-first-new-last" in direct_cleaned
     entry = direct_cleaned["old-first-new-last"]
     assert isinstance(entry, dict)
-    assert entry["raw"] == "obfs4 203.0.113.2:443 cert=def iat-mode=0"
+    assert entry["raw"] == "obfs4 203.0.113.2:443 cert=def iat-mode=2"
     assert entry["transport"] == "obfs4"
     assert entry["ip_version"] == "ipv4"
     assert entry["first_seen"] == "2026-05-01T00:00:00+00:00"

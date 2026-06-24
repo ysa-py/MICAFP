@@ -3871,6 +3871,10 @@
     "score": 59,
     "transport": "obfs4"
   },
+  "obfs4 97.115.72.184:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0": {
+    "score": 59,
+    "transport": "obfs4"
+  },
   "obfs4 97.115.92.203:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0": {
     "score": 59,
     "transport": "obfs4"
