@@ -151,6 +151,28 @@ def save_history(history: dict[str, Any]) -> None:
     )
 
 
+def _parse_history_dt(value: Any) -> datetime:
+    """Parse history timestamps as UTC-aware datetimes with an explicit fallback."""
+    fallback = datetime(2000, 1, 1, tzinfo=UTC)
+    if isinstance(value, datetime):
+        if value.tzinfo is None:
+            return value.replace(tzinfo=UTC)
+        return value.astimezone(UTC)
+    if isinstance(value, str):
+        try:
+            normalized = value.replace("Z", "+00:00")
+            parsed = parse_dt(normalized).astimezone(UTC)
+            if (
+                parsed == datetime(1970, 1, 1, tzinfo=UTC)
+                and not normalized.startswith("1970-01-01")
+            ):
+                return fallback
+            return parsed
+        except Exception:
+            return fallback
+    return fallback
+
+
 def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
     """Remove entries older than HISTORY_RETENTION_DAYS."""
     cutoff = datetime.now(UTC) - timedelta(days=HISTORY_RETENTION_DAYS)
@@ -158,13 +180,12 @@ def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
     for k, v in history.items():
         try:
             if isinstance(v, str):
-                ts_str = v
+                ts_value = v
             elif isinstance(v, dict):
-                ts_str = v.get("last_seen") or v.get("first_seen", "2000-01-01")
+                ts_value = v.get("last_seen") or v.get("first_seen")
             else:
-                to_delete.append(k)
-                continue
-            first = parse_dt(ts_str.replace("Z", "+00:00"))
+                ts_value = None
+            first = _parse_history_dt(ts_value)
             if first < cutoff:
                 to_delete.append(k)
         except Exception as _remediation_exc:
@@ -425,12 +446,12 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
                 continue
             try:
                 if isinstance(entry, str):
-                    ts_str = entry
+                    ts_value = entry
                 elif isinstance(entry, dict):
-                    ts_str = entry.get("first_seen", "2000-01-01")
+                    ts_value = entry.get("first_seen")
                 else:
-                    continue
-                first = parse_dt(ts_str.replace("Z", "+00:00"))
+                    ts_value = None
+                first = _parse_history_dt(ts_value)
                 if first > recent_cutoff:
                     recent_bridges.append(bridge)
             except Exception as _remediation_exc:
