@@ -35,7 +35,11 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-from core.dt_utils import coerce_utc_dt
+from sources.history_utils import (
+    cleanup_history,
+    normalize_history_timestamps,
+    parse_history_dt,
+)
 
 log = logging.getLogger(__name__)
 
@@ -122,49 +126,6 @@ def save_history(history: dict[str, Any]) -> None:
         encoding="utf-8",
     )
 
-
-def _parse_history_dt(value: Any) -> datetime:
-    """Parse history timestamps as UTC-aware datetimes with an explicit fallback."""
-    # Bridge history may contain legacy naive timestamps; coerce everything to
-    # UTC-aware datetimes before retention/recent-window comparisons.
-    return coerce_utc_dt(value)
-
-
-def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
-    """Normalize loaded history timestamps to UTC-aware ISO strings in-place."""
-    timestamp_fields = ("first_seen", "last_seen")
-    for key, entry in history.items():
-        if isinstance(entry, str):
-            history[key] = coerce_utc_dt(entry).isoformat()
-        elif isinstance(entry, dict):
-            for field in timestamp_fields:
-                value = entry.get(field)
-                if isinstance(value, str):
-                    entry[field] = coerce_utc_dt(value).isoformat()
-    return history
-
-
-def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
-    cutoff = datetime.now(UTC) - timedelta(days=HISTORY_RETENTION_DAYS)
-    stale = []
-    for k, v in history.items():
-        try:
-            if isinstance(v, str):
-                ts_value = v
-            elif isinstance(v, dict):
-                ts_value = v.get("first_seen")
-            else:
-                ts_value = None
-            dt = _parse_history_dt(ts_value)
-            if dt < cutoff:
-                stale.append(k)
-        except Exception as _remediation_exc:
-            from monitoring.structured_logger import record_silent_failure
-            record_silent_failure('sources.legacy_scraper:131', _remediation_exc)
-            pass
-    for k in stale:
-        del history[k]
-    return history
 
 
 def upsert_history(history: dict[str, Any], key: str, transport: str, raw: str) -> None:
@@ -384,7 +345,7 @@ def run() -> dict[str, int]:
     session = _session()
     history = load_history()
     history = normalize_history_timestamps(history)
-    history = cleanup_history(history)
+    history = cleanup_history(history, HISTORY_RETENTION_DAYS)
     cutoff  = datetime.now(UTC) - timedelta(hours=RECENT_HOURS)
     stats: dict[str, int] = {}
 
@@ -435,7 +396,7 @@ def run() -> dict[str, int]:
                     ts_value = entry.get("first_seen")
                 else:
                     ts_value = None
-                dt = _parse_history_dt(ts_value)
+                dt = parse_history_dt(ts_value)
                 if dt > cutoff:
                     recent.append(b)
             except Exception as _remediation_exc:

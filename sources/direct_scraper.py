@@ -34,7 +34,11 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-from core.dt_utils import coerce_utc_dt
+from sources.history_utils import (
+    cleanup_history,
+    normalize_history_timestamps,
+    parse_history_dt,
+)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging
@@ -150,52 +154,6 @@ def save_history(history: dict[str, Any]) -> None:
         encoding="utf-8",
     )
 
-
-def _parse_history_dt(value: Any) -> datetime:
-    """Parse history timestamps as UTC-aware datetimes with an explicit fallback."""
-    # Bridge history may contain legacy naive timestamps; coerce everything to
-    # UTC-aware datetimes before retention/recent-window comparisons.
-    return coerce_utc_dt(value)
-
-
-def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
-    """Normalize loaded history timestamps to UTC-aware ISO strings in-place."""
-    timestamp_fields = ("first_seen", "last_seen")
-    for key, entry in history.items():
-        if isinstance(entry, str):
-            history[key] = coerce_utc_dt(entry).isoformat()
-        elif isinstance(entry, dict):
-            for field in timestamp_fields:
-                value = entry.get(field)
-                if isinstance(value, str):
-                    entry[field] = coerce_utc_dt(value).isoformat()
-    return history
-
-
-def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
-    """Remove entries older than HISTORY_RETENTION_DAYS."""
-    cutoff = datetime.now(UTC) - timedelta(days=HISTORY_RETENTION_DAYS)
-    to_delete: list[str] = []
-    for k, v in history.items():
-        try:
-            if isinstance(v, str):
-                ts_value = v
-            elif isinstance(v, dict):
-                ts_value = v.get("last_seen") or v.get("first_seen")
-            else:
-                ts_value = None
-            first = _parse_history_dt(ts_value)
-            if first < cutoff:
-                to_delete.append(k)
-        except Exception as _remediation_exc:
-            from monitoring.structured_logger import record_silent_failure
-            record_silent_failure('sources.direct_scraper:169', _remediation_exc)
-            pass
-    for k in to_delete:
-        del history[k]
-    if to_delete:
-        log.info(f"Cleaned up {len(to_delete)} stale history entries.")
-    return history
 
 
 def update_history_entry(history: dict[str, Any], key: str, transport: str, raw: str) -> None:
@@ -394,7 +352,7 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
     session = _make_session()
     history = load_history()
     history = normalize_history_timestamps(history)
-    history = cleanup_history(history)
+    history = cleanup_history(history, HISTORY_RETENTION_DAYS)
 
     recent_cutoff = datetime.now(UTC) - timedelta(hours=RECENT_HOURS)
     stats: dict[str, int] = {}
@@ -451,7 +409,7 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
                     ts_value = entry.get("first_seen")
                 else:
                     ts_value = None
-                first = _parse_history_dt(ts_value)
+                first = parse_history_dt(ts_value)
                 if first > recent_cutoff:
                     recent_bridges.append(bridge)
             except Exception as _remediation_exc:
