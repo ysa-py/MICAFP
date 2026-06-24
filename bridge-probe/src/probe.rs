@@ -1,4 +1,3 @@
-#![deny(warnings)]
 //! probe.rs — Async reachability probes for each supported transport.
 //! TorShield-IR v2.0 — Extended Iran DPI-resistant transport support.
 //!
@@ -41,10 +40,10 @@ pub enum ProbeStatus {
 impl std::fmt::Display for ProbeStatus {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ProbeStatus::Reachable     => write!(f, "reachable"),
-            ProbeStatus::Timeout       => write!(f, "timeout"),
-            ProbeStatus::Refused       => write!(f, "refused"),
-            ProbeStatus::Error         => write!(f, "error"),
+            ProbeStatus::Reachable => write!(f, "reachable"),
+            ProbeStatus::Timeout => write!(f, "timeout"),
+            ProbeStatus::Refused => write!(f, "refused"),
+            ProbeStatus::Error => write!(f, "error"),
             ProbeStatus::QuicReachable => write!(f, "quic_reachable"),
         }
     }
@@ -53,18 +52,18 @@ impl std::fmt::Display for ProbeStatus {
 /// Full probe result for one bridge line.
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct ProbeResult {
-    pub bridge:         String,
-    pub status:         ProbeStatus,
-    pub latency_ms:     u64,
-    pub pt_type:        String,
+    pub bridge: String,
+    pub status: ProbeStatus,
+    pub latency_ms: u64,
+    pub pt_type: String,
     /// True if this transport can survive Iran NIN internet cut.
     pub nin_survivable: bool,
     /// Iran DPI resistance tier.
-    pub dpi_tier:       String,
+    pub dpi_tier: String,
     /// Protocol layer used for this probe: "tcp" | "tls" | "udp" | "assumed"
-    pub probe_layer:    String,
+    pub probe_layer: String,
     /// SNI hostname used in TLS probe (if applicable).
-    pub probe_sni:      Option<String>,
+    pub probe_sni: Option<String>,
 }
 
 /// Probe a single [`Endpoint`] within `probe_timeout`.
@@ -72,53 +71,75 @@ pub struct ProbeResult {
 pub async fn probe(ep: &Endpoint, probe_timeout: Duration) -> ProbeResult {
     let start = std::time::Instant::now();
 
-    // Route to the correct probe layer based on the endpoint metadata.
-    // uses_udp is set by transport::parse_endpoint for QUIC-based transports;
-    // using it here (rather than re-matching on Transport) ensures the field
-    // is read and the dead_code lint is satisfied, while also being correct.
-    let (status, probe_layer) = if ep.uses_udp {
-        // QUIC-based (Hysteria2, TUIC) — UDP probe
-        let s = probe_udp(&ep.host, ep.port, probe_timeout).await;
-        (s, "udp".to_string())
-    } else {
-        match ep.transport {
-            Transport::Snowflake => {
-                // WebRTC/DTLS over UDP 3478 or WSS/443 — cannot probe from
-                // a raw socket environment. Convention: Reachable.
-                debug!("Snowflake → assumed Reachable (WebRTC convention)");
-                (ProbeStatus::Reachable, "assumed".to_string())
-            }
-            Transport::WebTunnel | Transport::MeekLite => {
-                // TLS handshake using the CDN/bridge SNI from the bridge line.
-                let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
-                (s, "tls".to_string())
-            }
-            Transport::VlessReality | Transport::ShadowTls => {
-                // TLS camouflage — ep.sni holds the disguise domain for REALITY,
-                // or the target TLS host for ShadowTLS.
-                let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
-                (s, "tls".to_string())
-            }
-            Transport::Obfs4 => {
-                let s = probe_obfs4(ep, probe_timeout).await;
-                (s, "tcp".to_string())
-            }
-            Transport::Vanilla | Transport::Unknown | _ => {
-                let s = probe_tcp(&ep.host, ep.port, probe_timeout).await;
-                (s, "tcp".to_string())
-            }
+    debug_assert_eq!(
+        ep.uses_udp,
+        matches!(ep.transport, Transport::Hysteria2 | Transport::Tuic),
+        "Endpoint::uses_udp must match QUIC-based transport classification",
+    );
+
+    // Route by transport explicitly. This match intentionally has no wildcard:
+    // when a new Transport variant is added, the compiler must force us to
+    // choose the probe layer and behavior here instead of silently falling back.
+    let (status, probe_layer) = match &ep.transport {
+        Transport::Hysteria2 => {
+            // QUIC-based Hysteria2 — UDP probe.
+            let s = probe_udp(&ep.host, ep.port, probe_timeout).await;
+            (s, "udp".to_string())
+        }
+        Transport::Tuic => {
+            // QUIC-based TUIC v5 — UDP probe.
+            let s = probe_udp(&ep.host, ep.port, probe_timeout).await;
+            (s, "udp".to_string())
+        }
+        Transport::Snowflake => {
+            // WebRTC/DTLS over UDP 3478 or WSS/443 — cannot probe from
+            // a raw socket environment. Convention: Reachable.
+            debug!("Snowflake → assumed Reachable (WebRTC convention)");
+            (ProbeStatus::Reachable, "assumed".to_string())
+        }
+        Transport::WebTunnel => {
+            // TLS handshake using the CDN/bridge SNI from the bridge line.
+            let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
+            (s, "tls".to_string())
+        }
+        Transport::MeekLite => {
+            // TLS handshake using the CDN/bridge SNI from the bridge line.
+            let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
+            (s, "tls".to_string())
+        }
+        Transport::VlessReality => {
+            // TLS camouflage — ep.sni holds the REALITY disguise domain.
+            let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
+            (s, "tls".to_string())
+        }
+        Transport::ShadowTls => {
+            // TLS camouflage — ep.sni holds the target TLS host when present.
+            let s = probe_tls(&ep.host, ep.port, probe_timeout, ep.sni.as_deref()).await;
+            (s, "tls".to_string())
+        }
+        Transport::Obfs4 => {
+            let s = probe_obfs4(ep, probe_timeout).await;
+            (s, "tcp".to_string())
+        }
+        Transport::Vanilla => {
+            let s = probe_tcp(&ep.host, ep.port, probe_timeout).await;
+            (s, "tcp".to_string())
+        }
+        Transport::Unknown => {
+            let s = probe_tcp(&ep.host, ep.port, probe_timeout).await;
+            (s, "tcp".to_string())
         }
     };
 
     ProbeResult {
-        bridge:         ep.raw.clone(),
+        bridge: ep.raw.clone(),
         status,
-        latency_ms:     start.elapsed().as_millis() as u64,
-        pt_type:        ep.transport.to_string(),
+        latency_ms: start.elapsed().as_millis() as u64,
+        pt_type: ep.transport.to_string(),
         nin_survivable: ep.transport.survives_nin(),
-        dpi_tier:       format!("{:?}", ep.transport.dpi_tier()),
+        dpi_tier: format!("{:?}", ep.transport.dpi_tier()),
         probe_layer,
-        probe_sni:      ep.sni.clone(),
+        probe_sni: ep.sni.clone(),
     }
 }
 
@@ -130,16 +151,17 @@ pub async fn probe(ep: &Endpoint, probe_timeout: Duration) -> ProbeResult {
 /// Sending any bytes (including \x00) triggers RST on many Tor bridge servers.
 async fn probe_tcp(host: &str, port: u16, probe_timeout: Duration) -> ProbeStatus {
     let addr_str = format!("{}:{}", host, port);
-    let addr: SocketAddr = match tokio::net::lookup_host(&addr_str).await
+    let addr: SocketAddr = match tokio::net::lookup_host(&addr_str)
+        .await
         .ok()
         .and_then(|mut i| i.next())
     {
         Some(a) => a,
-        None    => return ProbeStatus::Error,
+        None => return ProbeStatus::Error,
     };
 
     match timeout(probe_timeout, TcpStream::connect(addr)).await {
-        Ok(Ok(_))  => ProbeStatus::Reachable,
+        Ok(Ok(_)) => ProbeStatus::Reachable,
         Ok(Err(e)) => {
             if e.kind() == std::io::ErrorKind::ConnectionRefused {
                 ProbeStatus::Refused
@@ -162,7 +184,12 @@ async fn probe_tcp(host: &str, port: u16, probe_timeout: Duration) -> ProbeStatu
 ///
 /// Full TLS handshake requires tokio-rustls; here we use TCP layer reachability
 /// as the proxy measurement — sufficient for censorship detection.
-async fn probe_tls(host: &str, port: u16, probe_timeout: Duration, sni: Option<&str>) -> ProbeStatus {
+async fn probe_tls(
+    host: &str,
+    port: u16,
+    probe_timeout: Duration,
+    sni: Option<&str>,
+) -> ProbeStatus {
     // Log which SNI we would use in a full TLS handshake.
     if let Some(s) = sni {
         debug!("TLS probe {}:{} (SNI: {})", host, port, s);
@@ -181,16 +208,17 @@ async fn probe_tls(host: &str, port: u16, probe_timeout: Duration, sni: Option<&
 /// and not silently dropping packets (which is how Iran's DPI blocks QUIC).
 async fn probe_udp(host: &str, port: u16, probe_timeout: Duration) -> ProbeStatus {
     let addr_str = format!("{}:{}", host, port);
-    let remote: SocketAddr = match tokio::net::lookup_host(&addr_str).await
+    let remote: SocketAddr = match tokio::net::lookup_host(&addr_str)
+        .await
         .ok()
         .and_then(|mut i| i.next())
     {
         Some(a) => a,
-        None    => return ProbeStatus::Error,
+        None => return ProbeStatus::Error,
     };
 
     let sock = match UdpSocket::bind("0.0.0.0:0").await {
-        Ok(s)  => s,
+        Ok(s) => s,
         Err(e) => {
             debug!("UDP bind error: {}", e);
             return ProbeStatus::Error;
@@ -200,15 +228,15 @@ async fn probe_udp(host: &str, port: u16, probe_timeout: Duration) -> ProbeStatu
     // Minimal QUIC Initial packet — enough to elicit a Version Negotiation
     // or Retry response from a live QUIC server, without completing a handshake.
     let quic_initial: &[u8] = &[
-        0xC0,                                                     // Long Header, Initial
-        0x00, 0x00, 0x00, 0x01,                                   // QUIC version 1
-        0x08,                                                     // DCID length = 8
-        0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,         // DCID (random)
-        0x00,                                                     // SCID length = 0
-        0x00,                                                     // Token length = 0
-        0x00, 0x04,                                               // Payload length = 4
-        0x00,                                                     // Packet number
-        0x00, 0x00, 0x00,                                         // Padding
+        0xC0, // Long Header, Initial
+        0x00, 0x00, 0x00, 0x01, // QUIC version 1
+        0x08, // DCID length = 8
+        0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, // DCID (random)
+        0x00, // SCID length = 0
+        0x00, // Token length = 0
+        0x00, 0x04, // Payload length = 4
+        0x00, // Packet number
+        0x00, 0x00, 0x00, // Padding
     ];
 
     let probe_fut = async {
@@ -230,7 +258,7 @@ async fn probe_udp(host: &str, port: u16, probe_timeout: Duration) -> ProbeStatu
 
 /// obfs4 probe: spawn lyrebird or obfs4proxy if available; TCP fallback otherwise.
 async fn probe_obfs4(ep: &Endpoint, probe_timeout: Duration) -> ProbeStatus {
-    let has_lyrebird  = which_pt_binary("lyrebird").await;
+    let has_lyrebird = which_pt_binary("lyrebird").await;
     let has_obfs4proxy = which_pt_binary("obfs4proxy").await;
 
     if has_lyrebird || has_obfs4proxy {
@@ -254,10 +282,19 @@ async fn which_pt_binary(name: &str) -> bool {
         .unwrap_or(false)
 }
 
-async fn attempt_obfs4_via_subprocess(ep: &Endpoint, probe_timeout: Duration) -> Result<ProbeStatus> {
-    let binary = if which_pt_binary("lyrebird").await { "lyrebird" } else { "obfs4proxy" };
+async fn attempt_obfs4_via_subprocess(
+    ep: &Endpoint,
+    probe_timeout: Duration,
+) -> Result<ProbeStatus> {
+    let binary = if which_pt_binary("lyrebird").await {
+        "lyrebird"
+    } else {
+        "obfs4proxy"
+    };
 
-    let cert = ep.raw.split_whitespace()
+    let cert = ep
+        .raw
+        .split_whitespace()
         .find(|s| s.starts_with("cert="))
         .unwrap_or("")
         .to_string();
@@ -268,8 +305,8 @@ async fn attempt_obfs4_via_subprocess(ep: &Endpoint, probe_timeout: Duration) ->
 
     let mut child = Command::new(binary)
         .env("TOR_PT_MANAGED_TRANSPORT_VER", "1")
-        .env("TOR_PT_CLIENT_TRANSPORTS",     "obfs4")
-        .env("TOR_PT_STATE_LOCATION",        "/tmp/torshield-obfs4-state")
+        .env("TOR_PT_CLIENT_TRANSPORTS", "obfs4")
+        .env("TOR_PT_STATE_LOCATION", "/tmp/torshield-obfs4-state")
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()?;

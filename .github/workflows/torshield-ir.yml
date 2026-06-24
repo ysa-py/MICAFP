@@ -340,6 +340,10 @@ jobs:
 
       - name: Build bridge-probe (release)
         working-directory: bridge-probe
+        env:
+          # Keep CI strict without baking warning-denial into the crate; this
+          # avoids breaking local/user builds on toolchain-version warnings.
+          RUSTFLAGS: "-D warnings"
         run: |
           set -euo pipefail
           cargo build --release 2>&1
