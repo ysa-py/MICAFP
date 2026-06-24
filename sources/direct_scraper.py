@@ -34,6 +34,8 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
+from core.dt_utils import parse_dt
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging
 # ─────────────────────────────────────────────────────────────────────────────
@@ -162,10 +164,7 @@ def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
             else:
                 to_delete.append(k)
                 continue
-            first = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-            # Make naive for comparison
-            if first.tzinfo is not None:
-                first = first.replace(tzinfo=None)
+            first = parse_dt(ts_str.replace("Z", "+00:00"))
             if first < cutoff:
                 to_delete.append(k)
         except Exception as _remediation_exc:
@@ -431,9 +430,7 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
                     ts_str = entry.get("first_seen", "2000-01-01")
                 else:
                     continue
-                first = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-                if first.tzinfo is not None:
-                    first = first.replace(tzinfo=None)
+                first = parse_dt(ts_str.replace("Z", "+00:00"))
                 if first > recent_cutoff:
                     recent_bridges.append(bridge)
             except Exception as _remediation_exc:
