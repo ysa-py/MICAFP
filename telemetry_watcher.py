@@ -809,9 +809,12 @@ class TelemetryWatcher:
 
     @staticmethod
     def _parse_ts(ts_str: str) -> datetime:
-        """Parse ISO timestamp string."""
+        """Parse ISO timestamp string and normalize it to UTC."""
         try:
-            return datetime.fromisoformat(ts_str)
+            parsed = datetime.fromisoformat(ts_str)
+            if parsed.tzinfo is None:
+                return parsed.replace(tzinfo=UTC)
+            return parsed.astimezone(UTC)
         except Exception:
             return datetime.now(UTC)
 
