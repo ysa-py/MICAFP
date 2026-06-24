@@ -471,8 +471,8 @@ jobs:
           name: "Self-healing engine v2"
           command: |
             set -euo pipefail
-            python recovery/self_healing_engine_v2.py 2>&1 | tee logs/self_heal.log || true
-            bash scripts/zero_error_engine_v5.sh        2>&1 | tee logs/zero_error.log || true
+            python recovery/self_healing_engine_v2.py 2>&1 | tee logs/self_heal.log
+            bash scripts/zero_error_engine_v5.sh        2>&1 | tee logs/zero_error.log
       - store_artifacts:
           path: logs
       - notify-slack-on-failure
