@@ -48,6 +48,8 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
+from core.dt_utils import coerce_utc_dt
+
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 BRIDGE_DIR = Path("bridge")
@@ -205,13 +207,19 @@ def _extract_endpoint(line: str) -> tuple[str | None, int | None, str]:
 
 
 def _parse_iso_safe(stamp: str | None) -> datetime | None:
-    """Parse an ISO timestamp string, returning None on any error."""
+    """Parse an ISO timestamp string as a UTC-aware datetime.
+
+    Legacy history may contain naive ISO timestamps. Treat those values as UTC
+    and normalize aware timestamps to UTC so comparisons with UTC cutoffs are
+    always safe. Invalid or missing values return None.
+    """
     if not stamp or not isinstance(stamp, str):
         return None
     try:
-        return datetime.fromisoformat(stamp)
+        datetime.fromisoformat(stamp.replace("Z", "+00:00"))
     except (ValueError, TypeError):
         return None
+    return coerce_utc_dt(stamp)
 
 
 def _entry_last_seen(entry: Any) -> datetime | None:
