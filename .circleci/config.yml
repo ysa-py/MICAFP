@@ -242,6 +242,9 @@ jobs:
             python -c "import yaml,sys,glob; [yaml.safe_load(open(f)) for f in glob.glob('**/*.yml', recursive=True) if '.venv/' not in f]" || exit 1
             echo "✓ YAML OK"
       - run:
+          name: "Shell entrypoint executable-bit check"
+          command: scripts/check_shell_entrypoints.sh
+      - run:
           name: "ruff (lint)"
           command: ruff check . --exclude .venv --exclude build
       - run:
