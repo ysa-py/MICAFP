@@ -34,6 +34,16 @@ CDN_KEYWORDS = {"cloudflare", "fastly", "akamai", "amazon", "cloudfront", "azure
                 "arvan", "gcore", "bunnycdn", "cdn77"}
 
 
+def _set_tls_probe_failure(
+    result: dict[str, Any],
+    status: str,
+    exc: BaseException,
+) -> None:
+    """Populate structured TLS probe failure fields for expected network errors."""
+    result["tls_probe_status"] = status
+    result["tls_error_type"] = type(exc).__name__
+
+
 def _check_ech(host: str, port: int, timeout: float = 8.0) -> dict[str, Any]:
     """Attempt TLS handshake and probe for ECH support via HTTPS record."""
     result: dict[str, Any] = {
@@ -57,17 +67,13 @@ def _check_ech(host: str, port: int, timeout: float = 8.0) -> dict[str, Any]:
                     result["ech_supported"] = True
                 result["tls_probe_status"] = "reachable"
     except (socket.timeout, TimeoutError) as exc:
-        result["tls_probe_status"] = "timeout"
-        result["tls_error_type"] = type(exc).__name__
+        _set_tls_probe_failure(result, "timeout", exc)
     except ConnectionRefusedError as exc:
-        result["tls_probe_status"] = "connection_refused"
-        result["tls_error_type"] = type(exc).__name__
+        _set_tls_probe_failure(result, "connection_refused", exc)
     except ssl.SSLError as exc:
-        result["tls_probe_status"] = "ssl_error"
-        result["tls_error_type"] = type(exc).__name__
+        _set_tls_probe_failure(result, "ssl_error", exc)
     except OSError as exc:
-        result["tls_probe_status"] = "unreachable"
-        result["tls_error_type"] = type(exc).__name__
+        _set_tls_probe_failure(result, "unreachable", exc)
     except Exception as _remediation_exc:
         log.exception("Unexpected ECH probe failure for %s:%s", host, port)
         from monitoring.structured_logger import record_silent_failure
