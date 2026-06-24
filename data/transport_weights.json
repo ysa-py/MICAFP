@@ -1,15 +1,15 @@
 {
-  "updated_at": "2026-06-23T20:12:08.826124+00:00",
+  "updated_at": "2026-06-24T00:09:20.388110+00:00",
   "weights": {
     "vanilla": 0.0,
-    "webtunnel": 0.3456,
+    "webtunnel": 0.0036,
     "obfs4": 0.0,
-    "snowflake": 0.4362,
-    "": 0.2181
+    "snowflake": 0.6642,
+    "": 0.3321
   },
   "scores": {
-    "snowflake": 29,
-    "webtunnel": 25,
+    "snowflake": 30,
+    "webtunnel": 20,
     "obfs4": 18,
     "meek_lite": 16,
     "vanilla": 4,
@@ -19,32 +19,32 @@
     "vanilla": {
       "working": 0,
       "blocked": 0,
-      "unknown": 447,
-      "total": 447
+      "unknown": 898,
+      "total": 898
     },
     "webtunnel": {
-      "working": 145,
+      "working": 2,
       "blocked": 0,
-      "unknown": 38,
-      "total": 183
+      "unknown": 364,
+      "total": 366
     },
     "obfs4": {
       "working": 0,
       "blocked": 0,
-      "unknown": 790,
-      "total": 790
+      "unknown": 1584,
+      "total": 1584
     },
     "snowflake": {
-      "working": 4,
+      "working": 8,
       "blocked": 0,
       "unknown": 0,
-      "total": 4
+      "total": 8
     },
     "": {
       "working": 0,
       "blocked": 0,
-      "unknown": 1,
-      "total": 1
+      "unknown": 2,
+      "total": 2
     }
   }
 }

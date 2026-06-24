@@ -106,7 +106,7 @@ var knownTorJA3 = map[string]bool{
 }
 
 // iranHighRiskPorts are Tor's well-known ports blocked by Iran's SIAM.
-var iranHighRiskPorts = map[int]bool{1443: true, 9001: true, 9030: true}
+var iranHighRiskPorts = map[int]bool{443: true, 9001: true, 9030: true}
 
 func portRiskFlag(port int) bool {
 	return iranHighRiskPorts[port]

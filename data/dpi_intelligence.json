@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-23T20:12:08.890863+00:00",
-  "total_bridges_analyzed": 1425,
+  "generated_at": "2026-06-24T00:09:20.455962+00:00",
+  "total_bridges_analyzed": 2858,
   "transport_profiles": {
     "snowflake": {
       "tier": "maximum",
@@ -103,39 +103,39 @@
   },
   "empirical_stats": {
     "vanilla": {
-      "tested": 447,
+      "tested": 898,
       "working": 0,
       "blocked": 0,
-      "dpi_risk_flags": 30,
+      "dpi_risk_flags": 60,
       "avg_dpi_score": 0.0,
       "observed_block_rate": 0.0
     },
-    "webtunnel": {
-      "tested": 183,
-      "working": 145,
-      "blocked": 0,
-      "dpi_risk_flags": 0,
-      "avg_dpi_score": 0.9129,
-      "observed_block_rate": 0.0
-    },
     "obfs4": {
-      "tested": 790,
+      "tested": 1584,
       "working": 0,
       "blocked": 0,
-      "dpi_risk_flags": 1,
+      "dpi_risk_flags": 2,
       "avg_dpi_score": 0.718,
       "observed_block_rate": 0.0
     },
     "snowflake": {
-      "tested": 4,
-      "working": 4,
+      "tested": 8,
+      "working": 8,
       "blocked": 0,
       "dpi_risk_flags": 0,
       "avg_dpi_score": 0.946,
       "observed_block_rate": 0.0
     },
+    "webtunnel": {
+      "tested": 366,
+      "working": 2,
+      "blocked": 0,
+      "dpi_risk_flags": 0,
+      "avg_dpi_score": 0.9129,
+      "observed_block_rate": 0.0
+    },
     "": {
-      "tested": 1,
+      "tested": 2,
       "working": 0,
       "blocked": 0,
       "dpi_risk_flags": 0,

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-23T20:12:09.264600+00:00",
-  "total_bridges": 1425,
+  "generated_at": "2026-06-24T00:09:20.840683+00:00",
+  "total_bridges": 1429,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -4022,7 +4022,34 @@
       "notes": []
     },
     {
+      "bridge_line": "Bridge 185.194.93.135:9001 F8C2F613EC974A042603490EE7F64DD8D1663377",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "conjure 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://registration.refraction.network/api fronts=cdn.sstatic.net,assets.cloud.censys.io transport=min",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "meek_lite 192.0.2.18:80 BE776A53492E1E044A26F17306E1BC46A55A1625 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -11150,7 +11177,25 @@
       "notes": []
     },
     {
+      "bridge_line": "snowflake 192.0.2.3:1 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ fronts=ftls.googlevideo.com ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -12788,7 +12833,7 @@
       "notes": []
     },
     {
-      "bridge_line": "Bridge 185.194.93.135:9001 F8C2F613EC974A042603490EE7F64DD8D1663377",
+      "bridge_line": "obfs4 47.36.122.155:8443 808E86271077E90D4F2795FD5FF9E5D2975F9EDE cert=43KGgMq2zn8BUuw6sau0jRvrqykD7biVvO4NOPU2HecVqCvj82NibIad4lwKyCY26s9kSw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -12797,7 +12842,7 @@
       "notes": []
     },
     {
-      "bridge_line": "snowflake 192.0.2.3:1 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ fronts=ftls.googlevideo.com ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn",
+      "bridge_line": "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -12806,7 +12851,7 @@
       "notes": []
     },
     {
-      "bridge_line": "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn",
+      "bridge_line": "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -12815,16 +12860,7 @@
       "notes": []
     },
     {
-      "bridge_line": "meek_lite 192.0.2.18:80 BE776A53492E1E044A26F17306E1BC46A55A1625 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com",
+      "bridge_line": "obfs4 [2602:61:7348:b806:be24:11ff:fed1:4a06]:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
