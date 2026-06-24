@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -300,12 +301,22 @@ func classifyBridge(
 	return result
 }
 
+func validateWorkers(workers int) error {
+	if workers < 1 {
+		return fmt.Errorf("workers must be >= 1, got %d", workers)
+	}
+	return nil
+}
+
 func main() {
 	inputFlag := flag.String("input", "bridge/bridge_list_for_testing.json", "JSON array of bridge strings")
 	outputFlag := flag.String("output", "bridge/iran_results.json", "Output JSON report path")
 	workersFlag := flag.Int("workers", 100, "Parallel worker count")
 	timeoutFlag := flag.Duration("timeout", 8*time.Second, "Per-bridge TCP timeout")
 	flag.Parse()
+	if err := validateWorkers(*workersFlag); err != nil {
+		log.Fatal(err)
+	}
 
 	// ── Read input ────────────────────────────────────────────────────────
 	data, err := os.ReadFile(*inputFlag)
