@@ -288,3 +288,81 @@ def test_onionhop_cleanup_history_and_recent_filter_accept_legacy_naive_values(m
         "recent-aware-offset": {"last_seen": "2026-06-23T03:30:00+03:30"},
     }
     assert recent == ["recent-naive", "recent-aware-offset"]
+
+
+def test_direct_cleanup_comparison_handles_mixed_naive_and_aware_values(monkeypatch) -> None:
+    monkeypatch.setattr(history_utils, "utc_now", lambda: datetime(2026, 6, 24, tzinfo=UTC))
+    history = {
+        "old-naive-string": "2026-05-01T00:00:00",
+        "fresh-aware-string": "2026-06-23T00:00:00+00:00",
+        "fresh-dict-naive-last": {
+            "first_seen": "2026-05-01T00:00:00+00:00",
+            "last_seen": "2026-06-23T00:00:00",
+        },
+        "old-dict-aware-last": {
+            "first_seen": "2026-06-23T00:00:00",
+            "last_seen": "2026-05-01T00:00:00+00:00",
+        },
+    }
+
+    cleaned = direct_scraper.cleanup_history(history, 30)
+
+    assert list(cleaned) == ["fresh-aware-string", "fresh-dict-naive-last"]
+
+
+def test_legacy_cleanup_comparison_handles_mixed_naive_and_aware_values(monkeypatch) -> None:
+    monkeypatch.setattr(history_utils, "utc_now", lambda: datetime(2026, 6, 24, tzinfo=UTC))
+    history = {
+        "old-naive-string": "2026-05-01T00:00:00",
+        "fresh-aware-string": "2026-06-23T00:00:00+00:00",
+        "fresh-dict-naive-last": {
+            "first_seen": "2026-05-01T00:00:00+00:00",
+            "last_seen": "2026-06-23T00:00:00",
+        },
+        "old-dict-aware-last": {
+            "first_seen": "2026-06-23T00:00:00",
+            "last_seen": "2026-05-01T00:00:00+00:00",
+        },
+    }
+
+    cleaned = legacy_scraper.cleanup_history(history, 30)
+
+    assert list(cleaned) == ["fresh-aware-string", "fresh-dict-naive-last"]
+
+
+def test_direct_recent_filter_first_seen_comparison_handles_mixed_values() -> None:
+    cutoff = datetime(2026, 6, 20, tzinfo=UTC)
+    entries = {
+        "legacy-naive": "2026-06-23T00:00:00",
+        "legacy-aware": "2026-06-23T03:30:00+03:30",
+        "dict-naive": {"first_seen": "2026-06-23T00:00:00"},
+        "dict-aware": {"first_seen": "2026-06-23T03:30:00+03:30"},
+        "old": {"first_seen": "2026-05-01T00:00:00"},
+    }
+
+    recent = [
+        bridge
+        for bridge, entry in entries.items()
+        if direct_scraper._history_first_seen_dt(entry) > cutoff
+    ]
+
+    assert recent == ["legacy-naive", "legacy-aware", "dict-naive", "dict-aware"]
+
+
+def test_legacy_recent_filter_first_seen_comparison_handles_mixed_values() -> None:
+    cutoff = datetime(2026, 6, 20, tzinfo=UTC)
+    entries = {
+        "legacy-naive": "2026-06-23T00:00:00",
+        "legacy-aware": "2026-06-23T03:30:00+03:30",
+        "dict-naive": {"first_seen": "2026-06-23T00:00:00"},
+        "dict-aware": {"first_seen": "2026-06-23T03:30:00+03:30"},
+        "old": {"first_seen": "2026-05-01T00:00:00"},
+    }
+
+    recent = [
+        bridge
+        for bridge, entry in entries.items()
+        if legacy_scraper._history_first_seen_dt(entry) > cutoff
+    ]
+
+    assert recent == ["legacy-naive", "legacy-aware", "dict-naive", "dict-aware"]

@@ -128,6 +128,17 @@ def save_history(history: dict[str, Any]) -> None:
 
 
 
+def _history_first_seen_dt(entry: Any) -> datetime:
+    """Return an entry's first_seen timestamp as a UTC-aware datetime."""
+    if isinstance(entry, str):
+        ts_value = entry
+    elif isinstance(entry, dict):
+        ts_value = entry.get("first_seen")
+    else:
+        ts_value = None
+    return parse_history_dt(ts_value)
+
+
 def upsert_history(history: dict[str, Any], key: str, transport: str, raw: str) -> None:
     now = datetime.now(tz=UTC).isoformat()
     if key not in history:
@@ -390,13 +401,7 @@ def run() -> dict[str, int]:
             if not entry:
                 continue
             try:
-                if isinstance(entry, str):
-                    ts_value = entry
-                elif isinstance(entry, dict):
-                    ts_value = entry.get("first_seen")
-                else:
-                    ts_value = None
-                dt = parse_history_dt(ts_value)
+                dt = _history_first_seen_dt(entry)
                 if dt > cutoff:
                     recent.append(b)
             except Exception as _remediation_exc:

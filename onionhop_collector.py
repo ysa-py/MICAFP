@@ -215,11 +215,11 @@ def _parse_iso_safe(stamp: str | None) -> datetime | None:
     """
     if not stamp or not isinstance(stamp, str):
         return None
-    try:
-        datetime.fromisoformat(stamp.replace("Z", "+00:00"))
-    except (ValueError, TypeError):
+    sentinel = datetime(1970, 1, 1, tzinfo=UTC)
+    parsed = coerce_utc_dt(stamp, fallback=sentinel)
+    if parsed == sentinel and stamp != sentinel.isoformat():
         return None
-    return coerce_utc_dt(stamp)
+    return parsed
 
 
 def _entry_last_seen(entry: Any) -> datetime | None:
