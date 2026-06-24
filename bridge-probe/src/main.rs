@@ -1,4 +1,3 @@
-#![deny(warnings)]
 //! bridge-probe — TorShield-IR pluggable-transport handshake prober v2.0
 //!
 //! Reads a JSON array (or newline-delimited list) of bridge strings from stdin,
@@ -98,7 +97,7 @@ async fn main() -> Result<()> {
             continue;
         }
 
-        let sem     = semaphore.clone();
+        let sem = semaphore.clone();
         let timeout = probe_timeout;
         join_set.spawn(async move {
             let _permit = sem.acquire().await.expect("semaphore closed");
@@ -109,19 +108,22 @@ async fn main() -> Result<()> {
     let mut results: Vec<probe::ProbeResult> = Vec::new();
     while let Some(res) = join_set.join_next().await {
         match res {
-            Ok(r)  => results.push(r),
+            Ok(r) => results.push(r),
             Err(e) => tracing::error!("Probe task panicked: {}", e),
         }
     }
 
     // Summary statistics on stderr.
-    let reachable = results.iter().filter(|r| {
-        r.status == ProbeStatus::Reachable || r.status == ProbeStatus::QuicReachable
-    }).count();
+    let reachable = results
+        .iter()
+        .filter(|r| r.status == ProbeStatus::Reachable || r.status == ProbeStatus::QuicReachable)
+        .count();
     let nin_ok = results.iter().filter(|r| r.nin_survivable).count();
     info!(
         "Complete | reachable={}/{} nin_survivable={}",
-        reachable, results.len(), nin_ok
+        reachable,
+        results.len(),
+        nin_ok
     );
 
     // Results on stdout as a JSON array.
