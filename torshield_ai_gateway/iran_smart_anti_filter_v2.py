@@ -257,6 +257,32 @@ class TransportScore:
         return asdict(self)
 
 
+@dataclass
+class SmartBypassProfile:
+    """Automatic Iran anti-filtering profile for the next connection attempt."""
+    isp: str
+    censorship_level: int
+    nin_active: bool
+    primary_transport: str
+    secondary_transport: str
+    tls_profile: str
+    sni_strategy: str
+    timing_strategy: str
+    connection_jitter_ms: tuple[int, int]
+    packet_padding_bytes: tuple[int, int]
+    cdn_front: str
+    fallback_chain: list[str]
+    risk_score: float
+    automation: str = "local-deterministic"
+    generated_at: str = ""
+
+    def to_dict(self) -> dict:
+        data = asdict(self)
+        data["connection_jitter_ms"] = list(self.connection_jitter_ms)
+        data["packet_padding_bytes"] = list(self.packet_padding_bytes)
+        return data
+
+
 # ════════════════════════════════════════════════════════════════════════════
 # PROBE ENDPOINTS FOR CENSORSHIP DETECTION
 # ════════════════════════════════════════════════════════════════════════════
@@ -1458,6 +1484,71 @@ class IranSmartAntiFilterV2:
             f"{'success' if success else 'failure'} → {updated:.3f}"
         )
 
+
+    def generate_smart_bypass_profile(self, isp: str | None = None) -> SmartBypassProfile:
+        """
+        Build a fully automatic, ISP-aware anti-filtering profile for Iran.
+
+        The profile combines censorship level, NIN status, temporal blocking
+        intensity, ISP DPI behavior, and adaptive transport scoring into one
+        deterministic plan that callers can apply without manual tuning.
+        """
+        isp_key = (isp or self._detected_isp or self._detect_isp()).lower().strip()
+        strategy = self.get_isp_strategy(isp_key)
+        temporal = self.get_temporal_analysis()
+        adaptive = self.get_adaptive_transport()
+        cdn_front = self.get_best_cdn_front().get("domain", "arvancloud.ir")
+
+        primary = adaptive.transport
+        if self._nin_active or self._current_censorship_level >= 5:
+            primary = "webtunnel"
+        elif adaptive.effectiveness < 0.5:
+            primary = strategy.primary_transport
+
+        fallback_chain = []
+        for item in (
+            primary,
+            strategy.secondary_transport,
+            "snowflake",
+            "webtunnel",
+            "obfs4_iat2",
+            "meek_lite",
+        ):
+            if item not in fallback_chain:
+                fallback_chain.append(item)
+
+        if temporal.current_intensity == "extreme" or self._nin_active:
+            jitter = (900, 3200)
+            padding = (96, 512)
+        elif temporal.current_intensity == "heavy":
+            jitter = (600, 2400)
+            padding = (64, 384)
+        elif temporal.current_intensity == "moderate":
+            jitter = (250, 1200)
+            padding = (32, 192)
+        else:
+            jitter = (100, 700)
+            padding = (16, 96)
+
+        risk = min(1.0, max(0.0, (self._current_censorship_level / 5) * 0.55 + temporal.blocking_probability_now * 0.35 + (0.10 if self._nin_active else 0.0)))
+
+        return SmartBypassProfile(
+            isp=strategy.isp_name,
+            censorship_level=self._current_censorship_level,
+            nin_active=self._nin_active,
+            primary_transport=primary,
+            secondary_transport=strategy.secondary_transport,
+            tls_profile=strategy.tls_profile,
+            sni_strategy=strategy.sni_strategy,
+            timing_strategy=strategy.timing_strategy,
+            connection_jitter_ms=jitter,
+            packet_padding_bytes=padding,
+            cdn_front=cdn_front,
+            fallback_chain=fallback_chain,
+            risk_score=round(risk, 3),
+            generated_at=datetime.now(UTC).isoformat(),
+        )
+
     # ══════════════════════════════════════════════════════════════════════
     # V1 COMPATIBILITY LAYER
     # ══════════════════════════════════════════════════════════════════════
@@ -1527,6 +1618,7 @@ class IranSmartAntiFilterV2:
             "temporal_analysis": self.get_temporal_analysis().to_dict(),
             "transport_effectiveness": self._transport_effectiveness,
             "adaptive_transport": self.get_adaptive_transport().to_dict(),
+            "smart_bypass_profile": self.generate_smart_bypass_profile().to_dict(),
         }
 
         if self._v1 is not None:
@@ -1588,9 +1680,10 @@ def main() -> None:
     parser.add_argument("--detect", action="store_true", help="AI-enhanced censorship detection")
     parser.add_argument("--status", action="store_true", help="Show full v2 status")
     parser.add_argument("--temporal", action="store_true", help="Temporal pattern analysis")
-    parser.add_argument("--isp", type=str, default="mci", help="ISP strategy (mci/irancell/rightel/shatel/asiatech)")
+    parser.add_argument("--isp", type=str, default=None, help="ISP strategy (mci/irancell/rightel/shatel/asiatech)")
     parser.add_argument("--nin", action="store_true", help="Generate NIN survival pack")
     parser.add_argument("--transport", action="store_true", help="Adaptive transport selection")
+    parser.add_argument("--profile", action="store_true", help="Automatic smart bypass profile")
     args = parser.parse_args()
 
     v2 = IranSmartAntiFilterV2()
@@ -1604,15 +1697,18 @@ def main() -> None:
     elif args.temporal:
         analysis = v2.get_temporal_analysis()
         print(json.dumps(analysis.to_dict(), indent=2, ensure_ascii=False))
-    elif args.isp:
-        strategy = v2.get_isp_strategy(args.isp)
-        print(json.dumps(strategy.to_dict(), indent=2, ensure_ascii=False))
     elif args.nin:
         pack = v2.get_nin_survival_pack()
         print(json.dumps(pack.to_dict(), indent=2, ensure_ascii=False))
     elif args.transport:
         best = v2.get_adaptive_transport()
         print(json.dumps(best.to_dict(), indent=2, ensure_ascii=False))
+    elif args.profile:
+        profile = v2.generate_smart_bypass_profile(args.isp or "mci")
+        print(json.dumps(profile.to_dict(), indent=2, ensure_ascii=False))
+    elif args.isp:
+        strategy = v2.get_isp_strategy(args.isp)
+        print(json.dumps(strategy.to_dict(), indent=2, ensure_ascii=False))
     else:
         parser.print_help()
 

@@ -124,6 +124,27 @@ class TestIranSmartAntiFilter(unittest.TestCase):
         self.assertIsInstance(result, dict)
 
 
+class TestIranSmartAntiFilterV2Profile(unittest.TestCase):
+    """Test advanced automatic smart bypass profile generation."""
+
+    def test_generate_smart_bypass_profile_is_bounded_and_automatic(self):
+        from torshield_ai_gateway.iran_smart_anti_filter_v2 import IranSmartAntiFilterV2
+
+        engine = IranSmartAntiFilterV2()
+        engine._current_censorship_level = 5
+        engine._nin_active = True
+        profile = engine.generate_smart_bypass_profile("mci")
+        data = profile.to_dict()
+
+        self.assertEqual(data["automation"], "local-deterministic")
+        self.assertEqual(data["primary_transport"], "webtunnel")
+        self.assertIn("snowflake", data["fallback_chain"])
+        self.assertGreaterEqual(data["risk_score"], 0.0)
+        self.assertLessEqual(data["risk_score"], 1.0)
+        self.assertLess(data["connection_jitter_ms"][0], data["connection_jitter_ms"][1])
+        self.assertLess(data["packet_padding_bytes"][0], data["packet_padding_bytes"][1])
+
+
 class TestIranAntiDPI(unittest.TestCase):
     """Test the IranAntiDPI engine."""
 
