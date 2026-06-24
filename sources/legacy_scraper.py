@@ -123,13 +123,40 @@ def save_history(history: dict[str, Any]) -> None:
     )
 
 
+def _parse_history_dt(value: Any) -> datetime:
+    """Parse history timestamps as UTC-aware datetimes with an explicit fallback."""
+    fallback = datetime(2000, 1, 1, tzinfo=UTC)
+    if isinstance(value, datetime):
+        if value.tzinfo is None:
+            return value.replace(tzinfo=UTC)
+        return value.astimezone(UTC)
+    if isinstance(value, str):
+        try:
+            normalized = value.replace("Z", "+00:00")
+            parsed = parse_dt(normalized).astimezone(UTC)
+            if (
+                parsed == datetime(1970, 1, 1, tzinfo=UTC)
+                and not normalized.startswith("1970-01-01")
+            ):
+                return fallback
+            return parsed
+        except Exception:
+            return fallback
+    return fallback
+
+
 def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
     cutoff = datetime.now(UTC) - timedelta(days=HISTORY_RETENTION_DAYS)
     stale = []
     for k, v in history.items():
         try:
-            ts = v if isinstance(v, str) else v.get("first_seen", "2000-01-01")
-            dt = parse_dt(ts.replace("Z", "+00:00"))
+            if isinstance(v, str):
+                ts_value = v
+            elif isinstance(v, dict):
+                ts_value = v.get("first_seen")
+            else:
+                ts_value = None
+            dt = _parse_history_dt(ts_value)
             if dt < cutoff:
                 stale.append(k)
         except Exception as _remediation_exc:
@@ -402,8 +429,13 @@ def run() -> dict[str, int]:
             if not entry:
                 continue
             try:
-                ts_str = entry if isinstance(entry, str) else entry.get("first_seen", "2000-01-01")
-                dt = parse_dt(ts_str.replace("Z", "+00:00"))
+                if isinstance(entry, str):
+                    ts_value = entry
+                elif isinstance(entry, dict):
+                    ts_value = entry.get("first_seen")
+                else:
+                    ts_value = None
+                dt = _parse_history_dt(ts_value)
                 if dt > cutoff:
                     recent.append(b)
             except Exception as _remediation_exc:
