@@ -526,6 +526,19 @@ python3 -m pytest tests/ --cov=torshield_ai_gateway --cov-report=html
 python3 -m pytest tests/ -v --tb=long
 ```
 
+### Optional Per-Test Timeout
+
+The default pytest configuration intentionally does not set a timeout, so a
+clean environment can run `pytest` without installing the optional
+`pytest-timeout` plugin or emitting unknown-option warnings. If a guarded run is
+needed locally or in CI, install the plugin explicitly and pass the timeout on
+the command line:
+
+```bash
+python3 -m pip install pytest-timeout
+python3 -m pytest tests/ --timeout=30
+```
+
 ### Specific Test Categories
 
 ```bash

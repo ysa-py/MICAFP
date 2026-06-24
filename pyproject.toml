@@ -21,10 +21,6 @@ markers = [
     "nin: requires NIN internet-cut detection",
 ]
 addopts = "-ra --tb=short --strict-markers"
-# `timeout` requires the optional `pytest-timeout` plugin. Wrap it so the
-# project still works when pytest-timeout isn't installed (zero-warning mode).
-# When pytest-timeout IS installed, this option is honoured automatically.
-timeout = 30
 
 [tool.ruff]
 line-length = 100

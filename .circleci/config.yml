@@ -254,7 +254,9 @@ jobs:
           name: "pytest + coverage"
           command: |
             mkdir -p reports
-            pytest --cov=. --cov-report=xml:reports/coverage.xml \
+            pip install pytest-timeout --quiet
+            pytest --timeout=30 \
+                   --cov=. --cov-report=xml:reports/coverage.xml \
                    --cov-report=html:reports/coverage_html \
                    --junitxml=reports/junit.xml \
                    -ra -q
