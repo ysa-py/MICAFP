@@ -28,7 +28,7 @@ from datetime import timedelta
 from pathlib import Path
 from typing import Any
 
-from core.dt_utils import parse_dt, utc_now
+from core.dt_utils import coerce_utc_dt, utc_now
 from core.tester import detect_transport, extract_endpoint
 
 log = logging.getLogger(__name__)
@@ -143,11 +143,10 @@ class IranScorer:
             return 10  # Domain — assume IPv4 CDN
 
     def _freshness_score(self, first_seen: str) -> int:
-        # FIX 3: always produce timezone-aware datetime objects so that
-        # the subtraction never raises "can't subtract offset-naive and
-        # offset-aware datetimes" on Python 3.10+.
+        # Bridge history may contain legacy naive timestamps; coerce to UTC-aware
+        # datetimes before subtracting from utc_now().
         try:
-            ts  = parse_dt(first_seen)          # always UTC-aware via dt_utils
+            ts  = coerce_utc_dt(first_seen)
             age = utc_now() - ts
             if age <= timedelta(hours=24):
                 return 20

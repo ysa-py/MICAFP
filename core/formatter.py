@@ -32,7 +32,7 @@ from datetime import timedelta
 from typing import Any
 
 import config
-from core.dt_utils import parse_dt, utc_now, utc_now_iso
+from core.dt_utils import coerce_utc_dt, utc_now, utc_now_iso
 from core.history import HistoryManager
 from core.scorer import IranScorer
 from core.tester import extract_endpoint
@@ -88,7 +88,8 @@ class BridgeFormatter:
     def _export_standard_files(self, history: HistoryManager) -> dict[str, int]:
         """Generate the classic per-transport .txt files (archive + 72h + tested)."""
         db = history.get_all()
-        # FIX: use utc_now() (UTC-aware) so comparison with parse_dt() never raises TypeError
+        # Bridge history may contain legacy naive timestamps; all recent-window
+        # comparisons below coerce values to UTC-aware datetimes.
         cutoff = utc_now() - timedelta(hours=config.RECENT_HOURS)
         stats: dict[str, int] = {}
 
@@ -98,16 +99,16 @@ class BridgeFormatter:
             ipv4 = [_save_line(r.get("raw", ""), transport) for r in records if not _is_ipv6(r) and r.get("raw")]
             ipv6 = [_save_line(r.get("raw", ""), transport) for r in records if _is_ipv6(r) and r.get("raw")]
 
-            # FIX: parse_dt() always returns UTC-aware datetime — safe to compare with cutoff
+            # coerce_utc_dt() treats legacy naive history timestamps as UTC.
             ipv4_72h = [
                 _save_line(r.get("raw", ""), transport) for r in records
                 if not _is_ipv6(r) and r.get("raw")
-                and parse_dt(r.get("first_seen", "2000-01-01")) > cutoff
+                and coerce_utc_dt(r.get("first_seen", "2000-01-01")) > cutoff
             ]
             ipv6_72h = [
                 _save_line(r.get("raw", ""), transport) for r in records
                 if _is_ipv6(r) and r.get("raw")
-                and parse_dt(r.get("first_seen", "2000-01-01")) > cutoff
+                and coerce_utc_dt(r.get("first_seen", "2000-01-01")) > cutoff
             ]
             ipv4_tested = [_save_line(r.get("raw", ""), transport) for r in records
                            if not _is_ipv6(r) and r.get("raw") and r.get("test_pass") is True]

@@ -15,7 +15,7 @@ from datetime import timedelta
 from typing import Any
 
 import config
-from core.dt_utils import parse_dt, utc_now, utc_now_iso
+from core.dt_utils import coerce_utc_dt, utc_now, utc_now_iso
 
 log = logging.getLogger(__name__)
 
@@ -124,7 +124,7 @@ class HistoryManager:
         result = []
         for v in self._db.values():
             try:
-                if parse_dt(v["first_seen"]) > cutoff:   # ← both UTC-aware
+                if coerce_utc_dt(v["first_seen"]) > cutoff:   # ← both UTC-aware
                     result.append(v)
             except (KeyError, ValueError) as _remediation_exc:
                 from monitoring.structured_logger import record_silent_failure
@@ -161,7 +161,7 @@ class HistoryManager:
         before = len(self._db)
         self._db = {
             k: v for k, v in self._db.items()
-            if parse_dt(v.get("last_seen", "2000-01-01")) > cutoff  # ← safe parse
+            if coerce_utc_dt(v.get("last_seen", "2000-01-01")) > cutoff  # ← UTC-aware comparison
         }
         removed = before - len(self._db)
         if removed:
