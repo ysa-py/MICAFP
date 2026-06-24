@@ -50,5 +50,10 @@
     "timestamp": "2026-06-24T21:26:22.831117+00:00",
     "strategy": "port_rotation",
     "blocking_score": 0.92
+  },
+  {
+    "timestamp": "2026-06-24T22:50:26.384963+00:00",
+    "strategy": "port_rotation",
+    "blocking_score": 0.98
   }
 ]

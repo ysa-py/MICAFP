@@ -178,5 +178,23 @@
       "vanilla": 4,
       "unknown": 6
     }
+  },
+  {
+    "ts": "2026-06-24T22:30:31.024724+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.003629764065335753,
+      "obfs4": 0.0,
+      "snowflake": 0.6642468239564429,
+      "": 0.33212341197822143
+    },
+    "scores": {
+      "snowflake": 30,
+      "webtunnel": 20,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
   }
 ]
