@@ -32,6 +32,8 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from core.dt_utils import parse_dt
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -127,7 +129,7 @@ def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
     for k, v in history.items():
         try:
             ts = v if isinstance(v, str) else v.get("first_seen", "2000-01-01")
-            dt = datetime.fromisoformat(ts.replace("Z", "+00:00")).replace(tzinfo=None)
+            dt = parse_dt(ts.replace("Z", "+00:00"))
             if dt < cutoff:
                 stale.append(k)
         except Exception as _remediation_exc:
@@ -401,7 +403,7 @@ def run() -> dict[str, int]:
                 continue
             try:
                 ts_str = entry if isinstance(entry, str) else entry.get("first_seen", "2000-01-01")
-                dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00")).replace(tzinfo=None)
+                dt = parse_dt(ts_str.replace("Z", "+00:00"))
                 if dt > cutoff:
                     recent.append(b)
             except Exception as _remediation_exc:
