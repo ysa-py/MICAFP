@@ -2760,6 +2760,16 @@
       ]
     },
     {
+      "bridge_line": "obfs4 47.36.122.155:8443 808E86271077E90D4F2795FD5FF9E5D2975F9EDE cert=43KGgMq2zn8BUuw6sau0jRvrqykD7biVvO4NOPU2HecVqCvj82NibIad4lwKyCY26s9kSw iat-mode=0",
+      "transport": "obfs4",
+      "port": 8443,
+      "anti_ai_dpi_score": 0.77,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "safe_port"
+      ]
+    },
+    {
       "bridge_line": "obfs4 5.104.81.79:8443 42FAC9C256D5701BDE7336474369550BC4D28182 cert=gcKlN2VE+NSMWSxk78A4rMtsGWIZTY0qAIjEXkj745RHSCXh7KCGd2/nNy5wvLXLvWZUNw iat-mode=0",
       "transport": "obfs4",
       "port": 8443,
@@ -3303,16 +3313,6 @@
       "bridge_line": "obfs4 95.179.192.8:8080 0E75D1C25A4C6E9CAA34C0326BC625F49DE76F1E cert=y3hZX0aEbfSfNiDJ3dM5tXbURAvAwmkKlkCkm5HDf9thLI08u6pRw1wGaF5Qg/D8Bg7pOg iat-mode=0",
       "transport": "obfs4",
       "port": 8080,
-      "anti_ai_dpi_score": 0.77,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "safe_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 47.36.122.155:8443 808E86271077E90D4F2795FD5FF9E5D2975F9EDE cert=43KGgMq2zn8BUuw6sau0jRvrqykD7biVvO4NOPU2HecVqCvj82NibIad4lwKyCY26s9kSw iat-mode=0",
-      "transport": "obfs4",
-      "port": 8443,
       "anti_ai_dpi_score": 0.77,
       "iran_ml_dpi_risk": "LOW",
       "flags": [
@@ -6226,6 +6226,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 92.5.79.231:8776 5B9DBF3FB7856D58F290CCE60902E257B52599A3 cert=xY1j9YM8E6uhGqEp0sGad6++hGHSx93t1+IpP+YZsk/QURcdxWIZuBrBo4yivPmFyBJZFQ iat-mode=0",
+      "transport": "obfs4",
+      "port": 8776,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 92.63.169.52:4444 4869FCBDBCC52D86650601965430648263613826 cert=Ibfl0OGdxfofcH8yC6Agxb88DVFdwB9IeC1+07tdAFr76jrnhrTV5Z/aNln+Wn0ieo+yEQ iat-mode=0",
       "transport": "obfs4",
       "port": 4444,
@@ -6915,6 +6923,14 @@
     },
     {
       "bridge_line": "obfs4 [2600:4040:a30e:ff00:dea6:32ff:fec5:a4c4]:50164 FBA329BA4F5FE648456C3A28BBAA3C7EBD118E08 cert=DKA6xS0N6c4I1CFVmWc/qgAEhPBgR/dPQyXhbkjt082Ka2xmq1pwSUpCPt626uuKW2Z1TA iat-mode=0",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 [2602:61:7348:b806:be24:11ff:fed1:4a06]:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,
@@ -8539,14 +8555,6 @@
     },
     {
       "bridge_line": "obfs4 [2a14:7584:d121::a]:443 C5F150E8FFEAF0298CF2E4B8F7501A5C9B059C00 cert=HpvfZZ1gyBwY3zHvIzF3kARYVZdMaCaDKTT2sD5KCk+foafG2CM8lP3OVCeJ4MaDfCArGg iat-mode=0",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2602:61:7348:b806:be24:11ff:fed1:4a06]:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,
@@ -11550,17 +11558,17 @@
       "flags": []
     },
     {
-      "bridge_line": "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A",
+      "bridge_line": "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91",
       "transport": "vanilla",
-      "port": 5316,
+      "port": 1025,
       "anti_ai_dpi_score": 0.05,
       "iran_ml_dpi_risk": "CRITICAL",
       "flags": []
     },
     {
-      "bridge_line": "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91",
+      "bridge_line": "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A",
       "transport": "vanilla",
-      "port": 1025,
+      "port": 5316,
       "anti_ai_dpi_score": 0.05,
       "iran_ml_dpi_risk": "CRITICAL",
       "flags": []

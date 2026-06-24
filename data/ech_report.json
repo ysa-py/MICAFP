@@ -436,6 +436,21 @@
       "ech_grease": false
     },
     {
+      "bridge_line": "142.93.128.78:1356 B2CF8191825381A63ADC2F62D667D028C1BD9749",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.4,
+      "flags": [
+        "non_standard_port",
+        "tls13_only"
+      ],
+      "host": "142.93.128.78",
+      "port": 1356,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false
+    },
+    {
       "bridge_line": "151.115.78.42:7002 4D877AB9773E6E1EEFC8AB84A705B2A9ABDDA379",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.4,
@@ -1631,20 +1646,6 @@
       ],
       "host": "136.56.6.135",
       "port": 50284,
-      "tls_reachable": false,
-      "tls_version": null,
-      "ech_supported": false,
-      "ech_grease": false
-    },
-    {
-      "bridge_line": "142.93.128.78:1356 B2CF8191825381A63ADC2F62D667D028C1BD9749",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.1,
-      "flags": [
-        "non_standard_port"
-      ],
-      "host": "142.93.128.78",
-      "port": 1356,
       "tls_reachable": false,
       "tls_version": null,
       "ech_supported": false,
