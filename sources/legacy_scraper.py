@@ -32,10 +32,10 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from core.dt_utils import parse_dt
-
 import requests
 from bs4 import BeautifulSoup
+
+from core.dt_utils import parse_dt
 
 log = logging.getLogger(__name__)
 
@@ -143,6 +143,20 @@ def _parse_history_dt(value: Any) -> datetime:
         except Exception:
             return fallback
     return fallback
+
+
+def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
+    """Normalize loaded history timestamps to UTC-aware ISO strings in-place."""
+    timestamp_fields = ("first_seen", "last_seen")
+    for key, entry in history.items():
+        if isinstance(entry, str):
+            history[key] = parse_dt(entry).isoformat()
+        elif isinstance(entry, dict):
+            for field in timestamp_fields:
+                value = entry.get(field)
+                if isinstance(value, str):
+                    entry[field] = parse_dt(value).isoformat()
+    return history
 
 
 def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
@@ -384,6 +398,7 @@ def run() -> dict[str, int]:
     log.info("══ Legacy scraper (bridges.torproject.org) ═══════════════════")
     session = _session()
     history = load_history()
+    history = normalize_history_timestamps(history)
     history = cleanup_history(history)
     cutoff  = datetime.now(UTC) - timedelta(hours=RECENT_HOURS)
     stats: dict[str, int] = {}
