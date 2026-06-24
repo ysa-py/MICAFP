@@ -26,9 +26,13 @@ class TestWorkflowYAMLValidity(unittest.TestCase):
     def _load_yaml(self):
         try:
             import yaml
-            return yaml
-        except ImportError:
-            self.skipTest("PyYAML not installed")
+        except ImportError as exc:
+            self.fail(
+                "PyYAML is required for workflow validation tests. "
+                "Install the repository test/dev dependencies before running CI."
+            )
+            raise AssertionError("unreachable") from exc
+        return yaml
 
     def _get_workflow_files(self):
         if not WORKFLOWS_DIR.exists():
@@ -138,9 +142,13 @@ class TestWorkflowScriptReferences(unittest.TestCase):
     def _load_yaml(self):
         try:
             import yaml
-            return yaml
-        except ImportError:
-            self.skipTest("PyYAML not installed")
+        except ImportError as exc:
+            self.fail(
+                "PyYAML is required for workflow validation tests. "
+                "Install the repository test/dev dependencies before running CI."
+            )
+            raise AssertionError("unreachable") from exc
+        return yaml
 
     def _get_workflow_files(self):
         if not WORKFLOWS_DIR.exists():
@@ -198,9 +206,13 @@ class TestWorkflowTriggers(unittest.TestCase):
     def _load_yaml(self):
         try:
             import yaml
-            return yaml
-        except ImportError:
-            self.skipTest("PyYAML not installed")
+        except ImportError as exc:
+            self.fail(
+                "PyYAML is required for workflow validation tests. "
+                "Install the repository test/dev dependencies before running CI."
+            )
+            raise AssertionError("unreachable") from exc
+        return yaml
 
     def _get_workflow_files(self):
         if not WORKFLOWS_DIR.exists():
