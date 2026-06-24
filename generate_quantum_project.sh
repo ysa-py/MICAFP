@@ -184,9 +184,14 @@ done
   && info "  Copied: tests/"
 
 # GitHub Actions workflow
-cp "$SRC_DIR/.github/workflows/torshield-ir.yml" \
-   "$DEST_DIR/.github/workflows/torshield-ir.yml" \
-  && info "  Copied: .github/workflows/torshield-ir.yml"
+if [[ -d "$SRC_DIR/.github/workflows" ]]; then
+  mkdir -p "$DEST_DIR/.github/workflows"
+  workflow_files=("$SRC_DIR/.github/workflows/"*)
+  if [[ -e "${workflow_files[0]}" ]]; then
+    cp "${workflow_files[@]}" "$DEST_DIR/.github/workflows/"
+    info "  Copied: .github/workflows/"
+  fi
+fi
 
 # Docs
 [[ -d "$SRC_DIR/docs" ]] && cp -r "$SRC_DIR/docs/"* "$DEST_DIR/docs/" 2>/dev/null || true
