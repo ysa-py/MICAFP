@@ -1,22 +1,8 @@
 {
-  "generated_at": "2026-06-24T12:26:15.445174+00:00",
-  "provider_count": 1,
-  "consensus_score": 0.92,
-  "selected_strategies": [
-    "obfs4_iat_boost",
-    "port_rotation"
-  ],
-  "mutation_triggered": true,
-  "individual_responses": [
-    {
-      "mutation_needed": true,
-      "confidence": 0.92,
-      "recommended_strategies": [
-        "obfs4_iat_boost",
-        "port_rotation"
-      ],
-      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate timing obfuscation and port diversification to evade ML classifiers and DPI signatures.",
-      "_provider": "Provider 10 -- Mistral-Large-2"
-    }
-  ]
+  "generated_at": "2026-06-24T13:57:01.885218+00:00",
+  "provider_count": 0,
+  "consensus_score": 0.0,
+  "selected_strategies": [],
+  "mutation_triggered": false,
+  "individual_responses": []
 }

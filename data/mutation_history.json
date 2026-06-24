@@ -28,5 +28,11 @@
     "timestamp": "2026-06-24T12:26:30.224299+00:00",
     "strategy": "port_rotation+obfs4_iat_boost",
     "blocking_score": 0.92
+  },
+  {
+    "timestamp": "2026-06-24T13:57:01.885781+00:00",
+    "event": "ai_waterfall_failure",
+    "local_score": 0.0,
+    "final_score": 0.0
   }
 ]

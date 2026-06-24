@@ -2,7 +2,7 @@
 
 > Polyglot (Python · Go · Rust) bridge collector with 8-layer Iran DPI analysis.<br>
 > OONI-verified · ASN-filtered · Composite-scored · Auto-updated hourly.<br>
-> **Last update:** `2026-06-24 12:26 UTC`
+> **Last update:** `2026-06-24 13:57 UTC`
 
 ---
 
@@ -26,8 +26,8 @@ Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
 
 | File | Bridges |
 | :--- | :---: |
-| [iran_likely_working_all.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_all.txt) | `443` |
-| [iran_likely_working_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_obfs4.txt) | `250` |
+| [iran_likely_working_all.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_all.txt) | `446` |
+| [iran_likely_working_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_obfs4.txt) | `253` |
 | [iran_likely_working_webtunnel.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_webtunnel.txt) | `1` |
 | [iran_likely_working_snowflake.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_snowflake.txt) | `4` |
 
@@ -39,7 +39,7 @@ Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
 
 | File | Bridges |
 | :--- | :---: |
-| [tested_global_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_obfs4.txt) | `250` |
+| [tested_global_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_obfs4.txt) | `253` |
 | [tested_global_webtunnel.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_webtunnel.txt) | `1` |
 | [tested_global_vanilla.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_vanilla.txt) | `188` |
 
@@ -50,7 +50,7 @@ Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
 | Metric | Value |
 | :--- | :--- |
 | Total tested | `1432` |
-| Globally reachable | `443` |
+| Globally reachable | `446` |
 | Iran likely working | `5` |
 | Iran likely blocked | `0` |
 | Iran ASN-blocked | `0` |
