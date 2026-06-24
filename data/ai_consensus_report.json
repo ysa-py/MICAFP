@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-24T08:14:53.620177+00:00",
+  "generated_at": "2026-06-24T11:22:18.059936+00:00",
   "provider_count": 1,
-  "consensus_score": 0.98,
+  "consensus_score": 0.92,
   "selected_strategies": [
     "ja3_randomize",
     "obfs4_iat_boost",
@@ -11,13 +11,13 @@
   "individual_responses": [
     {
       "mutation_needed": true,
-      "confidence": 0.98,
+      "confidence": 0.92,
       "recommended_strategies": [
         "port_rotation",
         "obfs4_iat_boost",
         "ja3_randomize"
       ],
-      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate transport mutation and timing/JA3 obfuscation to evade SIAM DPI's ML classifiers.",
+      "reasoning": "obfs4 is AI-detectable and fails under NIN, while Snowflake and WebTunnel remain resilient but require diversification to mitigate targeted blocking.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]

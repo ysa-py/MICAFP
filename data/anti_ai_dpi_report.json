@@ -3435,6 +3435,16 @@
       ]
     },
     {
+      "bridge_line": "obfs4 85.121.176.36:8080 0681477084718491DFDA7782E7CAEE5604EBA118 cert=EjyO5o19sT5BMvAJBWtPpjDhTDSx+5kiw2sC50xvxSIjd+GdCuRJkPLDMJlAh5ujPM6DfQ iat-mode=1",
+      "transport": "obfs4",
+      "port": 8080,
+      "anti_ai_dpi_score": 0.77,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "safe_port"
+      ]
+    },
+    {
       "bridge_line": "obfs4 85.93.10.164:443 C5F150E8FFEAF0298CF2E4B8F7501A5C9B059C00 cert=HpvfZZ1gyBwY3zHvIzF3kARYVZdMaCaDKTT2sD5KCk+foafG2CM8lP3OVCeJ4MaDfCArGg iat-mode=0",
       "transport": "obfs4",
       "port": 443,
@@ -3696,6 +3706,16 @@
     },
     {
       "bridge_line": "obfs4 24.68.77.14:60002 6FF5C5C1AE210431C5E182B73D8EB858CEA65B33 cert=QZz2IyrYLs+6uIjYW0Nv1D9xAgeHo+Qa1OKOFwj55Dna2lWRh75Mafluxx4p1Z6AY2oUIA iat-mode=0",
+      "transport": "obfs4",
+      "port": 60002,
+      "anti_ai_dpi_score": 0.75,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "ephemeral_port"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 24.69.110.186:60002 6FF5C5C1AE210431C5E182B73D8EB858CEA65B33 cert=QZz2IyrYLs+6uIjYW0Nv1D9xAgeHo+Qa1OKOFwj55Dna2lWRh75Mafluxx4p1Z6AY2oUIA iat-mode=0",
       "transport": "obfs4",
       "port": 60002,
       "anti_ai_dpi_score": 0.75,

@@ -46,7 +46,7 @@ _IRAN_DPI_SYSTEMS = {
         "name": "Arvan Cloud DPI",
         "detection_methods": ["SNI inspection", "TLS fingerprinting (JA3)", "HTTP header analysis"],
         "blocks": ["Direct Tor", "obfs4 (non-443 ports)", "vanilla Tor", "OpenVPN"],
-        "bypasses": ["obfs4 port 443 with iat-mode=2", "WebTunnel CDN-fronted", "Snowflake", "meek-lite"],
+        "bypasses": ["obfs4 port 443 with iat-mode=1", "WebTunnel CDN-fronted", "Snowflake", "meek-lite"],
         "active_since": "2023-Q3",
     },
     "siam": {
@@ -67,7 +67,7 @@ _IRAN_DPI_SYSTEMS = {
         "name": "Kowsar National Firewall",
         "detection_methods": ["Deep packet inspection", "Protocol fingerprinting", "Entropy analysis"],
         "blocks": ["Tor directory authorities", "obfs4 with known cert patterns", "SSH tunneling"],
-        "bypasses": ["obfs4 with iat-mode=2", "WebTunnel HTTPS", "XTLS-Reality"],
+        "bypasses": ["obfs4 with iat-mode=1", "WebTunnel HTTPS", "XTLS-Reality"],
         "active_since": "2024-Q2",
     },
     "ngfw": {
@@ -301,7 +301,7 @@ class LocalAIEngine:
         # Detect iat-mode
         iat_mode = params.get("iat-mode", "")
         if iat_mode == "2" and transport == "obfs4":
-            transport = "obfs4_443"  # iat-mode=2 is best for Iran
+            transport = "obfs4_443"  # iat-mode=1 is best for Iran
 
         return {
             "transport": transport,
@@ -317,7 +317,7 @@ class LocalAIEngine:
         Score a single bridge for Iran reachability using rule-based analysis.
 
         Args:
-            bridge_line: Tor bridge line (e.g., "obfs4 1.2.3.4:443 cert=... iat-mode=2")
+            bridge_line: Tor bridge line (e.g., "obfs4 1.2.3.4:443 cert=... iat-mode=1")
             censorship_level: Current Iran censorship level (1-5)
 
         Returns:
@@ -362,7 +362,7 @@ class LocalAIEngine:
         if transport == "obfs4":
             iat_mode = parsed["params"].get("iat-mode", "0")
             if iat_mode != "2":
-                mutation_hint = "Set iat-mode=2 for better DPI evasion"
+                mutation_hint = "Set iat-mode=1 for better DPI evasion"
             if port != 443:
                 mutation_hint += "; move to port 443 if possible"
         elif transport == "vanilla":
@@ -552,7 +552,7 @@ class LocalAIEngine:
             "fallback_transport": "snowflake",
             "last_resort": "webtunnel",
             "avoid": ["vanilla"],
-            "bridge_selection_hint": "obfs4 on port 443 with iat-mode=2 recommended",
+            "bridge_selection_hint": "obfs4 on port 443 with iat-mode=1 recommended",
             "config_hints": {
                 "obfs4": {"iat-mode": 2, "prefer_port": 443},
             },
@@ -592,7 +592,7 @@ class LocalAIEngine:
         if existing_iat_mode != 2:
             hints.append("Change iat-mode to 2 (spreads timing to defeat DPI statistical analysis)")
         else:
-            hints.append("iat-mode=2 is already optimal for Iran DPI evasion")
+            hints.append("iat-mode=1 is already optimal for Iran DPI evasion")
 
         if existing_cert:
             # Analyze cert length (longer = more entropy = harder to fingerprint)

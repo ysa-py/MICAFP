@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T07:53:52.234710+00:00",
+  "generated_at": "2026-06-24T11:02:49.839204+00:00",
   "nin_detected": false,
   "international_ok": true,
-  "total_scored": 1430,
+  "total_scored": 1432,
   "nin_pack_size": 50,
   "top_bridges": [
     {
@@ -28,6 +28,10 @@
       "asn": "AS8075",
       "asn_country": "CA",
       "asn_org": "AS8075 Microsoft Corporation",
+      "flags": [
+        "iran_dpi_high_risk",
+        "iran_port_high_risk"
+      ],
       "composite_score": 0.675,
       "nin_score": 0.803,
       "nextgen_proto": null
@@ -45,8 +49,8 @@
       "nextgen_proto": null
     },
     {
-      "line": "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com",
-      "host": "a0.awsstatic.com",
+      "line": "meek_lite 192.0.2.20:80 97700DFE9F483596DDA6264C4D7DF7641E1E39CE url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com",
+      "host": "meek.azureedge.net",
       "port": 443,
       "transport": "webtunnel",
       "tcp_reachable": false,
@@ -57,8 +61,8 @@
       "nextgen_proto": null
     },
     {
-      "line": "meek_lite 192.0.2.20:80 97700DFE9F483596DDA6264C4D7DF7641E1E39CE url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com",
-      "host": "meek.azureedge.net",
+      "line": "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com",
+      "host": "a0.awsstatic.com",
       "port": 443,
       "transport": "webtunnel",
       "tcp_reachable": false,
@@ -165,18 +169,6 @@
       "nextgen_proto": null
     },
     {
-      "line": "webtunnel [2001:db8:1ba8:84b3:6343:e46:dd15:cb61]:443 6591C1F81F0BED7F21B38488B884DF6ABA5B46FD url=https://chatbuddy.eu.org/x1DauPp3DogPaL9hd3tUC6W1 ver=0.0.4",
-      "host": "chatbuddy.eu.org",
-      "port": 443,
-      "transport": "webtunnel",
-      "tcp_reachable": false,
-      "iran_status": "tcp_unreachable",
-      "ooni_checked": false,
-      "composite_score": 0.325,
-      "nin_score": 0.772,
-      "nextgen_proto": null
-    },
-    {
       "line": "webtunnel [2001:db8:2638:b1a0:f262:490b:f15c:6798]:443 FFBAE1B459A6CB5C6751F9BE72284EAB9E36CD0F url=https://steuern-sind-raub.ch/rohzaaSae8meith4oo ver=0.0.3",
       "host": "steuern-sind-raub.ch",
       "port": 443,
@@ -189,8 +181,8 @@
       "nextgen_proto": null
     },
     {
-      "line": "webtunnel [2001:db8:259c:faa6:24a9:cce0:c60f:4642]:443 23958FC105E58061AFD2DECC61D363F28AB36490 url=https://pod02.oneclickhost.eu/lzcHh4sbo8bOTwkc4IwkSxNS ver=0.0.3",
-      "host": "pod02.oneclickhost.eu",
+      "line": "webtunnel [2001:db8:1ba8:84b3:6343:e46:dd15:cb61]:443 6591C1F81F0BED7F21B38488B884DF6ABA5B46FD url=https://chatbuddy.eu.org/x1DauPp3DogPaL9hd3tUC6W1 ver=0.0.4",
+      "host": "chatbuddy.eu.org",
       "port": 443,
       "transport": "webtunnel",
       "tcp_reachable": false,
@@ -213,8 +205,8 @@
       "nextgen_proto": null
     },
     {
-      "line": "webtunnel [2001:db8:1d4c:baf8:3ecc:fdb9:9a07:c2f8]:443 2EBBBBCC1AFBA74ACC9297508ED2CCE2DAD0E92F url=https://n8n.ikebun.jp/129f3f0795e0b037b6e974864e691f0c ver=0.0.4",
-      "host": "n8n.ikebun.jp",
+      "line": "webtunnel [2001:db8:259c:faa6:24a9:cce0:c60f:4642]:443 23958FC105E58061AFD2DECC61D363F28AB36490 url=https://pod02.oneclickhost.eu/lzcHh4sbo8bOTwkc4IwkSxNS ver=0.0.3",
+      "host": "pod02.oneclickhost.eu",
       "port": 443,
       "transport": "webtunnel",
       "tcp_reachable": false,
@@ -227,6 +219,18 @@
     {
       "line": "webtunnel [2001:db8:259c:faa6:24a9:cce0:c60f:4642]:443 23958FC105E58061AFD2DECC61D363F28AB36490 url=https://pod02.oneclickhost.eu/lzcHh4sbo8bOTwkc4IwkSxNS ver=0.0.4",
       "host": "pod02.oneclickhost.eu",
+      "port": 443,
+      "transport": "webtunnel",
+      "tcp_reachable": false,
+      "iran_status": "tcp_unreachable",
+      "ooni_checked": false,
+      "composite_score": 0.325,
+      "nin_score": 0.772,
+      "nextgen_proto": null
+    },
+    {
+      "line": "webtunnel [2001:db8:1d4c:baf8:3ecc:fdb9:9a07:c2f8]:443 2EBBBBCC1AFBA74ACC9297508ED2CCE2DAD0E92F url=https://n8n.ikebun.jp/129f3f0795e0b037b6e974864e691f0c ver=0.0.4",
+      "host": "n8n.ikebun.jp",
       "port": 443,
       "transport": "webtunnel",
       "tcp_reachable": false,

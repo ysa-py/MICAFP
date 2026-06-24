@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-24T07:53:52.151174+00:00",
-  "total_tested": 1430,
+  "generated_at": "2026-06-24T11:02:49.741382+00:00",
+  "total_tested": 1432,
   "nin_eligible": 4,
   "transport_counts": {
     "snowflake": 4
