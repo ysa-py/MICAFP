@@ -136,9 +136,9 @@ func parseVanilla(line string, b *Bridge) error {
 	// Try to parse IPv6 [addr]:port
 	m := ipv6PortRE.FindStringSubmatch(parts[idx])
 	if m != nil {
-		port, err := strconv.Atoi(m[2])
+		port, err := parsePort(m[2])
 		if err != nil {
-			return fmt.Errorf("invalid port: %s", m[2])
+			return err
 		}
 		b.Host = m[1]
 		b.Port = port
@@ -149,9 +149,9 @@ func parseVanilla(line string, b *Bridge) error {
 	// Try to parse IPv4 addr:port
 	m = ipv4PortRE.FindStringSubmatch(parts[idx])
 	if m != nil {
-		port, err := strconv.Atoi(m[2])
+		port, err := parsePort(m[2])
 		if err != nil {
-			return fmt.Errorf("invalid port: %s", m[2])
+			return err
 		}
 		b.Host = m[1]
 		b.Port = port
@@ -227,9 +227,9 @@ func parseObfs4(line string, b *Bridge) error {
 		return fmt.Errorf("invalid obfs4 address: %s", addrStr)
 	}
 
-	port, err := strconv.Atoi(m[2])
+	port, err := parsePort(m[2])
 	if err != nil {
-		return fmt.Errorf("invalid port: %s", m[2])
+		return err
 	}
 	b.Host = m[1]
 	b.Port = port
@@ -262,9 +262,9 @@ func parseWebTransport(line string, b *Bridge) error {
 
 	b.Host = m[1]
 	if m[2] != "" {
-		port, err := strconv.Atoi(m[2])
+		port, err := parsePort(m[2])
 		if err != nil {
-			return fmt.Errorf("invalid port in URL: %s", m[2])
+			return fmt.Errorf("invalid port in URL: %w", err)
 		}
 		b.Port = port
 	} else {

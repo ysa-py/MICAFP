@@ -102,6 +102,24 @@ func TestParse_DomainPortValidation(t *testing.T) {
 	}
 }
 
+func TestParse_PortValidation(t *testing.T) {
+	tests := []string{
+		"1.2.3.4:0",
+		"1.2.3.4:65536",
+		"[2001:db8::1]:0",
+		"obfs4 1.2.3.4:99999 cert=x",
+		"webtunnel 1.2.3.4:443 url=https://example.com:99999 key=x",
+	}
+
+	for _, line := range tests {
+		t.Run(line, func(t *testing.T) {
+			if _, err := Parse(line); err == nil {
+				t.Fatalf("Parse should fail for %q", line)
+			}
+		})
+	}
+}
+
 func TestParse_IPv6(t *testing.T) {
 	line := "[2001:db8::1]:9999"
 	b, err := Parse(line)
