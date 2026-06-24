@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
+
+import onionhop_collector
 
 from sources import direct_scraper, history_utils, legacy_scraper
 
@@ -222,3 +224,67 @@ def test_cleanup_can_prefer_first_seen_when_requested(monkeypatch) -> None:
     }
 
     assert history_utils.cleanup_history(history, 30, prefer_last_seen=False) == {}
+
+def test_onionhop_parse_iso_safe_normalizes_naive_history_timestamp_to_utc() -> None:
+    parsed = onionhop_collector._parse_iso_safe("2026-06-05T07:45:38")
+
+    assert parsed == datetime(2026, 6, 5, 7, 45, 38, tzinfo=UTC)
+    assert parsed.tzinfo is UTC
+
+
+def test_onionhop_parse_iso_safe_converts_aware_history_timestamp_to_utc() -> None:
+    parsed = onionhop_collector._parse_iso_safe("2026-06-05T08:45:38+03:30")
+
+    assert parsed == datetime(2026, 6, 5, 5, 15, 38, tzinfo=UTC)
+    assert parsed.tzinfo is UTC
+
+
+def test_onionhop_entry_last_seen_returns_aware_utc_for_legacy_values() -> None:
+    values = [
+        "2026-06-05T07:45:38",
+        {"last_seen": "2026-06-05T08:45:38+03:30"},
+    ]
+
+    parsed = [onionhop_collector._entry_last_seen(value) for value in values]
+
+    assert parsed == [
+        datetime(2026, 6, 5, 7, 45, 38, tzinfo=UTC),
+        datetime(2026, 6, 5, 5, 15, 38, tzinfo=UTC),
+    ]
+    assert all(value is not None and value.tzinfo is UTC for value in parsed)
+    assert onionhop_collector._entry_last_seen({"last_seen": "not-a-date"}) is None
+
+
+def test_onionhop_cleanup_history_and_recent_filter_accept_legacy_naive_values(monkeypatch) -> None:
+    fixed_now = datetime(2026, 6, 24, 12, 0, tzinfo=UTC)
+
+    class FixedDateTime(datetime):
+        @classmethod
+        def now(cls, tz=None):  # type: ignore[override]
+            if tz is None:
+                return fixed_now.replace(tzinfo=None)
+            return fixed_now.astimezone(tz)
+
+    monkeypatch.setattr(onionhop_collector, "datetime", FixedDateTime)
+    monkeypatch.setattr(onionhop_collector, "HISTORY_RETENTION_DAYS", 30)
+    monkeypatch.setattr(onionhop_collector, "RECENT_HOURS", 72)
+
+    history = {
+        "stale-naive": "2026-05-01T00:00:00",
+        "recent-naive": "2026-06-23T00:00:00",
+        "recent-aware-offset": {"last_seen": "2026-06-23T03:30:00+03:30"},
+    }
+
+    cleaned = onionhop_collector._cleanup_history(history)
+    recent_cutoff = datetime.now(UTC) - timedelta(hours=onionhop_collector.RECENT_HOURS)
+    recent = [
+        bridge
+        for bridge, entry in cleaned.items()
+        if (ts := onionhop_collector._entry_last_seen(entry)) and ts > recent_cutoff
+    ]
+
+    assert cleaned == {
+        "recent-naive": "2026-06-23T00:00:00",
+        "recent-aware-offset": {"last_seen": "2026-06-23T03:30:00+03:30"},
+    }
+    assert recent == ["recent-naive", "recent-aware-offset"]
