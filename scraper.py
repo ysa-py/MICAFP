@@ -45,6 +45,7 @@ from pathlib import Path
 from typing import Any
 
 from adaptive_selector import AdaptiveBridgeSelector
+from core.dt_utils import parse_dt
 
 import requests
 from bs4 import BeautifulSoup
@@ -410,7 +411,7 @@ def prune_history(history: dict[str, dict[str, Any]]) -> int:
     cutoff = datetime.now(tz=UTC) - timedelta(days=RETENTION_DAYS)
     to_delete = [
         k for k, v in history.items()
-        if datetime.fromisoformat(v.get("last_seen", "2000-01-01T00:00:00+00:00")) < cutoff
+        if parse_dt(v.get("last_seen", "2000-01-01T00:00:00+00:00")) < cutoff
     ]
     for k in to_delete:
         del history[k]
@@ -471,12 +472,12 @@ def write_bridge_files(history: dict[str, dict[str, Any]]) -> dict[str, int]:
         ipv4_72h = selected_lines([
             v for v in records
             if v.get("ip_version") != "ipv6"
-            and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
+            and parse_dt(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
         ])
         ipv6_72h = selected_lines([
             v for v in records
             if v.get("ip_version") == "ipv6"
-            and datetime.fromisoformat(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
+            and parse_dt(v.get("first_seen", "2000-01-01T00:00:00+00:00")) > cutoff_72
         ])
 
         preserve_rank = selector.config.enabled
