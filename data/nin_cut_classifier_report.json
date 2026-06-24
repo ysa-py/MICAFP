@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-24T21:27:00.662483+00:00",
-  "total_bridges": 625,
+  "generated_at": "2026-06-24T22:51:06.376683+00:00",
+  "total_bridges": 626,
   "green_count": 6,
   "yellow_count": 253,
-  "red_count": 366,
+  "red_count": 367,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -424,14 +424,6 @@
       "transport": "vanilla",
       "ip": "173.21.185.152",
       "port": 55443,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "175.115.163.222:49876 BC114F5B1E286CEF641B04867927EDC8F4D44562",
-      "transport": "vanilla",
-      "ip": "175.115.163.222",
-      "port": 49876,
       "sni": "",
       "tier": "RED"
     },
@@ -1148,6 +1140,14 @@
       "tier": "RED"
     },
     {
+      "raw": "79.199.122.90:9001 65FF7447FF845605D331522487DE411CB1247F55",
+      "transport": "vanilla",
+      "ip": "79.199.122.90",
+      "port": 9001,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
       "raw": "80.67.172.3:443 088ACF1F2F1720AA41BE8575F45AD202FBD59296",
       "transport": "vanilla",
       "ip": "80.67.172.3",
@@ -1184,6 +1184,14 @@
       "transport": "vanilla",
       "ip": "82.65.58.41",
       "port": 9002,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "83.151.206.122:9001 9E8B19CA2B5D504668242DB2B1D20BAB5DC6744E",
+      "transport": "vanilla",
+      "ip": "83.151.206.122",
+      "port": 9001,
       "sni": "",
       "tier": "RED"
     },
@@ -1304,6 +1312,14 @@
       "transport": "vanilla",
       "ip": "89.236.127.72",
       "port": 9001,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "89.58.12.52:3445 48A2BD4E1A942A3F4A73B4F5EE8D078725903411",
+      "transport": "vanilla",
+      "ip": "89.58.12.52",
+      "port": 3445,
       "sni": "",
       "tier": "RED"
     },
@@ -1714,22 +1730,6 @@
       "port": 443,
       "sni": "",
       "tier": "YELLOW"
-    },
-    {
-      "raw": "obfs4 141.156.198.249:8671 9486E39394190EEF4774F5063F394F8125A02941 cert=HbfvRQR3z85p9GUMdafMdVjgYbiLdh/WaQ+nOBeVw21iDtWrR3Nn1H0MVWm7iwLxv5A2BA iat-mode=0",
-      "transport": "obfs4",
-      "ip": "141.156.198.249",
-      "port": 8671,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "obfs4 141.156.198.249:8671 9486E39394190EEF4774F5063F394F8125A02941 cert=T3PuI6PvIZYg8Iex2lzy7vFEuyU+8g0v9iw7ffENtIjTovoOmWJ5ULR7yqPPtN0RxNrbfA iat-mode=0",
-      "transport": "obfs4",
-      "ip": "141.156.198.249",
-      "port": 8671,
-      "sni": "",
-      "tier": "RED"
     },
     {
       "raw": "obfs4 142.189.114.119:443 0DBB397ADC4F8A16C09331EC337197531899ED74 cert=/fGABEVsy165oq5yrI5LNYz198uisjQUeQ9/ecrGbmi+Y/eSB865w1GtT9Md2wKvROHHIQ iat-mode=0",
@@ -3120,6 +3120,14 @@
       "transport": "obfs4",
       "ip": "82.66.251.91",
       "port": 30030,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "obfs4 82.67.140.199:46767 A61ECF8D7E06423EDBC67239F1220A3E9B0770DB cert=i4MF/V4qT3/8jiV1tNYhtNM2e74YJjLpaZAYch4nVayljhKaK+S7Fe+lGsjDoxp8Js0/MQ iat-mode=0",
+      "transport": "obfs4",
+      "ip": "82.67.140.199",
+      "port": 46767,
       "sni": "",
       "tier": "RED"
     },
