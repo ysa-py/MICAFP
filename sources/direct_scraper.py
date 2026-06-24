@@ -173,6 +173,20 @@ def _parse_history_dt(value: Any) -> datetime:
     return fallback
 
 
+def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
+    """Normalize loaded history timestamps to UTC-aware ISO strings in-place."""
+    timestamp_fields = ("first_seen", "last_seen")
+    for key, entry in history.items():
+        if isinstance(entry, str):
+            history[key] = parse_dt(entry).isoformat()
+        elif isinstance(entry, dict):
+            for field in timestamp_fields:
+                value = entry.get(field)
+                if isinstance(value, str):
+                    entry[field] = parse_dt(value).isoformat()
+    return history
+
+
 def cleanup_history(history: dict[str, Any]) -> dict[str, Any]:
     """Remove entries older than HISTORY_RETENTION_DAYS."""
     cutoff = datetime.now(UTC) - timedelta(days=HISTORY_RETENTION_DAYS)
@@ -394,6 +408,7 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
 
     session = _make_session()
     history = load_history()
+    history = normalize_history_timestamps(history)
     history = cleanup_history(history)
 
     recent_cutoff = datetime.now(UTC) - timedelta(hours=RECENT_HOURS)
