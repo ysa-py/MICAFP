@@ -92,6 +92,23 @@ def test_direct_and_legacy_cleanup_use_same_last_seen_behavior(monkeypatch) -> N
     assert entry["capabilities"] == {"transport_options": {"iat-mode": "0"}}
 
 
+def test_cleanup_retains_dict_entry_when_last_seen_is_within_retention(monkeypatch) -> None:
+    monkeypatch.setattr(history_utils, "utc_now", lambda: datetime(2026, 6, 24, tzinfo=UTC))
+    history = {
+        "kept-by-last-seen": {
+            "first_seen": "2026-05-01T00:00:00+00:00",
+            "last_seen": "2026-06-23T00:00:00+00:00",
+        },
+    }
+
+    assert history_utils.cleanup_history(history, 30) == {
+        "kept-by-last-seen": {
+            "first_seen": "2026-05-01T00:00:00+00:00",
+            "last_seen": "2026-06-23T00:00:00+00:00",
+        },
+    }
+
+
 def test_cleanup_can_prefer_first_seen_when_requested(monkeypatch) -> None:
     monkeypatch.setattr(history_utils, "utc_now", lambda: datetime(2026, 6, 24, tzinfo=UTC))
     history = {

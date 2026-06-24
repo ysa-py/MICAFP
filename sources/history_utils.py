@@ -31,12 +31,22 @@ def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
     return history
 
 
-def history_entry_timestamp(entry: Any) -> Any:
-    """Return the preferred timestamp value for a bridge history entry."""
+def history_entry_timestamp(entry: Any, *, prefer_last_seen: bool = True) -> Any:
+    """Return the preferred timestamp value for a bridge history entry.
+
+    Dict entries expire by ``last_seen`` first by default, falling back to
+    ``first_seen`` only when ``last_seen`` is missing. Legacy string entries are
+    their own timestamp value.
+    """
     if isinstance(entry, str):
         return entry
     if isinstance(entry, dict):
-        return entry.get("last_seen") or entry.get("first_seen")
+        preferred, fallback = (
+            ("last_seen", "first_seen")
+            if prefer_last_seen
+            else ("first_seen", "last_seen")
+        )
+        return entry.get(preferred) or entry.get(fallback)
     return None
 
 
@@ -54,13 +64,7 @@ def cleanup_history(
     cutoff = utc_now() - timedelta(days=retention_days)
     stale: list[str] = []
     for key, entry in history.items():
-        if isinstance(entry, dict):
-            if prefer_last_seen:
-                timestamp = entry.get("last_seen") or entry.get("first_seen")
-            else:
-                timestamp = entry.get("first_seen") or entry.get("last_seen")
-        else:
-            timestamp = history_entry_timestamp(entry)
+        timestamp = history_entry_timestamp(entry, prefer_last_seen=prefer_last_seen)
 
         if parse_history_dt(timestamp) < cutoff:
             stale.append(key)
