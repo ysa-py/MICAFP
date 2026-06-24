@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-24T04:05:45.713952+00:00",
-  "total_configs": 249,
-  "average_dpi_score": 0.7633,
+  "generated_at": "2026-06-24T08:15:28.075152+00:00",
+  "total_configs": 250,
+  "average_dpi_score": 0.763,
   "snis_used": [
     "www.aparat.com",
     "www.digikala.com",
@@ -1432,8 +1432,8 @@
       "dpi_score": 0.7
     },
     {
-      "ip": "92.63.169.52",
-      "port": 4444,
+      "ip": "92.5.79.231",
+      "port": 8776,
       "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
@@ -1441,47 +1441,47 @@
       "ip": "92.63.169.52",
       "port": 4444,
       "sni": "www.digikala.com",
+      "dpi_score": 0.7
+    },
+    {
+      "ip": "92.63.169.52",
+      "port": 4444,
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "93.55.88.235",
       "port": 8081,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "94.142.246.132",
       "port": 8088,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "94.159.100.199",
       "port": 30443,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "94.34.128.178",
       "port": 60256,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "94.63.2.31",
       "port": 25565,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "95.141.43.207",
       "port": 15216,
-      "sni": "www.digikala.com",
-      "dpi_score": 0.7
-    },
-    {
-      "ip": "95.179.192.8",
-      "port": 8080,
       "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
@@ -1492,15 +1492,21 @@
       "dpi_score": 0.7
     },
     {
+      "ip": "95.179.192.8",
+      "port": 8080,
+      "sni": "www.digikala.com",
+      "dpi_score": 0.7
+    },
+    {
       "ip": "95.215.204.173",
       "port": 10993,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "95.216.37.112",
       "port": 59745,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     }
   ]
