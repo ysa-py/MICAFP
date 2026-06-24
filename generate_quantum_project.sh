@@ -6,7 +6,11 @@
 #
 # Usage:  bash generate_quantum_project.sh
 # Prereq: Run from the Tor-Bridges-Collector-Ultra-Vip-v2 project root
-#         (the directory that contains ai_dpi_mutator.py, go.mod, etc.)
+#         (the directory that contains ai_dpi_mutator.py, go.mod, etc.).
+#         Required Python source files must be present; missing required
+#         sources abort packaging instead of being replaced with stubs.
+#         Optional Python sources, if listed below, are packaged as explicit
+#         non-zero "not packaged" stubs when absent.
 #
 # Output: ../Tor-Bridges-Collector-Ultra-Vip-v2-quantum.tar.gz
 #         SHA-256 checksum printed to stdout.
@@ -100,17 +104,42 @@ PYTHON_SCRIPTS=(
   "generate_quantum_project.sh"
 )
 
+# Optional Python entry points may be listed here when they are intentionally
+# excluded from some source checkouts. Missing required files fail fast; missing
+# optional files are packaged only as explicit, non-zero placeholders.
+OPTIONAL_PYTHON_SCRIPTS=()
+
+is_optional_python_script() {
+  local candidate="$1"
+  local optional
+  for optional in "${OPTIONAL_PYTHON_SCRIPTS[@]}"; do
+    [[ "$candidate" == "$optional" ]] && return 0
+  done
+  return 1
+}
+
+write_optional_python_stub() {
+  local f="$1"
+  cat > "$DEST_DIR/$f" <<STUBEOF
+#!/usr/bin/env python3
+# $f — optional component not packaged in this build
+import sys
+
+print("$f: not packaged in this build", file=sys.stderr)
+sys.exit(1)
+STUBEOF
+  chmod +x "$DEST_DIR/$f"
+}
+
 for f in "${PYTHON_SCRIPTS[@]}"; do
   if [[ -f "$SRC_DIR/$f" ]]; then
     cp "$SRC_DIR/$f" "$DEST_DIR/$f"
     info "  Copied: $f"
+  elif is_optional_python_script "$f"; then
+    warn "  Optional source missing: $f (creating non-zero not-packaged stub)"
+    write_optional_python_stub "$f"
   else
-    warn "  Missing: $f (will create stub)"
-    echo "#!/usr/bin/env python3
-# $f — stub (not yet implemented)
-import sys
-print('$f: not implemented in this build')
-sys.exit(0)" > "$DEST_DIR/$f"
+    error "Required source missing: $f"
   fi
 done
 
