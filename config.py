@@ -151,6 +151,24 @@ IRAN_CDN_FRONTS: list = [
 # NIN mode: rescore bridges for internet-cut scenario
 NIN_MODE: bool = os.getenv("NIN_MODE", "false").lower() == "true"
 
+# Non-destructive Iran bridge prioritization (local scoring/reordering only)
+IRAN_BRIDGE_PRIORITIZATION_ENABLED: bool = os.getenv(
+    "IRAN_BRIDGE_PRIORITIZATION_ENABLED", "false"
+).lower() == "true"
+IRAN_BRIDGE_PRIORITIZATION_WEIGHT_PORT: float = float(os.getenv(
+    "IRAN_BRIDGE_PRIORITIZATION_WEIGHT_PORT", "1.0"
+))
+IRAN_BRIDGE_PRIORITIZATION_WEIGHT_TRANSPORT: float = float(os.getenv(
+    "IRAN_BRIDGE_PRIORITIZATION_WEIGHT_TRANSPORT", "1.0"
+))
+IRAN_BRIDGE_PRIORITIZATION_WEIGHT_RECENCY: float = float(os.getenv(
+    "IRAN_BRIDGE_PRIORITIZATION_WEIGHT_RECENCY", "1.0"
+))
+IRAN_BRIDGE_PRIORITIZATION_WEIGHT_REACHABILITY: float = float(os.getenv(
+    "IRAN_BRIDGE_PRIORITIZATION_WEIGHT_REACHABILITY", "1.0"
+))
+RIPE_ATLAS_API_KEY: str = os.getenv("RIPE_ATLAS_API_KEY", "")
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Anti-DPI / Anti-Filter (Iran AI-Powered)
 # ─────────────────────────────────────────────────────────────────────────────
