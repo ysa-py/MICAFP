@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-24T08:15:59.934097+00:00",
-  "total_bridges": 625,
+  "generated_at": "2026-06-24T11:22:54.122682+00:00",
+  "total_bridges": 623,
   "green_count": 6,
   "yellow_count": 252,
-  "red_count": 367,
+  "red_count": 365,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -368,14 +368,6 @@
       "transport": "vanilla",
       "ip": "159.195.29.170",
       "port": 9999,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "159.65.125.21:9002 63795CA9EBA4AAFC26407785884FF15790018BBC",
-      "transport": "vanilla",
-      "ip": "159.65.125.21",
-      "port": 9002,
       "sni": "",
       "tier": "RED"
     },
@@ -1032,14 +1024,6 @@
       "transport": "vanilla",
       "ip": "57.128.240.60",
       "port": 9004,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "64.44.83.138:6443 3FD2D70C4E7F8D5470080B6BABA21376F2B478A1",
-      "transport": "vanilla",
-      "ip": "64.44.83.138",
-      "port": 6443,
       "sni": "",
       "tier": "RED"
     },
@@ -2024,6 +2008,14 @@
       "transport": "obfs4",
       "ip": "179.214.0.29",
       "port": 8668,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "obfs4 181.118.218.29:4443 F1555089C07B70D7B9513FE19F2A630D03460FAC cert=T6S21IP6FyvyuE/07jJYmhp8Qtv6gUbUK6Pk2SPsnzHSt62zUBkbXFCmXdBdm8bl7syUEw iat-mode=0",
+      "transport": "obfs4",
+      "ip": "181.118.218.29",
+      "port": 4443,
       "sni": "",
       "tier": "RED"
     },
@@ -3336,14 +3328,6 @@
       "transport": "obfs4",
       "ip": "89.167.27.209",
       "port": 9103,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "obfs4 89.176.67.213:34001 9199D9D3024783BF781704238AF48A19F247EC4D cert=il7E5PRwbVDwyOuVFu2p+apokW0WLtP/cN70bNSuTqUNim9R2w50c7sWQLcwAIxe8nfxZg iat-mode=0",
-      "transport": "obfs4",
-      "ip": "89.176.67.213",
-      "port": 34001,
       "sni": "",
       "tier": "RED"
     },
