@@ -1,5 +1,5 @@
 # JA3/TLS Fingerprint Rotation Report
-**Generated:** 2026-06-24 11:22:48 UTC  
+**Generated:** 2026-06-24 12:26:43 UTC  
 
 ## Summary
 
@@ -15,7 +15,7 @@
 ## Universal Recommendations
 
 1. Enable TLS padding (RFC 7685) on all PT clients.
-2. Use `iat-mode=1` for obfs4 timing randomisation.
+2. Use `iat-mode=2` for obfs4 timing randomisation.
 3. Rotate JA3 baseline every 72 hours.
 4. Prefer WebTunnel — its JA3 is identical to browser HTTPS.
 5. Enable ECH where available — completely hides SNI from SIAM.
