@@ -34,5 +34,11 @@
     "event": "ai_waterfall_failure",
     "local_score": 0.0,
     "final_score": 0.0
+  },
+  {
+    "timestamp": "2026-06-24T16:58:11.533210+00:00",
+    "event": "ai_waterfall_failure",
+    "local_score": 0.0,
+    "final_score": 0.0
   }
 ]
