@@ -63,5 +63,3 @@ tenacity>=8.3.0
 structlog>=24.1.0
 # prometheus-client: metrics export for the VIP telemetry dashboard
 prometheus-client>=0.20.0
-# pytest-timeout: per-test timeout (used in pyproject.toml)
-pytest-timeout>=2.3.0
