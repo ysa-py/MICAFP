@@ -358,6 +358,23 @@ class TestFeatureFlags(unittest.TestCase):
         for name, value in flags.items():
             self.assertIsInstance(value, bool, f"Flag {name} should be bool")
 
+    def test_all_flags_default_enabled(self):
+        """All feature flags should default to enabled unless explicitly disabled."""
+        import importlib
+        import os
+        from unittest import mock
+
+        import config.feature_flags as feature_flags
+
+        flag_names = tuple(feature_flags.get_all_flags())
+        clean_env = {
+            key: value for key, value in os.environ.items() if key not in flag_names
+        }
+        with mock.patch.dict(os.environ, clean_env, clear=True):
+            reloaded = importlib.reload(feature_flags)
+            self.assertTrue(all(reloaded.get_all_flags().values()))
+        importlib.reload(feature_flags)
+
     def test_compat_path_fix_enabled(self):
         """CRITICAL: compat path fix should be enabled by default."""
         from config.feature_flags import ENABLE_COMPAT_PATH_FIX

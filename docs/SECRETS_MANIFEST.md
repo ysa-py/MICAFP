@@ -34,7 +34,7 @@ needs before cutting over.
 
 ---
 
-## Full key inventory (98 keys in `configs/env_template.sh` as of this remediation)
+## Full key inventory (110 keys in `configs/env_template.sh` as of this remediation)
 
 Categories below mirror the template's own section headers.
 
@@ -77,6 +77,13 @@ Categories below mirror the template's own section headers.
 
 ### Iran-Specific
 `NIN_MODE`, `DEEP_TEST`
+
+### Feature Flags (enabled by default unless explicitly disabled)
+`ENABLE_ENDPOINT_VALIDATION`, `ENABLE_CIRCUIT_BREAKER`,
+`ENABLE_MODEL_REGISTRY`, `ENABLE_RETRY_FAILOVER`, `ENABLE_SELF_HEALING`,
+`ENABLE_STRUCTURED_LOGGING`, `ENABLE_REPORT_GENERATION`,
+`ENABLE_ANTI_DPI_IRAN`, `ENABLE_UTLS_EVASION`, `ENABLE_IRST_ROUTING`,
+`ENABLE_COMPAT_PATH_FIX`, `ENABLE_TELEMETRY`
 
 ### v4 — uTLS / Elite Registry / Circuit Breaker / Telemetry / IRST
 **(the 16 keys fixed by this remediation — see §1.3 of the engineering prompt)**

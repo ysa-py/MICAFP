@@ -4,17 +4,18 @@ feature_flags.py — Feature Flag Configuration v1.0
 ═══════════════════════════════════════════════════════════════════════════════
 
 Centralized feature flags for all new capabilities.
-All new behavior is feature-flagged and disabled by default,
-ensuring zero regression in existing functionality.
+New capabilities are enabled by default so the repaired runtime path is active
+unless an operator explicitly disables a flag with an environment variable.
 
-Feature flags are controlled via environment variables.
-ALL existing functionality is preserved WITHOUT any feature flag.
+Feature flags are controlled via environment variables. Set a flag to ``false``
+to opt out of that capability; ALL existing functionality is preserved WITHOUT
+requiring any feature flag.
 """
 
 import os
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Feature Flags — All new capabilities are OFF by default
+# Feature Flags — New capabilities are ON by default unless explicitly disabled
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Endpoint Validation Layer

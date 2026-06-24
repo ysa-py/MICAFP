@@ -158,6 +158,26 @@ NIN_MODE="false"                       # Enable NIN (internet cut) scoring mode
 # Deep testing: test ALL bridges (slower but more thorough)
 DEEP_TEST="false"                      # Enable deep testing mode
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FEATURE FLAGS (new capabilities default to enabled)
+# ─────────────────────────────────────────────────────────────────────────────
+# These flags mirror config/feature_flags.py. Leave them as "true" to use the
+# repaired/enhanced runtime path; set any individual flag to "false" to opt out
+# without removing the capability from the codebase.
+ENABLE_ENDPOINT_VALIDATION="true"      # Enable endpoint validation layer
+ENABLE_CIRCUIT_BREAKER="true"          # Enable enhanced per-slot circuit breaker
+ENABLE_MODEL_REGISTRY="true"           # Enable dynamic model registry discovery
+ENABLE_RETRY_FAILOVER="true"           # Enable enhanced retry and failover engine
+ENABLE_SELF_HEALING="true"             # Enable self-healing engine
+ENABLE_STRUCTURED_LOGGING="true"       # Enable structured diagnostics logging
+ENABLE_REPORT_GENERATION="true"        # Enable report generation
+ENABLE_ANTI_DPI_IRAN="true"            # Enable enhanced Iran anti-DPI behavior
+ENABLE_UTLS_EVASION="true"             # Enable uTLS evasion layer
+ENABLE_IRST_ROUTING="true"             # Enable IRST time-based predictive routing
+ENABLE_COMPAT_PATH_FIX="true"          # Enable Cloudflare AI Gateway /compat/ path fix
+ENABLE_TELEMETRY="true"                # Enable telemetry watcher
+
 # ─────────────────────────────────────────────────────────────────────────────
 # v4: uTLS Evasion, Elite Registry, Circuit Breaker, Telemetry, IRST windows
 # ─────────────────────────────────────────────────────────────────────────────
