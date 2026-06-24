@@ -222,6 +222,14 @@ func parseObfs4(line string, b *Bridge) error {
 	if m == nil {
 		m = ipv4PortRE.FindStringSubmatch(addrStr)
 	}
+	if m == nil {
+		m = domainPortRE.FindStringSubmatch(addrStr)
+		if m != nil {
+			if err := validateDomain(m[1]); err != nil {
+				return err
+			}
+		}
+	}
 
 	if m == nil {
 		return fmt.Errorf("invalid obfs4 address: %s", addrStr)

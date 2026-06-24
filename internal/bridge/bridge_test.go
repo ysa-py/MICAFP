@@ -38,6 +38,61 @@ func TestParse_Obfs4(t *testing.T) {
 	}
 }
 
+func TestParse_Obfs4DomainPort(t *testing.T) {
+	tests := []struct {
+		name string
+		line string
+		host string
+		port int
+	}{
+		{
+			name: "cloud TLD with iat-mode",
+			line: "obfs4 bridge.example.cloud:443 cert=x iat-mode=0",
+			host: "bridge.example.cloud",
+			port: 443,
+		},
+		{
+			name: "country-code TLD without iat-mode",
+			line: "obfs4 x.y.ir:9001 cert=x",
+			host: "x.y.ir",
+			port: 9001,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b, err := Parse(tt.line)
+			if err != nil {
+				t.Fatalf("Parse failed: %v", err)
+			}
+			if b.Host != tt.host || b.Port != tt.port {
+				t.Errorf("got host=%s port=%d, want %s:%d", b.Host, b.Port, tt.host, tt.port)
+			}
+			if b.Transport != "obfs4" {
+				t.Errorf("got transport=%s, want obfs4", b.Transport)
+			}
+			if b.Params["cert"] != "x" {
+				t.Errorf("missing or wrong cert parameter")
+			}
+		})
+	}
+}
+
+func TestParse_Obfs4DomainPortValidation(t *testing.T) {
+	tests := []string{
+		"obfs4 bridge..example.cloud:443 cert=x",
+		"obfs4 bridge.example.cloud:0 cert=x",
+	}
+
+	for _, line := range tests {
+		t.Run(line, func(t *testing.T) {
+			if _, err := Parse(line); err == nil {
+				t.Fatalf("Parse should fail for %q", line)
+			}
+		})
+	}
+}
+
 func TestParse_WebTunnel(t *testing.T) {
 	line := "webtunnel 1.2.3.4:443 url=https://example.com key=secret"
 	b, err := Parse(line)
