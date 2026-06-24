@@ -33,7 +33,7 @@ var (
 	// HTTPS URL pattern
 	httpsRE = regexp.MustCompile(`https?://([^/:\s]+)(?::(\d+))?`)
 	// Domain:port pattern
-	domainPortRE = regexp.MustCompile(`([a-zA-Z0-9._-]+\.(?:net|com|org|io|dev)):(\d+)`)
+	domainPortRE = regexp.MustCompile(`^((?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}):(\d+)$`)
 )
 
 // Parse parses a bridge line and returns a Bridge struct or an error.
@@ -162,9 +162,12 @@ func parseVanilla(line string, b *Bridge) error {
 	// Try to parse domain:port
 	m = domainPortRE.FindStringSubmatch(parts[idx])
 	if m != nil {
-		port, err := strconv.Atoi(m[2])
+		if err := validateDomain(m[1]); err != nil {
+			return err
+		}
+		port, err := parsePort(m[2])
 		if err != nil {
-			return fmt.Errorf("invalid port: %s", m[2])
+			return err
 		}
 		b.Host = m[1]
 		b.Port = port
@@ -173,6 +176,31 @@ func parseVanilla(line string, b *Bridge) error {
 	}
 
 	return errors.New("could not parse address:port")
+}
+
+// validateDomain verifies hostname labels after domainPortRE matches.
+func validateDomain(host string) error {
+	labels := strings.Split(host, ".")
+	for _, label := range labels {
+		if label == "" {
+			return fmt.Errorf("invalid domain: empty label in %s", host)
+		}
+	}
+
+	return nil
+}
+
+// parsePort parses and validates a TCP port number.
+func parsePort(raw string) (int, error) {
+	port, err := strconv.Atoi(raw)
+	if err != nil {
+		return 0, fmt.Errorf("invalid port: %s", raw)
+	}
+	if port < 1 || port > 65535 {
+		return 0, fmt.Errorf("port out of range: %d", port)
+	}
+
+	return port, nil
 }
 
 // parseObfs4 parses obfs4 bridge lines.
