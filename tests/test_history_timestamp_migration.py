@@ -23,7 +23,7 @@ def _assert_normalized(history: dict[str, object]) -> None:
     entry = history["dict-bridge"]
     assert isinstance(entry, dict)
     assert entry["first_seen"] == "2026-06-05T07:45:38+00:00"
-    assert entry["last_seen"] == "2026-06-05T08:45:38+03:30"
+    assert entry["last_seen"] == "2026-06-05T05:15:38+00:00"
     assert entry["raw"] == "obfs4 203.0.113.1:443 cert=abc iat-mode=0"
     assert entry["transport"] == "obfs4"
     assert entry["tcp_reachable"] is True

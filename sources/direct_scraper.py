@@ -34,7 +34,7 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-from core.dt_utils import parse_dt
+from core.dt_utils import coerce_utc_dt
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging
@@ -153,24 +153,9 @@ def save_history(history: dict[str, Any]) -> None:
 
 def _parse_history_dt(value: Any) -> datetime:
     """Parse history timestamps as UTC-aware datetimes with an explicit fallback."""
-    fallback = datetime(2000, 1, 1, tzinfo=UTC)
-    if isinstance(value, datetime):
-        if value.tzinfo is None:
-            return value.replace(tzinfo=UTC)
-        return value.astimezone(UTC)
-    if isinstance(value, str):
-        try:
-            normalized = value.replace("Z", "+00:00")
-            parsed = parse_dt(normalized).astimezone(UTC)
-            if (
-                parsed == datetime(1970, 1, 1, tzinfo=UTC)
-                and not normalized.startswith("1970-01-01")
-            ):
-                return fallback
-            return parsed
-        except Exception:
-            return fallback
-    return fallback
+    # Bridge history may contain legacy naive timestamps; coerce everything to
+    # UTC-aware datetimes before retention/recent-window comparisons.
+    return coerce_utc_dt(value)
 
 
 def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
@@ -178,12 +163,12 @@ def normalize_history_timestamps(history: dict[str, Any]) -> dict[str, Any]:
     timestamp_fields = ("first_seen", "last_seen")
     for key, entry in history.items():
         if isinstance(entry, str):
-            history[key] = parse_dt(entry).isoformat()
+            history[key] = coerce_utc_dt(entry).isoformat()
         elif isinstance(entry, dict):
             for field in timestamp_fields:
                 value = entry.get(field)
                 if isinstance(value, str):
-                    entry[field] = parse_dt(value).isoformat()
+                    entry[field] = coerce_utc_dt(value).isoformat()
     return history
 
 
