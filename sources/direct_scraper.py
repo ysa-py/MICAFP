@@ -156,6 +156,17 @@ def save_history(history: dict[str, Any]) -> None:
 
 
 
+def _history_first_seen_dt(entry: Any) -> datetime:
+    """Return an entry's first_seen timestamp as a UTC-aware datetime."""
+    if isinstance(entry, str):
+        ts_value = entry
+    elif isinstance(entry, dict):
+        ts_value = entry.get("first_seen")
+    else:
+        ts_value = None
+    return parse_history_dt(ts_value)
+
+
 def update_history_entry(history: dict[str, Any], key: str, transport: str, raw: str) -> None:
     """Upsert a bridge entry in the history dict."""
     now = datetime.now(tz=UTC).isoformat()
@@ -403,13 +414,7 @@ def run(bridge_dir: Path | None = None) -> dict[str, int]:
             if entry is None:
                 continue
             try:
-                if isinstance(entry, str):
-                    ts_value = entry
-                elif isinstance(entry, dict):
-                    ts_value = entry.get("first_seen")
-                else:
-                    ts_value = None
-                first = parse_history_dt(ts_value)
+                first = _history_first_seen_dt(entry)
                 if first > recent_cutoff:
                     recent_bridges.append(bridge)
             except Exception as _remediation_exc:
