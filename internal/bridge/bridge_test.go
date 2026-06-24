@@ -52,6 +52,56 @@ func TestParse_WebTunnel(t *testing.T) {
 	}
 }
 
+func TestParse_DomainPortWithUnlistedTLDs(t *testing.T) {
+	tests := []struct {
+		name string
+		line string
+		host string
+		port int
+	}{
+		{
+			name: "cloud TLD with multiple labels",
+			line: "bridge.example.cloud:443",
+			host: "bridge.example.cloud",
+			port: 443,
+		},
+		{
+			name: "country-code TLD with multiple labels",
+			line: "x.y.ir:9001",
+			host: "x.y.ir",
+			port: 9001,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b, err := Parse(tt.line)
+			if err != nil {
+				t.Fatalf("Parse failed: %v", err)
+			}
+			if b.Host != tt.host || b.Port != tt.port {
+				t.Errorf("got host=%s port=%d, want %s:%d", b.Host, b.Port, tt.host, tt.port)
+			}
+		})
+	}
+}
+
+func TestParse_DomainPortValidation(t *testing.T) {
+	tests := []string{
+		"bridge..example.cloud:443",
+		"bridge.example.cloud:0",
+		"bridge.example.cloud:65536",
+	}
+
+	for _, line := range tests {
+		t.Run(line, func(t *testing.T) {
+			if _, err := Parse(line); err == nil {
+				t.Fatalf("Parse should fail for %q", line)
+			}
+		})
+	}
+}
+
 func TestParse_IPv6(t *testing.T) {
 	line := "[2001:db8::1]:9999"
 	b, err := Parse(line)
