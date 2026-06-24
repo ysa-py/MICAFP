@@ -103,11 +103,15 @@ if [[ "$NO_RUST" == "false" ]]; then
     log_ok "Rust $(rustc --version) installed."
   fi
 
-  log_info "Building bridge-probe (release)…"
-  cd bridge-probe
-  cargo build --release
-  cd ..
-  log_ok "bridge-probe binary: bridge-probe/target/release/bridge-probe"
+  if [[ -d "bridge-probe" && -f "bridge-probe/Cargo.toml" ]]; then
+    log_info "Building bridge-probe (release)…"
+    ( cd bridge-probe && cargo build --release )
+    if [[ -x "bridge-probe/target/release/bridge-probe" ]]; then
+      log_ok "bridge-probe binary: bridge-probe/target/release/bridge-probe"
+    fi
+  else
+    log_warn "Optional component bridge-probe is not present in this checkout; skipping Rust build."
+  fi
 fi
 
 # ── 5. Go ────────────────────────────────────────────────────────────────────
