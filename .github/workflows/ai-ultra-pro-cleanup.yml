@@ -1,0 +1,50 @@
+name: AI Ultra Pro Cleanup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    name: Cleanup old workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old AI Ultra Pro runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const mdCell = value => String(value).replaceAll('|', '\\|').replace(/\r?\n/g, ' ');
+            const {data: runs} = await github.rest.actions.listWorkflowRunsForRepo({
+              owner,
+              repo,
+              per_page: 100,
+            });
+            const candidates = runs.workflow_runs.filter(r => r.name?.includes('AI Ultra Pro'));
+
+            core.summary
+              .addHeading('AI Ultra Pro cleanup')
+              .addTable([
+                [
+                  {data: 'Run ID', header: true},
+                  {data: 'Workflow', header: true},
+                  {data: 'Status', header: true},
+                  {data: 'Created', header: true},
+                ],
+                ...candidates.map(r => [
+                  String(r.id),
+                  mdCell(r.name),
+                  String(r.status),
+                  String(r.created_at),
+                ]),
+              ]);
+
+            for (const r of candidates) {
+              console.log(`AI Ultra Pro cleanup candidate: ${r.id} ${r.name}`);
+            }
+
+            await core.summary.write();
