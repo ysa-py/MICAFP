@@ -240,7 +240,7 @@ func main() {
 		for _, tb := range allBridges {
 			ripeWG.Add(1)
 			sem <- struct{}{}
-			go func(raw, src string) {
+			go func(raw string) {
 				defer ripeWG.Done()
 				defer func() { <-sem }()
 				b, err := bridge.Parse(raw)
@@ -252,7 +252,7 @@ func main() {
 				defer cancel()
 				ok, tested := ripeClient.Measure(rCtx, b.Host, b.Port)
 				ripeCh <- ripeResult{raw, ok, tested}
-			}(tb.line, tb.source)
+			}(tb.line)
 		}
 		ripeWG.Wait()
 	}
