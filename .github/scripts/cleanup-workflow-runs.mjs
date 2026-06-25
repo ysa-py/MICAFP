@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const ACTIVE_STATUSES = new Set([
-  'action_required',
   'in_progress',
   'pending',
   'queued',
@@ -14,6 +13,7 @@ const REPOSITORY = process.env.GITHUB_REPOSITORY;
 const TOKEN = process.env.GITHUB_TOKEN;
 const CURRENT_RUN_ID = process.env.GITHUB_RUN_ID;
 const DRY_RUN = process.env.DRY_RUN === 'true';
+const STRICT_CLEANUP = process.env.STRICT_CLEANUP === 'true';
 
 if (!Number.isInteger(KEEP_LAST_N) || KEEP_LAST_N < 0) {
   throw new Error(`KEEP_LAST_N must be a non-negative integer, got ${process.env.KEEP_LAST_N}`);
@@ -33,6 +33,10 @@ const headers = {
   'X-GitHub-Api-Version': '2022-11-28',
 };
 
+function warn(message) {
+  console.warn(`Warning: ${message}`);
+}
+
 async function githubJson(url) {
   const response = await fetch(url, { headers });
   if (!response.ok) {
@@ -49,7 +53,18 @@ async function collectWorkflowRuns() {
     url.searchParams.set('per_page', '100');
     url.searchParams.set('page', String(page));
 
-    const data = await githubJson(url);
+    let data;
+    try {
+      data = await githubJson(url);
+    } catch (error) {
+      const message = `Cannot list workflow runs on page ${page}; skipping remaining pages — ${error.message || String(error)}`;
+      if (STRICT_CLEANUP) {
+        throw new Error(message, { cause: error });
+      }
+      warn(message);
+      break;
+    }
+
     const runs = data.workflow_runs ?? [];
     allRuns.push(...runs);
 
@@ -73,14 +88,20 @@ async function deleteWorkflowRun(run) {
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to delete run ${run.id}: ${response.status} ${response.statusText}`);
+    const message = `Failed to delete run ${run.id}: ${response.status} ${response.statusText}`;
+    if (STRICT_CLEANUP) {
+      throw new Error(message);
+    }
+    warn(message);
+    return false;
   }
 
   console.log(`Deleted completed run ${run.id} (${run.status})`);
+  return true;
 }
 
 async function main() {
-  const allRuns = await collectWorkflowRuns();
+  const allRuns = (await collectWorkflowRuns()).sort((a, b) => Date.parse(b.created_at ?? '') - Date.parse(a.created_at ?? ''));
   const completedRuns = allRuns.filter((run) => !ACTIVE_STATUSES.has(run.status));
   const protectedCompletedRuns = new Set(
     completedRuns.slice(0, KEEP_LAST_N).map((run) => run.id),
