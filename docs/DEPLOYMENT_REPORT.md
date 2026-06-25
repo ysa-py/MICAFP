@@ -8,7 +8,7 @@
 
 | Component | Minimum Version | Purpose |
 |-----------|----------------|---------|
-| Python | 3.10+ | Main application runtime |
+| Python | 3.12+ | Main application runtime |
 | Go | 1.21+ | Bridge probe, scheduler |
 | Rust | 1.70+ | Bridge-probe tool |
 | Zig | 0.11+ | Scanner module |

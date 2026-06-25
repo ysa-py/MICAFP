@@ -26,7 +26,7 @@
 
 | Requirement | Minimum | Recommended |
 |-------------|---------|-------------|
-| **Python** | 3.11+ | 3.12 |
+| **Python** | 3.12+ | 3.12 |
 | **Go** | 1.21+ | 1.22 |
 | **Rust** | stable (1.78+) | latest stable |
 | **Zig** | 0.11+ | 0.13+ |
@@ -44,7 +44,7 @@
 
 ```bash
 # Python
-python3 --version    # 3.11+ required
+python3 --version    # 3.12+ required
 pip3 --version
 
 # Go
