@@ -1,0 +1,66 @@
+# Standalone workflow-run cleanup utility.
+# Set dry_run to false only after reviewing dry-run output.
+name: Cleanup Workflow Runs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview deletions without deleting workflow runs. Set to false only after reviewing dry-run output.'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      keep_last_n:
+        description: 'Number of newest workflow runs to keep.'
+        required: false
+        default: '2'
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup-workflow-runs:
+    name: Cleanup workflow runs
+    runs-on: ubuntu-latest
+    env:
+      # Set to false only after reviewing dry-run output.
+      DRY_RUN: ${{ inputs.dry_run || 'true' }}
+      KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Delete old workflow runs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if ! [[ "$KEEP_LAST_N" =~ ^[0-9]+$ ]]; then
+            echo "::error::KEEP_LAST_N must be a non-negative integer; got '$KEEP_LAST_N'"
+            exit 1
+          fi
+
+          echo "DRY_RUN=$DRY_RUN"
+          echo "KEEP_LAST_N=$KEEP_LAST_N"
+
+          mapfile -t run_ids < <(
+            gh api --paginate "/repos/${GITHUB_REPOSITORY}/actions/runs?per_page=100" \
+              --jq '.workflow_runs | sort_by(.created_at) | reverse | .[].id'
+          )
+
+          if (( ${#run_ids[@]} <= KEEP_LAST_N )); then
+            echo "Nothing to delete; found ${#run_ids[@]} run(s), keeping $KEEP_LAST_N."
+            exit 0
+          fi
+
+          for run_id in "${run_ids[@]:KEEP_LAST_N}"; do
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "Dry run: would delete workflow run $run_id"
+            else
+              echo "Deleting workflow run $run_id"
+              gh api --method DELETE "/repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}"
+            fi
+          done
