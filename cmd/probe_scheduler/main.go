@@ -69,9 +69,61 @@ type MergedResult struct {
 
 // SchedulerReport is the JSON served at /results.
 type SchedulerReport struct {
+	Status       string         `json:"status,omitempty"`
 	GeneratedAt  string         `json:"generated_at"`
 	TotalBridges int            `json:"total_bridges"`
 	Results      []MergedResult `json:"results"`
+}
+
+type schedulerState struct {
+	mu     sync.RWMutex
+	status string
+	report SchedulerReport
+}
+
+func newSchedulerState() *schedulerState {
+	return &schedulerState{
+		status: "starting",
+		report: SchedulerReport{
+			Status:      "starting",
+			GeneratedAt: time.Now().UTC().Format(time.RFC3339),
+			Results:     []MergedResult{},
+		},
+	}
+}
+
+func (s *schedulerState) setStatus(status string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.status = status
+	s.report.Status = status
+}
+
+func (s *schedulerState) setReport(status string, report SchedulerReport) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	report.Status = status
+	if report.Results == nil {
+		report.Results = []MergedResult{}
+	}
+	s.status = status
+	s.report = report
+}
+
+func (s *schedulerState) snapshot() SchedulerReport {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	report := s.report
+	if report.Results == nil {
+		report.Results = []MergedResult{}
+	}
+	return report
+}
+
+func (s *schedulerState) health() map[string]string {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return map[string]string{"status": s.status}
 }
 
 func validatePort(port int) error {
@@ -182,141 +234,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ripeKey := os.Getenv("RIPE_ATLAS_API_KEY")
-	ripeClient := ripe.New(ripeKey)
-	if ripeClient.Enabled() {
-		log.Println("RIPE Atlas: enabled (IR probes)")
-	} else {
-		log.Println("RIPE Atlas: disabled (RIPE_ATLAS_API_KEY not set) — OONI-only mode")
-	}
-
-	ctx := context.Background()
-
-	// ── Step 1: Bridge acquisition ────────────────────────────────────────
-	log.Println("Fetching bridges from MOAT API…")
-	moatLines, err := fetchMOATBridges(ctx)
-	if err != nil {
-		log.Printf("MOAT API error (non-fatal): %v", err)
-	}
-	log.Printf("MOAT: %d bridges fetched", len(moatLines))
-
-	staticRecords, err := readIranBridges(*bridgesFlag)
-	if err != nil {
-		log.Printf("Cannot read iran bridges DB (non-fatal): %v", err)
-	}
-
-	// Combine all bridge lines (dedup by raw string)
-	seen := make(map[string]bool)
-	type taggedBridge struct {
-		line   string
-		source string
-	}
-	var allBridges []taggedBridge
-	for _, line := range moatLines {
-		if !seen[line] {
-			seen[line] = true
-			allBridges = append(allBridges, taggedBridge{line, "moat"})
-		}
-	}
-	for _, r := range staticRecords {
-		if r.BridgeLine != "" && !seen[r.BridgeLine] {
-			seen[r.BridgeLine] = true
-			allBridges = append(allBridges, taggedBridge{r.BridgeLine, r.Source})
-		}
-	}
-	log.Printf("Total bridges to schedule: %d", len(allBridges))
-
-	// ── Step 2: RIPE Atlas measurements ──────────────────────────────────
-	type ripeResult struct {
-		line      string
-		reachable bool
-		tested    bool
-	}
-	ripeCh := make(chan ripeResult, len(allBridges))
-
-	if ripeClient.Enabled() {
-		var ripeWG sync.WaitGroup
-		sem := make(chan struct{}, 5) // max 5 concurrent RIPE submissions
-		for _, tb := range allBridges {
-			ripeWG.Add(1)
-			sem <- struct{}{}
-			go func(raw, src string) {
-				defer ripeWG.Done()
-				defer func() { <-sem }()
-				b, err := bridge.Parse(raw)
-				if err != nil || b.Transport == "snowflake" {
-					ripeCh <- ripeResult{line: raw, reachable: false, tested: false}
-					return
-				}
-				rCtx, cancel := context.WithTimeout(ctx, 12*time.Minute)
-				defer cancel()
-				ok, tested := ripeClient.Measure(rCtx, b.Host, b.Port)
-				ripeCh <- ripeResult{raw, ok, tested}
-			}(tb.line, tb.source)
-		}
-		ripeWG.Wait()
-	}
-	close(ripeCh)
-
-	ripeMap := make(map[string]ripeResult)
-	for r := range ripeCh {
-		ripeMap[r.line] = r
-	}
-
-	// ── Step 3: Merge with PT handshake results ───────────────────────────
-	ptMap, _ := readPTResults("data/pt_results.json")
-
-	var merged []MergedResult
-	for _, tb := range allBridges {
-		b, _ := bridge.Parse(tb.line)
-		host, port, transport := "", 0, "unknown"
-		if b != nil {
-			host, port, transport = b.Host, b.Port, b.Transport
-		}
-
-		rr := ripeMap[tb.line]
-		pt := ptMap[tb.line]
-		mr := MergedResult{
-			BridgeLine:    tb.line,
-			Host:          host,
-			Port:          port,
-			Transport:     transport,
-			RIPEReachable: rr.reachable,
-			RIPETested:    rr.tested,
-			PTStatus:      pt.Status,
-			PTLatencyMs:   pt.LatencyMs,
-			Source:        tb.source,
-		}
-		merged = append(merged, mr)
-	}
-
-	results := normalizeSchedulerResults(merged)
-	report := SchedulerReport{
-		GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
-		TotalBridges: len(results),
-		Results:      results,
-	}
-
-	// Persist merged results for Python correlator
-	const schedulerResultsPath = "data/scheduler_results.json"
-	if err := os.MkdirAll("data", 0755); err != nil {
-		log.Printf("Cannot create scheduler results directory (non-fatal): %v", err)
-	} else if out, err := json.MarshalIndent(report, "", "  "); err != nil {
-		log.Printf("Cannot marshal scheduler results (non-fatal): %v", err)
-	} else if err := os.WriteFile(schedulerResultsPath, out, 0644); err != nil {
-		log.Printf("Cannot write scheduler results to %s (non-fatal): %v", schedulerResultsPath, err)
-	}
-
-	// ── Step 4: HTTP exposure ─────────────────────────────────────────────
-	log.Printf("Listening on http://localhost:%d/results", *portFlag)
+	state := newSchedulerState()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/results", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(report) //nolint:errcheck
+		json.NewEncoder(w).Encode(state.snapshot()) //nolint:errcheck
 	})
 	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, "ok")
+		json.NewEncoder(w).Encode(state.health()) //nolint:errcheck
 	})
 
 	srv := &http.Server{
@@ -325,6 +252,147 @@ func main() {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
+
+	go func() {
+		ripeKey := os.Getenv("RIPE_ATLAS_API_KEY")
+		ripeClient := ripe.New(ripeKey)
+		if ripeClient.Enabled() {
+			log.Println("RIPE Atlas: enabled (IR probes)")
+		} else {
+			log.Println("RIPE Atlas: disabled (RIPE_ATLAS_API_KEY not set) — OONI-only mode")
+		}
+
+		state.setStatus("running")
+
+		ctx := context.Background()
+
+		// ── Step 1: Bridge acquisition ────────────────────────────────────────
+		log.Println("Fetching bridges from MOAT API…")
+		moatLines, err := fetchMOATBridges(ctx)
+		if err != nil {
+			log.Printf("MOAT API error (non-fatal): %v", err)
+		}
+		log.Printf("MOAT: %d bridges fetched", len(moatLines))
+
+		staticRecords, err := readIranBridges(*bridgesFlag)
+		if err != nil {
+			log.Printf("Cannot read iran bridges DB (non-fatal): %v", err)
+		}
+
+		// Combine all bridge lines (dedup by raw string)
+		seen := make(map[string]bool)
+		type taggedBridge struct {
+			line   string
+			source string
+		}
+		var allBridges []taggedBridge
+		for _, line := range moatLines {
+			if !seen[line] {
+				seen[line] = true
+				allBridges = append(allBridges, taggedBridge{line, "moat"})
+			}
+		}
+		for _, r := range staticRecords {
+			if r.BridgeLine != "" && !seen[r.BridgeLine] {
+				seen[r.BridgeLine] = true
+				allBridges = append(allBridges, taggedBridge{r.BridgeLine, r.Source})
+			}
+		}
+		log.Printf("Total bridges to schedule: %d", len(allBridges))
+
+		// ── Step 2: RIPE Atlas measurements ──────────────────────────────────
+		type ripeResult struct {
+			line      string
+			reachable bool
+			tested    bool
+		}
+		ripeCh := make(chan ripeResult, len(allBridges))
+
+		if ripeClient.Enabled() {
+			var ripeWG sync.WaitGroup
+			sem := make(chan struct{}, 5) // max 5 concurrent RIPE submissions
+			for _, tb := range allBridges {
+				ripeWG.Add(1)
+				sem <- struct{}{}
+				go func(raw, src string) {
+					defer ripeWG.Done()
+					defer func() { <-sem }()
+					b, err := bridge.Parse(raw)
+					if err != nil || b.Transport == "snowflake" {
+						ripeCh <- ripeResult{line: raw, reachable: false, tested: false}
+						return
+					}
+					rCtx, cancel := context.WithTimeout(ctx, 12*time.Minute)
+					defer cancel()
+					ok, tested := ripeClient.Measure(rCtx, b.Host, b.Port)
+					ripeCh <- ripeResult{raw, ok, tested}
+				}(tb.line, tb.source)
+			}
+			ripeWG.Wait()
+		}
+		close(ripeCh)
+
+		ripeMap := make(map[string]ripeResult)
+		for r := range ripeCh {
+			ripeMap[r.line] = r
+		}
+
+		// ── Step 3: Merge with PT handshake results ───────────────────────────
+		ptMap, _ := readPTResults("data/pt_results.json")
+
+		var merged []MergedResult
+		for _, tb := range allBridges {
+			b, _ := bridge.Parse(tb.line)
+			host, port, transport := "", 0, "unknown"
+			if b != nil {
+				host, port, transport = b.Host, b.Port, b.Transport
+			}
+
+			rr := ripeMap[tb.line]
+			pt := ptMap[tb.line]
+			mr := MergedResult{
+				BridgeLine:    tb.line,
+				Host:          host,
+				Port:          port,
+				Transport:     transport,
+				RIPEReachable: rr.reachable,
+				RIPETested:    rr.tested,
+				PTStatus:      pt.Status,
+				PTLatencyMs:   pt.LatencyMs,
+				Source:        tb.source,
+			}
+			merged = append(merged, mr)
+		}
+
+		results := normalizeSchedulerResults(merged)
+		report := SchedulerReport{
+			Status:       "ready",
+			GeneratedAt:  time.Now().UTC().Format(time.RFC3339),
+			TotalBridges: len(results),
+			Results:      results,
+		}
+
+		// Persist merged results for Python correlator
+		const schedulerResultsPath = "data/scheduler_results.json"
+		writeStatus := "ready"
+		persistedReport := report
+		persistedReport.Status = ""
+		if err := os.MkdirAll("data", 0755); err != nil {
+			writeStatus = "error"
+			log.Printf("Cannot create scheduler results directory (non-fatal): %v", err)
+		} else if out, err := json.MarshalIndent(persistedReport, "", "  "); err != nil {
+			writeStatus = "error"
+			log.Printf("Cannot marshal scheduler results (non-fatal): %v", err)
+		} else if err := os.WriteFile(schedulerResultsPath, out, 0644); err != nil {
+			writeStatus = "error"
+			log.Printf("Cannot write scheduler results to %s (non-fatal): %v", schedulerResultsPath, err)
+		}
+		state.setReport(writeStatus, report)
+
+	}()
+
+	// ── Step 4: HTTP exposure ─────────────────────────────────────────────
+	log.Printf("Listening on http://localhost:%d/results", *portFlag)
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatalf("HTTP server: %v", err)
 	}
