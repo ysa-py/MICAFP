@@ -1,0 +1,96 @@
+name: AI Ultra Pro Cleanup
+
+on:
+  workflow_call:
+    inputs:
+      keep_last_n:
+        description: 'Number of most recent completed runs to keep for the caller workflow.'
+        required: false
+        default: '2'
+        type: string
+      dry_run:
+        description: 'When true, report deletions without deleting workflow runs.'
+        required: false
+        default: true
+        type: boolean
+  workflow_dispatch:
+    inputs:
+      keep_last_n:
+        description: 'Number of most recent completed runs to keep for this workflow.'
+        required: false
+        default: '2'
+        type: string
+      dry_run:
+        description: 'When true, report deletions without deleting workflow runs.'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    name: Prune old workflow runs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Prune old completed runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_NAME: ${{ github.workflow }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          KEEP_LAST_N: ${{ inputs.keep_last_n }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          if ! [[ "$KEEP_LAST_N" =~ ^[0-9]+$ ]]; then
+            echo "::error::keep_last_n must be a non-negative integer; got '$KEEP_LAST_N'"
+            exit 1
+          fi
+
+          echo "Cleanup target workflow: ${WORKFLOW_NAME}"
+          echo "Repository: ${REPOSITORY}"
+          echo "Current run: ${CURRENT_RUN_ID}"
+          echo "Keep last completed runs: ${KEEP_LAST_N}"
+          echo "Dry run: ${DRY_RUN}"
+
+          workflow_id="$(
+            gh api "repos/${REPOSITORY}/actions/workflows?per_page=100" \
+              --jq ".workflows[] | select(.name == \"${WORKFLOW_NAME}\") | .id" | head -n 1
+          )"
+
+          if [ -z "$workflow_id" ]; then
+            echo "::warning::No workflow found with name '${WORKFLOW_NAME}'; skipping cleanup."
+            exit 0
+          fi
+
+          mapfile -t completed_run_ids < <(
+            gh api --paginate "repos/${REPOSITORY}/actions/workflows/${workflow_id}/runs?status=completed&per_page=100" \
+              --jq ".workflow_runs[] | select(.id != (${CURRENT_RUN_ID} | tonumber)) | .id"
+          )
+
+          total_completed="${#completed_run_ids[@]}"
+          echo "Completed runs available for pruning, excluding current run: ${total_completed}"
+
+          if [ "$total_completed" -le "$KEEP_LAST_N" ]; then
+            echo "Nothing to prune."
+            exit 0
+          fi
+
+          delete_count=$((total_completed - KEEP_LAST_N))
+          echo "Runs selected for pruning: ${delete_count}"
+
+          for ((i = KEEP_LAST_N; i < total_completed; i++)); do
+            run_id="${completed_run_ids[$i]}"
+            if [ "$DRY_RUN" = "true" ]; then
+              echo "DRY RUN: would delete workflow run ${run_id}"
+            else
+              echo "Deleting workflow run ${run_id}"
+              gh api --method DELETE "repos/${REPOSITORY}/actions/runs/${run_id}"
+            fi
+          done

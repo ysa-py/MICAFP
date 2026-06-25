@@ -34,6 +34,10 @@ on:
         required: false
         default: 'bridge/iran_results.json'
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   ai-rerank:
     if: >
@@ -163,3 +167,13 @@ jobs:
           path: bridge/bridges_ai_iran_ranked.json
           retention-days: 30
           if-no-files-found: ignore
+
+  cleanup:
+    name: Cleanup old workflow runs
+    needs: [ai-rerank]
+    if: always()
+    uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+    secrets: inherit
+    with:
+      keep_last_n: '2'
+      dry_run: true
