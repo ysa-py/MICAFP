@@ -22,6 +22,7 @@ on:
       - master
 
 permissions:
+  actions: write
   contents: read
   pull-requests: read
 
@@ -113,3 +114,13 @@ jobs:
             python3 -m py_compile "$f" || exit 1
           done
           echo "✔ All Python files have valid syntax"
+
+  cleanup:
+    name: AI Ultra-Pro Cleanup
+    if: always()
+    needs: [go-quality-gate, python-quality-gate]
+    uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+    secrets: inherit
+    with:
+      keep_last_n: '2'
+      dry_run: true

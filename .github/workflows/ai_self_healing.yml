@@ -31,6 +31,10 @@ on:
     workflows: ["*"]
     types: [completed]
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   auto-diagnose-and-fix:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
@@ -291,3 +295,13 @@ jobs:
           path: data/failure_categorization.json
           retention-days: 7
           if-no-files-found: ignore
+
+  cleanup:
+    name: AI Ultra-Pro Cleanup
+    if: always()
+    needs: [auto-diagnose-and-fix]
+    uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+    secrets: inherit
+    with:
+      keep_last_n: '2'
+      dry_run: true
