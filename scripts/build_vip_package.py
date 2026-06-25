@@ -19,10 +19,10 @@ import json
 import os
 import subprocess
 import sys
-import tempfile
-import xml.etree.ElementTree as ET
 import tarfile
+import tempfile
 import time
+import xml.etree.ElementTree as ET
 from datetime import UTC, datetime
 from pathlib import Path
 

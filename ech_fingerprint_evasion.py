@@ -66,7 +66,7 @@ def _check_ech(host: str, port: int, timeout: float = 8.0) -> dict[str, Any]:
                 if cert and b"ech" in cert.lower():
                     result["ech_supported"] = True
                 result["tls_probe_status"] = "reachable"
-    except (socket.timeout, TimeoutError) as exc:
+    except TimeoutError as exc:
         _set_tls_probe_failure(result, "timeout", exc)
     except ConnectionRefusedError as exc:
         _set_tls_probe_failure(result, "connection_refused", exc)

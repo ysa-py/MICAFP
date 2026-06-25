@@ -26,10 +26,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from generated_json_loader import load_generated_json
-
 import requests
 from requests.adapters import HTTPAdapter, Retry
+
+from generated_json_loader import load_generated_json
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging

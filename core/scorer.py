@@ -29,13 +29,15 @@ from pathlib import Path
 from typing import Any
 
 from core.dt_utils import coerce_utc_dt, utc_now
+from core.tester import detect_transport, extract_endpoint
 from sources.bridge_scoring import (
     load_scheduler_results,
     load_telemetry,
     recommended_priority,
+)
+from sources.bridge_scoring import (
     score_bridge as adaptive_score_bridge,
 )
-from core.tester import detect_transport, extract_endpoint
 
 log = logging.getLogger(__name__)
 

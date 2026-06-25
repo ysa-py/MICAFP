@@ -44,12 +44,12 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from adaptive_selector import AdaptiveBridgeSelector
-from core.dt_utils import parse_dt
-
 import requests
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter, Retry
+
+from adaptive_selector import AdaptiveBridgeSelector
+from core.dt_utils import parse_dt
 
 # ─────────────────────────────────────────────────────────────────────────────
 # GitHub bridge source — graceful fallback if module unavailable (Bug 6 fix)

@@ -12,7 +12,7 @@ import ech_fingerprint_evasion as efe
 @pytest.mark.parametrize(
     ("exc", "status"),
     [
-        (socket.timeout("timed out"), "timeout"),
+        (TimeoutError("timed out"), "timeout"),
         (TimeoutError("timed out"), "timeout"),
         (ConnectionRefusedError("refused"), "connection_refused"),
         (OSError("network unreachable"), "unreachable"),

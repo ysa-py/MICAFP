@@ -9,9 +9,10 @@ enabled, receive those records ranked and filtered by a composite adaptive score
 """
 
 import os
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from generated_json_loader import load_generated_json
 
@@ -39,7 +40,7 @@ class AdaptiveConfig:
     recent_failure_penalty: float = 0.15
 
     @classmethod
-    def from_env(cls) -> "AdaptiveConfig":
+    def from_env(cls) -> AdaptiveConfig:
         return cls(
             enabled=_env_bool("ADAPTIVE_IR_SCORING_ENABLED", False),
             min_score=_env_float("ADAPTIVE_IR_MIN_SCORE", 0.0),
