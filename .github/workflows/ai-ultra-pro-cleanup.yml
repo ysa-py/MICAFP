@@ -1,0 +1,114 @@
+name: AI Ultra-Pro Cleanup
+
+on:
+  workflow_call:
+    inputs:
+      retention-days:
+        description: Number of days to retain generated cleanup artifacts.
+        required: false
+        default: '7'
+        type: string
+      remove-python-cache:
+        description: Remove Python cache directories before artifact upload.
+        required: false
+        default: true
+        type: boolean
+      remove-node-cache:
+        description: Remove Node package-manager cache directories before artifact upload.
+        required: false
+        default: true
+        type: boolean
+  workflow_dispatch:
+    inputs:
+      retention-days:
+        description: Number of days to retain generated cleanup artifacts.
+        required: false
+        default: '7'
+        type: string
+      remove-python-cache:
+        description: Remove Python cache directories before artifact upload.
+        required: false
+        default: true
+        type: boolean
+      remove-node-cache:
+        description: Remove Node package-manager cache directories before artifact upload.
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ai-ultra-pro-cleanup-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cleanup:
+    name: AI Ultra-Pro Cleanup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Normalize inputs
+        id: inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          retention_days='${{ inputs.retention-days }}'
+          if [[ -z "$retention_days" ]]; then
+            retention_days='7'
+          fi
+          if ! [[ "$retention_days" =~ ^[0-9]+$ ]]; then
+            echo "retention-days must be a positive integer" >&2
+            exit 1
+          fi
+          if (( retention_days < 1 || retention_days > 90 )); then
+            echo "retention-days must be between 1 and 90" >&2
+            exit 1
+          fi
+          echo "retention-days=$retention_days" >> "$GITHUB_OUTPUT"
+
+      - name: Clean generated caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Starting workspace cleanup for $GITHUB_REPOSITORY@$GITHUB_SHA"
+
+          if [[ '${{ inputs.remove-python-cache }}' == 'true' ]]; then
+            find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' -o -name '.ruff_cache' \) -prune -print -exec rm -rf {} +
+            find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -print -delete
+          fi
+
+          if [[ '${{ inputs.remove-node-cache }}' == 'true' ]]; then
+            find . -type d \( -name '.next' -o -name '.nuxt' -o -name '.turbo' -o -name '.vite' \) -prune -print -exec rm -rf {} +
+          fi
+
+      - name: Write cleanup summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p cleanup-report
+          {
+            echo "# AI Ultra-Pro Cleanup"
+            echo
+            echo "- Repository: $GITHUB_REPOSITORY"
+            echo "- Ref: $GITHUB_REF"
+            echo "- SHA: $GITHUB_SHA"
+            echo "- Retention days: ${{ steps.inputs.outputs.retention-days }}"
+            echo "- Python cache cleanup: ${{ inputs.remove-python-cache }}"
+            echo "- Node cache cleanup: ${{ inputs.remove-node-cache }}"
+            echo "- Completed at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } > cleanup-report/summary.md
+          cat cleanup-report/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload cleanup report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-ultra-pro-cleanup-report
+          path: cleanup-report/summary.md
+          retention-days: ${{ steps.inputs.outputs.retention-days }}
