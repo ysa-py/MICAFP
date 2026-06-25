@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T09:57:12.456743+00:00",
-  "total_bridges": 629,
+  "generated_at": "2026-06-25T13:02:10.537155+00:00",
+  "total_bridges": 630,
   "green_count": 6,
-  "yellow_count": 253,
+  "yellow_count": 254,
   "red_count": 370,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
@@ -1756,6 +1756,30 @@
       "tier": "YELLOW"
     },
     {
+      "raw": "obfs4 141.147.47.136:443 C3E835DD48EE4F0E658DC777213ABC299C2CF25E cert=KtjdNztrKXhCtRMfQRlyXYcYHVQ/hvuhBVYbitfJKEiYybLb4X1bzjwvtyb+h+uZ6eAFMA iat-mode=0",
+      "transport": "obfs4",
+      "ip": "141.147.47.136",
+      "port": 443,
+      "sni": "",
+      "tier": "YELLOW"
+    },
+    {
+      "raw": "obfs4 141.156.198.249:8671 9486E39394190EEF4774F5063F394F8125A02941 cert=HbfvRQR3z85p9GUMdafMdVjgYbiLdh/WaQ+nOBeVw21iDtWrR3Nn1H0MVWm7iwLxv5A2BA iat-mode=0",
+      "transport": "obfs4",
+      "ip": "141.156.198.249",
+      "port": 8671,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "obfs4 141.156.198.249:8671 9486E39394190EEF4774F5063F394F8125A02941 cert=T3PuI6PvIZYg8Iex2lzy7vFEuyU+8g0v9iw7ffENtIjTovoOmWJ5ULR7yqPPtN0RxNrbfA iat-mode=0",
+      "transport": "obfs4",
+      "ip": "141.156.198.249",
+      "port": 8671,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
       "raw": "obfs4 142.189.114.119:443 0DBB397ADC4F8A16C09331EC337197531899ED74 cert=/fGABEVsy165oq5yrI5LNYz198uisjQUeQ9/ecrGbmi+Y/eSB865w1GtT9Md2wKvROHHIQ iat-mode=0",
       "transport": "obfs4",
       "ip": "142.189.114.119",
@@ -2712,22 +2736,6 @@
       "transport": "obfs4",
       "ip": "45.76.185.188",
       "port": 4444,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "obfs4 45.83.182.93:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=0",
-      "transport": "obfs4",
-      "ip": "45.83.182.93",
-      "port": 8009,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "obfs4 45.83.182.93:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=1",
-      "transport": "obfs4",
-      "ip": "45.83.182.93",
-      "port": 8009,
       "sni": "",
       "tier": "RED"
     },
