@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import TypeVar
+
+T = TypeVar("T", dict, list)
 
 _LIST_FIELDS = ("bridges", "results")
 
 
-def load_generated_json[T: (dict, list)](path: Path, fallback: T) -> T:
+def load_generated_json(path: Path, fallback: T) -> T:
     """Load a generated JSON artifact, returning *fallback* when unsafe.
 
     The artifact is considered unsafe when it is missing, unreadable, empty,
