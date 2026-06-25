@@ -10,19 +10,28 @@
 # ║  ✅ Active-Run Guard — active/queued/pending runs are never touched      ║
 # ║  ✅ Rate-Limit Check — quota pre-check plus adaptive throttle/backoff    ║
 # ║  ✅ Retry Engine     — retry transient API failures before skipping      ║
-# ║  ✅ Dry-Run Mode     — manual/caller preview; scheduled live cleanup     ║
+# ║  ✅ Dry-Run Mode     — manual tests can preview before deleting          ║
 # ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
 # ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
 # ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
 # ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
 # ╠═══════════════════════════════════════════════════════════════════════════╣
-# ║  HOW TO USE                                                            ║
+# ║  CLEANUP POLICY                                                        ║
 # ║                                                                         ║
-# ║  OPTION A: STANDALONE (Recommended)                                     ║
-# ║    This reusable workflow is the source of truth. It runs on schedule,   ║
-# ║    can be run manually, and can be called from other workflows.          ║
+# ║  This workflow uses one policy: scheduled production cleanup is live by  ║
+# ║  default, while manual testing is dry-run by default.                   ║
 # ║                                                                         ║
-# ║  OPTION B: CALL FROM EXISTING WORKFLOW                                  ║
+# ║  • Manual workflow_dispatch runs default to dry-run so operators can     ║
+# ║    preview deletions safely; pass dry_run: false to delete.             ║
+# ║  • Scheduled production cleanup defaults to live deletion and can delete ║
+# ║    old completed workflow runs.                                         ║
+# ║  • Reusable workflow_call invocations default to live deletion; pass     ║
+# ║    dry_run: true to preview instead.                                    ║
+# ║  • Explicit caller/manual dry_run inputs always win over defaults.       ║
+# ║  • The current run and active/queued/pending runs remain protected.      ║
+# ║  • The latest 2 runs per workflow remain protected by default.          ║
+# ║                                                                         ║
+# ║  Reusable workflow example:                                             ║
 # ║    cleanup:                                                             ║
 # ║      if: always()                                                       ║
 # ║      needs: [your-main-job]                                             ║
@@ -30,10 +39,7 @@
 # ║      secrets: inherit                                                   ║
 # ║      with:                                                              ║
 # ║        keep_last_n: '2'                                                 ║
-# ║        dry_run: true                                                    ║
-# ║                                                                         ║
-# ║  Inline snippets are intentionally not duplicated here; if documented,   ║
-# ║  they should note this reusable workflow is the source of truth.         ║
+# ║        dry_run: true  # preview; omit or set false for live cleanup      ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 name: 🧹 AI Ultra-Pro Autonomous Cleanup Engine v4.0
@@ -63,7 +69,7 @@ on:
       dry_run:
         description: 'Dry-run: preview deletions without performing them'
         required: false
-        default: true
+        default: false
         type: boolean
 
 permissions:
@@ -86,15 +92,27 @@ jobs:
         uses: actions/github-script@v8
         env:
           KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
-          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          DRY_RUN_INPUT: ${{ inputs.dry_run }}
+          EVENT_NAME: ${{ github.event_name }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
             const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
-            const rawDryRun = String(process.env.DRY_RUN || 'true').toLowerCase();
-            const DRY_RUN = rawDryRun === 'true';
-            const DRY_RUN_SOURCE = `env.DRY_RUN=${rawDryRun}`;
+            const rawDryRunInput = String(process.env.DRY_RUN_INPUT || '').trim().toLowerCase();
+            const EVENT_NAME = String(process.env.EVENT_NAME || context.eventName || '').trim();
+            let DRY_RUN;
+            let DRY_RUN_SOURCE;
+            if (rawDryRunInput === 'true' || rawDryRunInput === 'false') {
+              DRY_RUN = rawDryRunInput === 'true';
+              DRY_RUN_SOURCE = `input dry_run=${rawDryRunInput}`;
+            } else if (EVENT_NAME === 'schedule') {
+              DRY_RUN = false;
+              DRY_RUN_SOURCE = 'schedule default dry_run=false';
+            } else {
+              DRY_RUN = true;
+              DRY_RUN_SOURCE = `${EVENT_NAME || 'unknown event'} default dry_run=true`;
+            }
             const THROTTLE_MS = 250;
             const MAX_RETRIES = 4;
             const CURRENT_RUN_ID = Number(context.runId);
