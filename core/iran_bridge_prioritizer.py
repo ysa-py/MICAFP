@@ -8,8 +8,9 @@ records, mutates input records in-place, or removes existing fields.
 
 import copy
 import re
+from collections.abc import Iterable
 from datetime import timedelta, timezone
-from typing import Any, Iterable
+from typing import Any
 
 import config
 from core.dt_utils import coerce_utc_dt, utc_now

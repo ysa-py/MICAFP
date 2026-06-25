@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 
 import onionhop_collector
-
 from sources import direct_scraper, history_utils, legacy_scraper
 
 

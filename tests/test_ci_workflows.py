@@ -4,7 +4,7 @@ tests/test_ci_workflows.py — CI Workflow Validation Tests
 Validates GitHub Actions workflow YAML files for:
 - Valid YAML syntax
 - Required keys (name, on, jobs)
-- Job structure (runs-on, steps)
+- Job structure (runs-on/steps for normal jobs; uses for reusable workflow jobs)
 - No deprecated environment variables
 - No inline Python heredocs that cause indentation errors
 - All referenced scripts exist
@@ -67,7 +67,7 @@ class TestWorkflowYAMLValidity(unittest.TestCase):
                     self.assertIn(key, data, f"{wf_file.name} missing '{key}'")
 
     def test_jobs_have_runs_on(self):
-        """Test that all jobs specify runs-on."""
+        """Test that normal jobs specify runs-on and reusable jobs specify uses."""
         yaml = self._load_yaml()
         for wf_file in self._get_workflow_files():
             with self.subTest(file=wf_file.name):
@@ -77,11 +77,15 @@ class TestWorkflowYAMLValidity(unittest.TestCase):
                 for job_name, job_data in jobs.items():
                     with self.subTest(job=job_name):
                         if isinstance(job_data, dict):
-                            self.assertIn("runs-on", job_data,
-                                f"{wf_file.name} job '{job_name}' missing 'runs-on'")
+                            if "uses" in job_data:
+                                self.assertNotIn("runs-on", job_data,
+                                    f"{wf_file.name} reusable job '{job_name}' should not set 'runs-on'")
+                            else:
+                                self.assertIn("runs-on", job_data,
+                                    f"{wf_file.name} job '{job_name}' missing 'runs-on'")
 
     def test_jobs_have_steps(self):
-        """Test that all jobs have steps defined."""
+        """Test that normal jobs define steps and reusable jobs define uses."""
         yaml = self._load_yaml()
         for wf_file in self._get_workflow_files():
             with self.subTest(file=wf_file.name):
@@ -91,8 +95,12 @@ class TestWorkflowYAMLValidity(unittest.TestCase):
                 for job_name, job_data in jobs.items():
                     with self.subTest(job=job_name):
                         if isinstance(job_data, dict):
-                            self.assertIn("steps", job_data,
-                                f"{wf_file.name} job '{job_name}' missing 'steps'")
+                            if "uses" in job_data:
+                                self.assertNotIn("steps", job_data,
+                                    f"{wf_file.name} reusable job '{job_name}' should not set 'steps'")
+                            else:
+                                self.assertIn("steps", job_data,
+                                    f"{wf_file.name} job '{job_name}' missing 'steps'")
 
     def test_node24_env_var_properly_set(self):
         """Test that workflows properly set FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 to opt into Node.js 24.
