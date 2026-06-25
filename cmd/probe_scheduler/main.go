@@ -74,6 +74,96 @@ type SchedulerReport struct {
 	Results      []MergedResult `json:"results"`
 }
 
+// schedulerState is shared by the measurement pipeline and HTTP handlers.
+type schedulerState struct {
+	mu           sync.RWMutex
+	status       string
+	startedAt    time.Time
+	totalBridges int
+	report       SchedulerReport
+}
+
+type schedulerStateSnapshot struct {
+	Status       string          `json:"status"`
+	StartedAt    string          `json:"started_at"`
+	TotalBridges int             `json:"total_bridges"`
+	Report       SchedulerReport `json:"report,omitempty"`
+}
+
+func newSchedulerState() *schedulerState {
+	return &schedulerState{
+		status:    "starting",
+		startedAt: time.Now().UTC(),
+		report: SchedulerReport{
+			Results: []MergedResult{},
+		},
+	}
+}
+
+func (s *schedulerState) setStatus(status string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.status = status
+}
+
+func (s *schedulerState) setTotalBridges(total int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.totalBridges = total
+	s.report.TotalBridges = total
+}
+
+func (s *schedulerState) setReport(status string, report SchedulerReport) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.status = status
+	s.totalBridges = report.TotalBridges
+	s.report = report
+}
+
+func (s *schedulerState) snapshot() schedulerStateSnapshot {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return schedulerStateSnapshot{
+		Status:       s.status,
+		StartedAt:    s.startedAt.Format(time.RFC3339),
+		TotalBridges: s.totalBridges,
+		Report:       s.report,
+	}
+}
+
+func startHTTPServer(port int, state *schedulerState) <-chan error {
+	errCh := make(chan error, 1)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/results", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		snapshot := state.snapshot()
+		if snapshot.Status != "ready" {
+			w.WriteHeader(http.StatusAccepted)
+		}
+		json.NewEncoder(w).Encode(snapshot) //nolint:errcheck
+	})
+	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{ //nolint:errcheck
+			"status": state.snapshot().Status,
+		})
+	})
+
+	srv := &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			errCh <- err
+		}
+	}()
+	return errCh
+}
+
 func normalizeSchedulerResults(results any) []MergedResult {
 	resultsList, ok := results.([]MergedResult)
 	if !ok {
@@ -181,6 +271,13 @@ func main() {
 	}
 
 	ctx := context.Background()
+	state := newSchedulerState()
+
+	// Start HTTP exposure before any long-running measurements so health
+	// checks can observe progress while the scheduler pipeline is active.
+	log.Printf("Listening on http://localhost:%d/results", *portFlag)
+	httpErrCh := startHTTPServer(*portFlag, state)
+	state.setStatus("running")
 
 	// ── Step 1: Bridge acquisition ────────────────────────────────────────
 	log.Println("Fetching bridges from MOAT API…")
@@ -215,6 +312,7 @@ func main() {
 		}
 	}
 	log.Printf("Total bridges to schedule: %d", len(allBridges))
+	state.setTotalBridges(len(allBridges))
 
 	// ── Step 2: RIPE Atlas measurements ──────────────────────────────────
 	type ripeResult struct {
@@ -296,26 +394,10 @@ func main() {
 	} else if err := os.WriteFile(schedulerResultsPath, out, 0644); err != nil {
 		log.Printf("Cannot write scheduler results to %s (non-fatal): %v", schedulerResultsPath, err)
 	}
+	state.setReport("ready", report)
 
 	// ── Step 4: HTTP exposure ─────────────────────────────────────────────
-	log.Printf("Listening on http://localhost:%d/results", *portFlag)
-	mux := http.NewServeMux()
-	mux.HandleFunc("/results", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(report) //nolint:errcheck
-	})
-	mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, "ok")
-	})
-
-	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", *portFlag),
-		Handler:      mux,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-	}
-	if err := srv.ListenAndServe(); err != nil {
+	if err := <-httpErrCh; err != nil {
 		log.Fatalf("HTTP server: %v", err)
 	}
 }
