@@ -815,8 +815,14 @@ class TelemetryWatcher:
             if parsed.tzinfo is None:
                 return parsed.replace(tzinfo=UTC)
             return parsed.astimezone(UTC)
-        except Exception:
-            return datetime.now(UTC)
+        except Exception as exc:
+            from monitoring.structured_logger import record_silent_failure
+            record_silent_failure(
+                "telemetry_watcher._parse_ts",
+                exc,
+                timestamp=ts_str,
+            )
+            return datetime.min.replace(tzinfo=UTC)
 
     def _persist_state(self) -> None:
         """Persist telemetry state to disk for crash recovery."""
