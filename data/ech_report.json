@@ -1,6 +1,23 @@
 {
   "bridges": [
     {
+      "bridge_line": "134.209.113.118:9001 6D195D68B80BEDBA8FF156C5DF9064DAC1237F9A",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.7,
+      "flags": [
+        "ech_enabled",
+        "tls13_only"
+      ],
+      "host": "134.209.113.118",
+      "port": 9001,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": true,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
       "bridge_line": "103.149.168.242:9443 91637DE9ED5B069722DA7A5796926EE13238694D",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.4,
@@ -486,6 +503,23 @@
       ],
       "host": "141.95.3.138",
       "port": 1025,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
+      "bridge_line": "142.93.128.78:1356 B2CF8191825381A63ADC2F62D667D028C1BD9749",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.4,
+      "flags": [
+        "non_standard_port",
+        "tls13_only"
+      ],
+      "host": "142.93.128.78",
+      "port": 1356,
       "tls_reachable": true,
       "tls_version": "TLSv1.3",
       "ech_supported": false,
@@ -1377,22 +1411,6 @@
       "tls_error_type": null
     },
     {
-      "bridge_line": "134.209.113.118:9001 6D195D68B80BEDBA8FF156C5DF9064DAC1237F9A",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.3,
-      "flags": [
-        "tls13_only"
-      ],
-      "host": "134.209.113.118",
-      "port": 9001,
-      "tls_reachable": true,
-      "tls_version": "TLSv1.3",
-      "ech_supported": false,
-      "ech_grease": false,
-      "tls_probe_status": "reachable",
-      "tls_error_type": null
-    },
-    {
       "bridge_line": "136.25.5.185:9001 9D542D1BCF5994FF21ED379AA68DD691F305E03C",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.3,
@@ -1823,22 +1841,6 @@
       "ech_grease": false,
       "tls_probe_status": "connection_refused",
       "tls_error_type": "ConnectionRefusedError"
-    },
-    {
-      "bridge_line": "142.93.128.78:1356 B2CF8191825381A63ADC2F62D667D028C1BD9749",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.1,
-      "flags": [
-        "non_standard_port"
-      ],
-      "host": "142.93.128.78",
-      "port": 1356,
-      "tls_reachable": false,
-      "tls_version": null,
-      "ech_supported": false,
-      "ech_grease": false,
-      "tls_probe_status": "timeout",
-      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "142.93.128.78:34689 9BC96DE81181DB5503E16B89D3B2694E2FBF1C34",
@@ -3107,8 +3109,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "timeout",
-      "tls_error_type": "TimeoutError"
+      "tls_probe_status": "connection_refused",
+      "tls_error_type": "ConnectionRefusedError"
     },
     {
       "bridge_line": "18.116.247.121:9001 221544285A6401268EB5B7414004B824BDE3DCC8",

@@ -21,7 +21,7 @@ def test_reachable_low_latency_webtunnel_ranks_above_stale_failed_obfs4():
         "pt_status": "ok",
     }
     obfs4 = {
-        "raw": "obfs4 198.51.100.11:9001 FINGERPRINT cert=x iat-mode=0",
+        "raw": "obfs4 198.51.100.11:9001 FINGERPRINT cert=x iat-mode=1",
         "transport": "obfs4",
         "port": 9001,
         "test_pass": False,
@@ -59,7 +59,7 @@ def test_snowflake_receives_resilience_credit_under_high_dpi_state():
 
 def test_recently_failed_bridges_are_penalized_but_not_deleted():
     failed = {
-        "raw": "obfs4 203.0.113.10:443 FINGERPRINT cert=x iat-mode=0",
+        "raw": "obfs4 203.0.113.10:443 FINGERPRINT cert=x iat-mode=1",
         "transport": "obfs4",
         "test_pass": False,
         "last_seen": (NOW - timedelta(hours=1)).isoformat(),
