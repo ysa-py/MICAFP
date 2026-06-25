@@ -1784,7 +1784,7 @@
     "transport": "vanilla"
   },
   "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91": {
-    "score": 34,
+    "score": 29,
     "transport": "vanilla"
   },
   "Bridge 185.194.93.135:9001 F8C2F613EC974A042603490EE7F64DD8D1663377": {
@@ -1792,6 +1792,14 @@
     "transport": "vanilla"
   },
   "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A": {
+    "score": 29,
+    "transport": "vanilla"
+  },
+  "Bridge 188.68.55.68:8443 AAB7DAE2F38A907951899A53A3EE781D180D8CAB": {
+    "score": 42,
+    "transport": "vanilla"
+  },
+  "Bridge 217.217.249.205:9001 57CE78F6F2C5377429AD653639443DB1653F0D16": {
     "score": 34,
     "transport": "vanilla"
   },
@@ -2912,7 +2920,7 @@
     "transport": "obfs4"
   },
   "obfs4 47.36.122.155:8443 808E86271077E90D4F2795FD5FF9E5D2975F9EDE cert=43KGgMq2zn8BUuw6sau0jRvrqykD7biVvO4NOPU2HecVqCvj82NibIad4lwKyCY26s9kSw iat-mode=0": {
-    "score": 67,
+    "score": 62,
     "transport": "obfs4"
   },
   "obfs4 5.104.81.79:8443 42FAC9C256D5701BDE7336474369550BC4D28182 cert=gcKlN2VE+NSMWSxk78A4rMtsGWIZTY0qAIjEXkj745RHSCXh7KCGd2/nNy5wvLXLvWZUNw iat-mode=0": {
@@ -3289,6 +3297,10 @@
   },
   "obfs4 79.253.17.28:9053 C4050BA23C6A85B11EC799CA17A80D14D61D68AE cert=Gf2BJiLPGLsC75X9JwHohzmcMue0c2+sxwSUzMyyivnGZ8dLUoGU7vExa7wKllxnTV/1KA iat-mode=0": {
     "score": 54,
+    "transport": "obfs4"
+  },
+  "obfs4 79.253.8.79:9053 C4050BA23C6A85B11EC799CA17A80D14D61D68AE cert=Gf2BJiLPGLsC75X9JwHohzmcMue0c2+sxwSUzMyyivnGZ8dLUoGU7vExa7wKllxnTV/1KA iat-mode=0": {
+    "score": 59,
     "transport": "obfs4"
   },
   "obfs4 79.41.222.61:8443 E8643AF0230E2F2763DB0781E81CC01E5730D32D cert=xzBvSxLEQ4OaiTfFvaW2Nv5+dhuCD1QTn6htiVCs7kGYYJfw3g7RstX4scYXinyyWvycUA iat-mode=0": {
@@ -4160,7 +4172,7 @@
     "transport": "obfs4"
   },
   "obfs4 [2602:61:7348:b806:be24:11ff:fed1:4a06]:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0": {
-    "score": 54,
+    "score": 49,
     "transport": "obfs4"
   },
   "obfs4 [2602:61:735c:cb06:be24:11ff:fed1:4a06]:3786 F5D28C8C3A00D29A1A8818E83634437CF8218F69 cert=1hCcsSORiGRDt/0+9t2kPjBbuNpT5/LU0kngNY7AhTb/2bXC41zhfQffzoNxDtLye4SmDA iat-mode=0": {

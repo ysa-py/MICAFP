@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-24T22:30:31.479287+00:00",
-  "total_bridges": 1433,
+  "generated_at": "2026-06-25T00:25:41.250493+00:00",
+  "total_bridges": 1436,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -4049,6 +4049,24 @@
       "notes": []
     },
     {
+      "bridge_line": "Bridge 188.68.55.68:8443 AAB7DAE2F38A907951899A53A3EE781D180D8CAB",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "Bridge 217.217.249.205:9001 57CE78F6F2C5377429AD653639443DB1653F0D16",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "conjure 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://registration.refraction.network/api fronts=cdn.sstatic.net,assets.cloud.censys.io transport=min",
       "ech_detected": false,
       "pq_detected": false,
@@ -7407,6 +7425,15 @@
     },
     {
       "bridge_line": "obfs4 79.253.17.28:9053 C4050BA23C6A85B11EC799CA17A80D14D61D68AE cert=Gf2BJiLPGLsC75X9JwHohzmcMue0c2+sxwSUzMyyivnGZ8dLUoGU7vExa7wKllxnTV/1KA iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "obfs4 79.253.8.79:9053 C4050BA23C6A85B11EC799CA17A80D14D61D68AE cert=Gf2BJiLPGLsC75X9JwHohzmcMue0c2+sxwSUzMyyivnGZ8dLUoGU7vExa7wKllxnTV/1KA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
