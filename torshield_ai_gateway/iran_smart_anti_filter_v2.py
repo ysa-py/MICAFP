@@ -1258,6 +1258,7 @@ class IranSmartAntiFilterV2:
 
         # Select with transport diversity
         selected: list[str] = []
+        selected_scores: list[float] = []
         transport_counts: dict[str, int] = {}
         max_per_transport = max(2, max_bridges // 3)
 
@@ -1267,6 +1268,7 @@ class IranSmartAntiFilterV2:
             count = transport_counts.get(transport, 0)
             if count < max_per_transport or score >= 0.9:
                 selected.append(bridge)
+                selected_scores.append(score)
                 transport_counts[transport] = count + 1
 
         # Determine CDN fronts used
@@ -1285,8 +1287,8 @@ class IranSmartAntiFilterV2:
         ]
 
         # Estimate survival rate
-        if selected:
-            avg_score = sum(s for _, s, _ in scored[:len(selected)]) / len(selected)
+        if selected_scores:
+            avg_score = sum(selected_scores) / len(selected_scores)
         else:
             avg_score = 0.0
 
