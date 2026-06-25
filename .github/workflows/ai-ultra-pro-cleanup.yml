@@ -86,13 +86,16 @@ jobs:
         uses: actions/github-script@v8
         env:
           KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
-          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          DRY_RUN: ${{ inputs.dry_run }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
             const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
-            const DRY_RUN = String(process.env.DRY_RUN || 'true').toLowerCase() === 'true';
+            const rawDryRun = String(process.env.DRY_RUN || '').trim().toLowerCase();
+            const dryRunDefaulted = rawDryRun === '' || rawDryRun === 'null' || rawDryRun === 'undefined';
+            const DRY_RUN = dryRunDefaulted ? true : rawDryRun === 'true';
+            const DRY_RUN_SOURCE = dryRunDefaulted ? 'default true (no input provided)' : `input dry_run=${rawDryRun}`;
             const THROTTLE_MS = 250;
             const MAX_RETRIES = 4;
             const CURRENT_RUN_ID = Number(context.runId);
