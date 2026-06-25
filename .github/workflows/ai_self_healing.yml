@@ -304,4 +304,4 @@ jobs:
     secrets: inherit
     with:
       keep_last_n: '2'
-      dry_run: true
+      dry_run: false
