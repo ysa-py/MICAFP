@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-25T05:38:25.837068+00:00",
-  "total_configs": 257,
-  "average_dpi_score": 0.7625,
+  "generated_at": "2026-06-25T09:57:07.258470+00:00",
+  "total_configs": 254,
+  "average_dpi_score": 0.762,
   "snis_used": [
     "www.aparat.com",
     "www.digikala.com",
@@ -176,24 +176,6 @@
       "port": 443,
       "sni": "www.aparat.com",
       "dpi_score": 1.0
-    },
-    {
-      "ip": "141.147.47.136",
-      "port": 443,
-      "sni": "www.digikala.com",
-      "dpi_score": 1.0
-    },
-    {
-      "ip": "141.156.198.249",
-      "port": 8671,
-      "sni": "cdn.telewebion.com",
-      "dpi_score": 0.7
-    },
-    {
-      "ip": "141.156.198.249",
-      "port": 8671,
-      "sni": "www.aparat.com",
-      "dpi_score": 0.7
     },
     {
       "ip": "142.189.114.119",
