@@ -71,3 +71,18 @@ Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
 ---
 
 *Report: [docs/iran-bridge-status.md](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/docs/iran-bridge-status.md)*
+
+---
+
+## 🧹 GitHub Actions workflow-run cleanup
+
+The standalone cleanup workflow defaults to safe preview mode and keeps the latest two workflow runs. To enable real deletion, first review the dry-run output, then set `dry_run` to `false` when manually dispatching the workflow.
+
+Inline snippet for reuse:
+
+```yaml
+env:
+  # Set to false only after reviewing dry-run output.
+  DRY_RUN: 'true'
+  KEEP_LAST_N: '2'
+```
