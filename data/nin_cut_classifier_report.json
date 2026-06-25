@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-24T22:51:06.376683+00:00",
-  "total_bridges": 626,
+  "generated_at": "2026-06-25T00:47:04.216722+00:00",
+  "total_bridges": 625,
   "green_count": 6,
-  "yellow_count": 253,
-  "red_count": 367,
+  "yellow_count": 254,
+  "red_count": 365,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -120,14 +120,6 @@
       "transport": "vanilla",
       "ip": "118.241.190.171",
       "port": 45883,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "121.110.203.115:443 ADE62CA3591E32A3CE8329F6E8EE31A441308CED",
-      "transport": "vanilla",
-      "ip": "121.110.203.115",
-      "port": 443,
       "sni": "",
       "tier": "RED"
     },
@@ -440,14 +432,6 @@
       "transport": "vanilla",
       "ip": "176.223.133.126",
       "port": 6010,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
-      "transport": "vanilla",
-      "ip": "185.112.147.158",
-      "port": 19001,
       "sni": "",
       "tier": "RED"
     },
@@ -1727,6 +1711,14 @@
       "raw": "obfs4 14.201.215.82:443 7AE3A45F5A83B9AB91D5CF9B531104C6A3412611 cert=ztCfqQg1TKtEw96tdfr1ksniXtQV3r5JXNhyyAllS6wa/FDBl5zX+JMA7k/c1ZcuJjexKQ iat-mode=0",
       "transport": "obfs4",
       "ip": "14.201.215.82",
+      "port": 443,
+      "sni": "",
+      "tier": "YELLOW"
+    },
+    {
+      "raw": "obfs4 141.147.47.136:443 C3E835DD48EE4F0E658DC777213ABC299C2CF25E cert=KtjdNztrKXhCtRMfQRlyXYcYHVQ/hvuhBVYbitfJKEiYybLb4X1bzjwvtyb+h+uZ6eAFMA iat-mode=0",
+      "transport": "obfs4",
+      "ip": "141.147.47.136",
       "port": 443,
       "sni": "",
       "tier": "YELLOW"
