@@ -237,6 +237,9 @@ class NINSurvivalPack:
     fallback_dns: list[str]
     generated_at: str = ""
     estimated_survival_rate: float = 0.0
+    warnings: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    recommendations: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -1215,13 +1218,37 @@ class IranSmartAntiFilterV2:
         Returns:
             NINSurvivalPack with bridges optimized for NIN survival
         """
-        # If no bridges provided, generate from template
+        warnings: list[str] = []
+        metadata: dict[str, Any] = {
+            "input_bridges_provided": bool(available_bridges),
+            "placeholder_bridge_patterns_blocked": [
+                "192.0.2.",
+                "198.51.100.",
+                "203.0.113.",
+                "...",
+            ],
+        }
+        recommendations: dict[str, Any] = {}
+
         if not available_bridges:
-            available_bridges = self._generate_nin_template_bridges()
+            available_bridges = []
+            template_bridges = self._generate_nin_template_bridges()
+            warnings.append(
+                "No available_bridges were provided; generated pack contains no "
+                "operational bridge lines. Template bridge examples are provided "
+                "only in recommendations['examples']."
+            )
+            recommendations["examples"] = template_bridges
 
         # Score and filter bridges for NIN survival
         scored: list[tuple[str, float, str]] = []
         for bridge in available_bridges:
+            if not self._is_operational_bridge_line(bridge):
+                warnings.append(
+                    "Ignored non-operational placeholder bridge line containing "
+                    "documentation/test-net markers."
+                )
+                continue
             transport = self._detect_transport(bridge)
             score = self._nin_bridge_score(bridge, transport)
             scored.append((bridge, score, transport))
@@ -1270,6 +1297,9 @@ class IranSmartAntiFilterV2:
             fallback_dns=fallback_dns,
             generated_at=datetime.now(UTC).isoformat(),
             estimated_survival_rate=round(avg_score, 3),
+            warnings=warnings,
+            metadata=metadata,
+            recommendations=recommendations,
         )
 
         log.info(
@@ -1289,6 +1319,11 @@ class IranSmartAntiFilterV2:
             "obfs4 192.0.2.5:443 cert=... iat-mode=1",
         ]
         return templates
+
+    def _is_operational_bridge_line(self, bridge: str) -> bool:
+        """Return False for documentation-only or reserved placeholder bridges."""
+        placeholder_markers = ("192.0.2.", "198.51.100.", "203.0.113.", "...")
+        return bool(bridge and not any(marker in bridge for marker in placeholder_markers))
 
     def _nin_bridge_score(self, bridge: str, transport: str) -> float:
         """Score a bridge for NIN survival probability."""
