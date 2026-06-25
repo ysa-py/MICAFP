@@ -173,6 +173,8 @@ class BridgeFormatter:
                 "first_seen": v.get("first_seen"),
                 "last_seen":  v.get("last_seen"),
                 "latency_ms": v.get("latency_ms"),
+                "score_reasons": v.get("score_reasons", []),
+                "recommended_priority": v.get("recommended_priority"),
             }
             by_transport.setdefault(t, []).append(entry)
 
