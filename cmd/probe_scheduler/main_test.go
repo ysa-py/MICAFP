@@ -2,8 +2,68 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 )
+
+func TestReadPTResultsMissingFileReturnsEmptyMap(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "data", "pt_results.json")
+
+	results, err := readPTResults(path)
+	if err != nil {
+		t.Fatalf("readPTResults(%q) returned error %v, want nil", path, err)
+	}
+	if results == nil {
+		t.Fatal("readPTResults returned nil map, want empty map")
+	}
+	if len(results) != 0 {
+		t.Fatalf("readPTResults returned %d results, want 0", len(results))
+	}
+}
+
+func TestReadPTResultsMalformedJSONReturnsError(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "pt_results.json")
+	if err := os.WriteFile(path, []byte(`{"bridge":`), 0644); err != nil {
+		t.Fatalf("write malformed PT results: %v", err)
+	}
+
+	results, err := readPTResults(path)
+	if err == nil {
+		t.Fatal("readPTResults returned nil error, want parse error")
+	}
+	if results != nil {
+		t.Fatalf("readPTResults returned map %#v, want nil on parse error", results)
+	}
+	if !strings.Contains(err.Error(), "parse "+path) {
+		t.Fatalf("readPTResults error %q does not include parse path", err.Error())
+	}
+	var syntaxErr *json.SyntaxError
+	if !errors.As(err, &syntaxErr) {
+		t.Fatalf("readPTResults error %v does not wrap json.SyntaxError", err)
+	}
+}
+
+func TestReadPTResultsReadFailureReturnsWrappedError(t *testing.T) {
+	path := t.TempDir()
+
+	results, err := readPTResults(path)
+	if err == nil {
+		t.Fatal("readPTResults returned nil error, want read error")
+	}
+	if results != nil {
+		t.Fatalf("readPTResults returned map %#v, want nil on read error", results)
+	}
+	if !strings.Contains(err.Error(), "read "+path) {
+		t.Fatalf("readPTResults error %q does not include read path", err.Error())
+	}
+	var pathErr *os.PathError
+	if !errors.As(err, &pathErr) {
+		t.Fatalf("readPTResults error %v does not wrap os.PathError", err)
+	}
+}
 
 func TestValidatePort(t *testing.T) {
 	tests := []struct {
