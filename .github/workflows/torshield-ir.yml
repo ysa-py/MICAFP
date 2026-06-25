@@ -31,6 +31,7 @@ env:
   PYTHONPATH: ${{ github.workspace }}
 
 permissions:
+  actions: write
   contents: write
 
 concurrency:
@@ -1086,3 +1087,13 @@ jobs:
         with:
           files: dist/Tor-Bridges-Collector-main-ultra-quantum-vip-vip-super-ultra-vip-ultra-quantum-ultra-vip-ultra-quantum.tar.gz
           token: ${{ secrets.GH_PAT_AUTOFIX }}
+
+  cleanup:
+    name: AI Ultra-Pro Cleanup
+    if: always()
+    needs: [quality-gate, build-rust, build-go, scrape-and-test, package-final-artifact]
+    uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+    secrets: inherit
+    with:
+      keep_last_n: '2'
+      dry_run: true
