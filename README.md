@@ -78,11 +78,14 @@ Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
 
 The standalone cleanup workflow defaults to safe preview mode and keeps the latest two workflow runs. To enable real deletion, first review the dry-run output, then set `dry_run` to `false` when manually dispatching the workflow.
 
-Inline snippet for reuse:
+Prefer the reusable workflow pattern instead of copying the cleanup JavaScript engine into docs or other workflows. `.github/workflows/ai-ultra-pro-cleanup.yml` is the source of truth, so stale inline snippets do not reintroduce cleanup bugs.
 
 ```yaml
-env:
-  # Set to false only after reviewing dry-run output.
-  DRY_RUN: 'true'
-  KEEP_LAST_N: '2'
+cleanup:
+  if: always()
+  uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+  secrets: inherit
+  with:
+    keep_last_n: '2'
+    dry_run: true
 ```
