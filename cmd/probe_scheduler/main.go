@@ -112,11 +112,14 @@ func readPTResults(path string) (map[string]PTResult, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		// PT results file may not exist if bridge-probe was not run
-		return map[string]PTResult{}, nil
+		if os.IsNotExist(err) {
+			return map[string]PTResult{}, nil
+		}
+		return nil, fmt.Errorf("read %s: %w", path, err)
 	}
 	var results []PTResult
 	if err := json.Unmarshal(data, &results); err != nil {
-		return map[string]PTResult{}, nil
+		return nil, fmt.Errorf("parse %s: %w", path, err)
 	}
 	m := make(map[string]PTResult, len(results))
 	for _, r := range results {
@@ -264,7 +267,12 @@ func main() {
 	}
 
 	// ── Step 3: Merge with PT handshake results ───────────────────────────
-	ptMap, _ := readPTResults("data/pt_results.json")
+	const ptResultsPath = "data/pt_results.json"
+	ptMap, err := readPTResults(ptResultsPath)
+	if err != nil {
+		log.Printf("Cannot read PT results from %s (non-fatal): %v", ptResultsPath, err)
+		ptMap = map[string]PTResult{}
+	}
 
 	var merged []MergedResult
 	for _, tb := range allBridges {
