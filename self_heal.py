@@ -104,7 +104,9 @@ def _repo_root() -> Path:
         ).stdout.strip()
         if root:
             return Path(root).resolve()
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('self_heal:107', _remediation_exc)
         pass
     return Path.cwd().resolve()
 

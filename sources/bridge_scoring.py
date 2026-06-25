@@ -67,7 +67,9 @@ def _port(record: dict[str, Any]) -> int:
         value = int(record.get("port"))
         if 0 < value <= 65535:
             return value
-    except (TypeError, ValueError):
+    except (TypeError, ValueError) as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('sources.bridge_scoring:70', _remediation_exc)
         pass
     match = _ENDPOINT_RE.search(_raw_line(record))
     if not match:

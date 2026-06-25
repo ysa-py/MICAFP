@@ -57,7 +57,9 @@ def _extract_port(record: dict[str, Any]) -> int:
             port = int(value)
             if 0 < port <= 65535:
                 return port
-    except (TypeError, ValueError):
+    except (TypeError, ValueError) as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('core.iran_bridge_prioritizer:60', _remediation_exc)
         pass
 
     match = _ENDPOINT_RE.search(_raw_line(record))

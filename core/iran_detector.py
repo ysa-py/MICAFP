@@ -168,7 +168,9 @@ class NINDetector:
             # when no loop is running and patch only genuinely running loops.
             try:
                 loop = asyncio.get_running_loop()
-            except RuntimeError:
+            except RuntimeError as _remediation_exc:
+                from monitoring.structured_logger import record_silent_failure
+                record_silent_failure('core.iran_detector:171', _remediation_exc)
                 int_ok, nin_active = asyncio.run(check_connectivity())
             else:
                 nest_asyncio.apply(loop)
@@ -193,7 +195,9 @@ class NINDetector:
                 events = _json.load(fh)
                 if not isinstance(events, list):
                     events = []
-        except FileNotFoundError:
+        except FileNotFoundError as _remediation_exc:
+            from monitoring.structured_logger import record_silent_failure
+            record_silent_failure('core.iran_detector:196', _remediation_exc)
             events = []
         except Exception as _remediation_exc:
             from monitoring.structured_logger import record_silent_failure
