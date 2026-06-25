@@ -1,114 +1,252 @@
-name: AI Ultra-Pro Cleanup
+# ╔═══════════════════════════════════════════════════════════════════════════╗
+# ║   AI ULTRA-PRO AUTONOMOUS CLEANUP ENGINE  v4.0                         ║
+# ║   File: .github/workflows/ai-ultra-pro-cleanup.yml                     ║
+# ╠═══════════════════════════════════════════════════════════════════════════╣
+# ║  FEATURES                                                              ║
+# ║  ✅ Global Sweep     — purges old completed runs for ALL workflows      ║
+# ║  ✅ Zero-Error       — warns and summarizes instead of failing callers   ║
+# ║  ✅ Smart Pagination — handles hundreds/thousands of runs via paginate  ║
+# ║  ✅ Self-Protection  — the current run is never deleted                 ║
+# ║  ✅ Active-Run Guard — active/queued/pending runs are never touched      ║
+# ║  ✅ Rate-Limit Check — quota pre-check plus adaptive throttle/backoff    ║
+# ║  ✅ Retry Engine     — retry transient API failures before skipping      ║
+# ║  ✅ Dry-Run Mode     — default preview mode for safe rollout             ║
+# ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
+# ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
+# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
+# ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
+# ╠═══════════════════════════════════════════════════════════════════════════╣
+# ║  HOW TO USE                                                            ║
+# ║                                                                         ║
+# ║  OPTION A: STANDALONE (Recommended)                                     ║
+# ║    This reusable workflow is the source of truth. It runs on schedule,   ║
+# ║    can be run manually, and can be called from other workflows.          ║
+# ║                                                                         ║
+# ║  OPTION B: CALL FROM EXISTING WORKFLOW                                  ║
+# ║    cleanup:                                                             ║
+# ║      if: always()                                                       ║
+# ║      needs: [your-main-job]                                             ║
+# ║      uses: ./.github/workflows/ai-ultra-pro-cleanup.yml                 ║
+# ║      secrets: inherit                                                   ║
+# ║      with:                                                              ║
+# ║        keep_last_n: '2'                                                 ║
+# ║        dry_run: true                                                    ║
+# ║                                                                         ║
+# ║  Inline snippets are intentionally not duplicated here; if documented,   ║
+# ║  they should note this reusable workflow is the source of truth.         ║
+# ╚═══════════════════════════════════════════════════════════════════════════╝
+
+name: 🧹 AI Ultra-Pro Autonomous Cleanup Engine v4.0
 
 on:
-  workflow_call:
-    inputs:
-      retention-days:
-        description: Number of days to retain generated cleanup artifacts.
-        required: false
-        default: '7'
-        type: string
-      remove-python-cache:
-        description: Remove Python cache directories before artifact upload.
-        required: false
-        default: true
-        type: boolean
-      remove-node-cache:
-        description: Remove Node package-manager cache directories before artifact upload.
-        required: false
-        default: true
-        type: boolean
+  schedule:
+    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
-      retention-days:
-        description: Number of days to retain generated cleanup artifacts.
+      keep_last_n:
+        description: 'Number of recent runs to keep per workflow'
         required: false
-        default: '7'
+        default: '2'
         type: string
-      remove-python-cache:
-        description: Remove Python cache directories before artifact upload.
+      dry_run:
+        description: 'Dry-run: preview deletions without performing them'
         required: false
-        default: true
+        default: false
         type: boolean
-      remove-node-cache:
-        description: Remove Node package-manager cache directories before artifact upload.
+  workflow_call:
+    inputs:
+      keep_last_n:
+        description: 'Number of recent runs to keep per workflow'
+        required: false
+        default: '2'
+        type: string
+      dry_run:
+        description: 'Dry-run: preview deletions without performing them'
         required: false
         default: true
         type: boolean
 
 permissions:
+  actions: write
   contents: read
-  actions: read
 
 concurrency:
-  group: ai-ultra-pro-cleanup-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ai-ultra-pro-cleanup
+  cancel-in-progress: false
 
 jobs:
   cleanup:
-    name: AI Ultra-Pro Cleanup
+    name: 🧹 Global Cleanup — All Workflows
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Normalize inputs
-        id: inputs
-        shell: bash
-        run: |
-          set -euo pipefail
-          retention_days='${{ inputs.retention-days }}'
-          if [[ -z "$retention_days" ]]; then
-            retention_days='7'
-          fi
-          if ! [[ "$retention_days" =~ ^[0-9]+$ ]]; then
-            echo "retention-days must be a positive integer" >&2
-            exit 1
-          fi
-          if (( retention_days < 1 || retention_days > 90 )); then
-            echo "retention-days must be between 1 and 90" >&2
-            exit 1
-          fi
-          echo "retention-days=$retention_days" >> "$GITHUB_OUTPUT"
-
-      - name: Clean generated caches
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "Starting workspace cleanup for $GITHUB_REPOSITORY@$GITHUB_SHA"
-
-          if [[ '${{ inputs.remove-python-cache }}' == 'true' ]]; then
-            find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.mypy_cache' -o -name '.ruff_cache' \) -prune -print -exec rm -rf {} +
-            find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -print -delete
-          fi
-
-          if [[ '${{ inputs.remove-node-cache }}' == 'true' ]]; then
-            find . -type d \( -name '.next' -o -name '.nuxt' -o -name '.turbo' -o -name '.vite' \) -prune -print -exec rm -rf {} +
-          fi
-
-      - name: Write cleanup summary
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p cleanup-report
-          {
-            echo "# AI Ultra-Pro Cleanup"
-            echo
-            echo "- Repository: $GITHUB_REPOSITORY"
-            echo "- Ref: $GITHUB_REF"
-            echo "- SHA: $GITHUB_SHA"
-            echo "- Retention days: ${{ steps.inputs.outputs.retention-days }}"
-            echo "- Python cache cleanup: ${{ inputs.remove-python-cache }}"
-            echo "- Node cache cleanup: ${{ inputs.remove-node-cache }}"
-            echo "- Completed at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-          } > cleanup-report/summary.md
-          cat cleanup-report/summary.md >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload cleanup report
-        uses: actions/upload-artifact@v4
+      - name: 🧠 AI Ultra-Pro Global Cleanup — Zero-Error Autonomous Engine v4.0
+        if: always()
+        uses: actions/github-script@v8
+        env:
+          KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
+          DRY_RUN: ${{ inputs.dry_run }}
         with:
-          name: ai-ultra-pro-cleanup-report
-          path: cleanup-report/summary.md
-          retention-days: ${{ steps.inputs.outputs.retention-days }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
+            const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
+            const rawDryRun = String(process.env.DRY_RUN || '').toLowerCase();
+            const DRY_RUN = rawDryRun === '' ? false : rawDryRun === 'true';
+            const THROTTLE_MS = 250;
+            const MAX_RETRIES = 4;
+            const CURRENT_RUN_ID = Number(context.runId);
+
+            const { owner, repo } = context.repo;
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            const mdCell = value => String(value).replaceAll('|', '\\|').replace(/\r?\n/g, ' ');
+            const ACTIVE_STATUSES = new Set(['in_progress', 'queued', 'requested', 'waiting', 'pending']);
+
+            async function withRetry(fn, label) {
+              for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+                try {
+                  return { ok: true, data: await fn() };
+                } catch (err) {
+                  const s = err.status ?? 0;
+                  const msg = err.message || String(err);
+                  if (s === 404) return { ok: false, reason: 'not_found', detail: msg };
+                  if (s === 409) return { ok: false, reason: 'active_lock', detail: msg };
+                  if (s === 401 || s === 422) return { ok: false, reason: 'api_rejected', detail: msg };
+                  if (s === 403 && msg.includes('Cannot delete')) return { ok: false, reason: 'protected', detail: msg };
+                  if (attempt === MAX_RETRIES) return { ok: false, reason: 'error', detail: `HTTP ${s}: ${msg}` };
+
+                  const retryAfter = Number(err.response?.headers?.['retry-after'] || 0) * 1000;
+                  const backoff = Math.max(retryAfter, THROTTLE_MS * Math.pow(2, attempt));
+                  const tag = (s === 429 || s === 403) ? 'Rate-limit' : `HTTP ${s}`;
+                  core.warning(`[${label}] ${tag} — retry ${attempt}/${MAX_RETRIES - 1} in ${backoff} ms`);
+                  await sleep(backoff);
+                }
+              }
+              return { ok: false, reason: 'exhausted' };
+            }
+
+            let extraThrottle = 0;
+            try {
+              const { data: rl } = await github.rest.rateLimit.get();
+              const c = rl.resources.core;
+              const pct = Math.round((c.remaining / c.limit) * 100);
+              core.info(`🔋 API Quota: ${c.remaining}/${c.limit} (${pct}%) | Resets: ${new Date(c.reset * 1000).toUTCString()}`);
+              if (c.remaining < 200) {
+                extraThrottle = 500;
+                core.warning('⚠️ Low API quota — adding +500 ms extra throttle per call');
+              }
+            } catch (e) {
+              core.warning(`Rate-limit pre-check skipped (non-critical): ${e.message}`);
+            }
+
+            const effectiveThrottle = THROTTLE_MS + extraThrottle;
+            core.startGroup('🚀 Engine Initializing');
+            core.info(`Repository   : ${owner}/${repo}`);
+            core.info(`Policy       : Keep last ${KEEP_LAST_N} run(s) per workflow`);
+            core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'}`);
+            core.info(`Self-Guard   : Run ID ${CURRENT_RUN_ID} is protected`);
+            core.info(`Throttle     : ${effectiveThrottle} ms between delete calls`);
+            core.endGroup();
+
+            const wfRes = await withRetry(
+              () => github.paginate(github.rest.actions.listRepoWorkflows, { owner, repo, per_page: 100 }),
+              'listRepoWorkflows'
+            );
+
+            if (!wfRes.ok) {
+              const reason = wfRes.detail || wfRes.reason || 'unknown error';
+              core.warning(`Cleanup skipped: cannot list workflows — ${reason}`);
+              await core.summary
+                .addRaw('## 🧹 AI Ultra-Pro Cleanup Skipped\n\n')
+                .addRaw(`> Cleanup did not run because workflows could not be listed: ${mdCell(reason)}\n`)
+                .write();
+              return;
+            }
+
+            const workflows = wfRes.data;
+            core.info(`\n📂 Discovered ${workflows.length} workflow definition(s). Starting global sweep...\n`);
+
+            let gScanned = 0, gKept = 0, gDeleted = 0, gSkipped = 0, gFailed = 0;
+            const rows = [];
+
+            for (const wf of workflows) {
+              core.startGroup(`📋 Workflow: "${wf.name}" (id: ${wf.id})`);
+              const runsRes = await withRetry(
+                () => github.paginate(github.rest.actions.listWorkflowRuns, { owner, repo, workflow_id: wf.id, per_page: 100 }),
+                `listRuns:${wf.id}`
+              );
+
+              if (!runsRes.ok) {
+                core.warning(`  ⚠️ Cannot list runs (${runsRes.reason}) — skipping this workflow`);
+                rows.push({ name: wf.name, total: '?', kept: '?', del: 0, skip: 0, fail: 0, st: '⚠️ Skipped' });
+                core.endGroup();
+                continue;
+              }
+
+              const allRuns = runsRes.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+              gScanned += allRuns.length;
+              const protectedRuns = allRuns.slice(0, KEEP_LAST_N);
+              const candidates = allRuns.slice(KEEP_LAST_N);
+              gKept += protectedRuns.length;
+
+              core.info(`  Total Runs  : ${allRuns.length}`);
+              core.info(`  Protected   : ${protectedRuns.length ? protectedRuns.map(r => `#${r.run_number}`).join(', ') : '(none)'}`);
+              core.info(`  Candidates  : ${candidates.length} run(s) queued for deletion`);
+
+              let wDel = 0, wSkip = 0, wFail = 0;
+              for (const run of candidates) {
+                const lbl = `run #${run.run_number} (id: ${run.id}, status: ${run.status})`;
+                if (Number(run.id) === CURRENT_RUN_ID) { core.info(`  🔒 Self-protection active — skip ${lbl}`); wSkip++; continue; }
+                if (ACTIVE_STATUSES.has(run.status)) { core.info(`  ⏭️  Active run — skip ${lbl}`); wSkip++; continue; }
+                if (DRY_RUN) { core.info(`  🔵 [DRY-RUN] Would delete: ${lbl}`); wDel++; continue; }
+
+                const delRes = await withRetry(
+                  () => github.rest.actions.deleteWorkflowRun({ owner, repo, run_id: run.id }),
+                  `deleteRun:${run.id}`
+                );
+
+                if (delRes.ok || delRes.reason === 'not_found') { core.info(`  ✅ Deleted/already gone: ${lbl}`); wDel++; }
+                else if (delRes.reason === 'active_lock' || delRes.reason === 'protected') { core.info(`  ⏭️  Skipped (${delRes.reason}): ${lbl}`); wSkip++; }
+                else { core.warning(`  ❌ Failed: ${lbl} — ${delRes.detail || delRes.reason}`); wFail++; }
+                await sleep(effectiveThrottle);
+              }
+
+              gDeleted += wDel; gSkipped += wSkip; gFailed += wFail;
+              rows.push({ name: wf.name, total: allRuns.length, kept: protectedRuns.length, del: wDel, skip: wSkip, fail: wFail, st: wFail > 0 ? '⚠️' : '✅' });
+              core.info(`  ── Result: deleted=${wDel}  skipped=${wSkip}  failed=${wFail}`);
+              core.endGroup();
+            }
+
+            core.startGroup('📊 Final Cleanup Report');
+            core.info(`${'Workflow'.padEnd(46)}Total   Kept  Deleted  Skipped  Failed  St`);
+            core.info('─'.repeat(90));
+            for (const r of rows) {
+              const n = String(r.name).slice(0, 45).padEnd(46);
+              core.info(`${n}${String(r.total).padStart(5)}  ${String(r.kept).padStart(4)}  ${String(r.del).padStart(7)}  ${String(r.skip).padStart(7)}  ${String(r.fail).padStart(6)}  ${r.st}`);
+            }
+            core.info('─'.repeat(90));
+            core.info(`${'GRAND TOTAL'.padEnd(46)}${String(gScanned).padStart(5)}  ${String(gKept).padStart(4)}  ${String(gDeleted).padStart(7)}  ${String(gSkipped).padStart(7)}  ${String(gFailed).padStart(6)}`);
+            core.endGroup();
+
+            const dryLabel = DRY_RUN ? ' — DRY-RUN MODE' : '';
+            let md = `## 🧹 AI Ultra-Pro Cleanup Report${dryLabel}\n\n`;
+            md += `> **Repo:** \`${owner}/${repo}\``;
+            md += ` · **Policy:** keep last ${KEEP_LAST_N} run(s) per workflow`;
+            md += ` · **Mode:** ${DRY_RUN ? '🔵 Dry-Run' : '🔴 Live'}`;
+            md += ` · **Engine:** v4.0\n\n`;
+            md += '| Workflow | Total | Kept | Deleted | Skipped | Failed | Status |\n';
+            md += '|:---------|------:|-----:|--------:|--------:|-------:|:------:|\n';
+            for (const r of rows) {
+              md += `| ${mdCell(r.name)} | ${r.total} | ${r.kept} | ${r.del} | ${r.skip} | ${r.fail} | ${r.st} |\n`;
+            }
+            md += `| **GRAND TOTAL** | **${gScanned}** | **${gKept}** | **${gDeleted}** | **${gSkipped}** | **${gFailed}** | ${gFailed === 0 ? '✅ Clean' : '⚠️ Check Logs'} |\n`;
+            if (DRY_RUN) {
+              md += '\n> 🔵 **Dry-Run active** — zero actual deletions were performed. Set `dry_run: false` only after reviewing this output; manual and scheduled standalone runs default to live mode.\n';
+            }
+            await core.summary.addRaw(md).write();
+
+            core.info(DRY_RUN
+              ? `🔵 Dry-run complete. ${gDeleted} run(s) would be removed across ${workflows.length} workflow(s).`
+              : `🎉 Cleanup complete! Deleted: ${gDeleted} | Kept: ${gKept} | Across ${workflows.length} workflow(s).`);
+            if (gFailed > 0) core.warning(`⚠️ ${gFailed} deletion(s) could not complete — pipeline continues normally.`);

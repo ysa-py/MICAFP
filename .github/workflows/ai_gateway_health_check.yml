@@ -54,6 +54,10 @@ on:
         default: '3'
         type: string
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   check-all-providers:
     runs-on: ubuntu-latest
@@ -444,3 +448,13 @@ jobs:
             data/observability_report.json
           retention-days: 30
           if-no-files-found: warn
+
+  cleanup:
+    name: AI Ultra-Pro Cleanup
+    if: always()
+    needs: [check-all-providers]
+    uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
+    secrets: inherit
+    with:
+      keep_last_n: '2'
+      dry_run: true
