@@ -5,6 +5,31 @@ import (
 	"testing"
 )
 
+func TestValidatePort(t *testing.T) {
+	tests := []struct {
+		name    string
+		port    int
+		wantErr bool
+	}{
+		{name: "zero", port: 0, wantErr: true},
+		{name: "negative", port: -1, wantErr: true},
+		{name: "above maximum", port: 65536, wantErr: true},
+		{name: "valid", port: 8742, wantErr: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validatePort(tt.port)
+			if tt.wantErr && err == nil {
+				t.Fatalf("validatePort(%d) returned nil error, want error", tt.port)
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("validatePort(%d) returned error %v, want nil", tt.port, err)
+			}
+		})
+	}
+}
+
 func TestSchedulerReportSerializesZeroBridgeResultsAsEmptyList(t *testing.T) {
 	results := normalizeSchedulerResults([]MergedResult(nil))
 	report := SchedulerReport{

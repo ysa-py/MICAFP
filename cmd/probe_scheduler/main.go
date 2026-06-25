@@ -74,6 +74,13 @@ type SchedulerReport struct {
 	Results      []MergedResult `json:"results"`
 }
 
+func validatePort(port int) error {
+	if port < 1 || port > 65535 {
+		return fmt.Errorf("invalid --port: must be between 1 and 65535")
+	}
+	return nil
+}
+
 func normalizeSchedulerResults(results any) []MergedResult {
 	resultsList, ok := results.([]MergedResult)
 	if !ok {
@@ -171,6 +178,9 @@ func main() {
 	bridgesFlag := flag.String("bridges", "data/iran_bridges.json", "Iran bridge database JSON")
 	portFlag := flag.Int("port", 8742, "HTTP results port")
 	flag.Parse()
+	if err := validatePort(*portFlag); err != nil {
+		log.Fatal(err)
+	}
 
 	ripeKey := os.Getenv("RIPE_ATLAS_API_KEY")
 	ripeClient := ripe.New(ripeKey)
