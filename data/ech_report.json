@@ -1,24 +1,6 @@
 {
   "bridges": [
     {
-      "bridge_line": "158.69.55.8:445 27FC184FF5612418A38DA1B038485AD7B63EB322",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.8,
-      "flags": [
-        "non_standard_port",
-        "ech_enabled",
-        "tls13_only"
-      ],
-      "host": "158.69.55.8",
-      "port": 445,
-      "tls_reachable": true,
-      "tls_version": "TLSv1.3",
-      "ech_supported": true,
-      "ech_grease": false,
-      "tls_probe_status": "reachable",
-      "tls_error_type": null
-    },
-    {
       "bridge_line": "103.149.168.242:9443 91637DE9ED5B069722DA7A5796926EE13238694D",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.4,
@@ -657,6 +639,23 @@
       ],
       "host": "158.69.55.8",
       "port": 25001,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
+      "bridge_line": "158.69.55.8:445 27FC184FF5612418A38DA1B038485AD7B63EB322",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.4,
+      "flags": [
+        "non_standard_port",
+        "tls13_only"
+      ],
+      "host": "158.69.55.8",
+      "port": 445,
       "tls_reachable": true,
       "tls_version": "TLSv1.3",
       "ech_supported": false,
@@ -1600,8 +1599,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "103.17.153.50:37635 E1FE1E1EBF704DB6D9F450895E449D86255DD8DE",
@@ -1616,8 +1615,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "103.17.153.52:45757 487051F8352D0EB4D0277A4682694AF7A745D344",
@@ -1632,8 +1631,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "103.17.153.56:33407 3C2A6DB074677285B4AD8E64BB2B663E66F14EEE",
@@ -1648,8 +1647,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "103.29.64.172:44247 26F26C3D6EDCBC61B59A84F0D9D4CFCB0B8475EC",
@@ -2016,8 +2015,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "timeout",
-      "tls_error_type": "TimeoutError"
+      "tls_probe_status": "connection_refused",
+      "tls_error_type": "ConnectionRefusedError"
     },
     {
       "bridge_line": "158.179.180.37:49001 1024AB00D9A83E8F164A5BE3D6C1AD26A883598B",

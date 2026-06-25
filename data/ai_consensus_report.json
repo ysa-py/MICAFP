@@ -1,21 +1,23 @@
 {
-  "generated_at": "2026-06-25T05:37:56.827629+00:00",
+  "generated_at": "2026-06-25T09:56:39.818584+00:00",
   "provider_count": 1,
-  "consensus_score": 0.92,
+  "consensus_score": 0.98,
   "selected_strategies": [
     "ja3_randomize",
-    "obfs4_iat_boost"
+    "obfs4_iat_boost",
+    "port_rotation"
   ],
   "mutation_triggered": true,
   "individual_responses": [
     {
       "mutation_needed": true,
-      "confidence": 0.92,
+      "confidence": 0.98,
       "recommended_strategies": [
+        "port_rotation",
         "obfs4_iat_boost",
         "ja3_randomize"
       ],
-      "reasoning": "obfs4's AI detectability via timing/packet-size analysis necessitates inter-arrival timing obfuscation and TLS fingerprint randomization to evade SIAM's ML classifiers.",
+      "reasoning": "obfs4's AI detectability and high block rate necessitate timing and fingerprint mutations to evade SIAM's ML classifiers.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]
