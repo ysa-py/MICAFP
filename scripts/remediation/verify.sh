@@ -107,6 +107,19 @@ check "All CI YAML files parse" check_ci_yaml_valid
 check_checksums_current() {
     python3 - <<'PYEOF'
 import hashlib, sys
+MUTABLE_RUNTIME_PATHS = {
+    'data/anti_filter_state.json',
+    'data/anti_filter_v2_state.json',
+    'data/censorship_state.json',
+    'data/dpi_intelligence.json',
+    'data/elite_registry_cache.json',
+    'data/monitor.log',
+    'data/telemetry_state.json',
+    'diagnostics.log',
+    'logs/diagnostics.log',
+    'logs/monitor.log',
+    'logs/recovery.log',
+}
 bad = []
 missing = []
 for line in open('checksums.sha256', encoding='utf-8', errors='ignore'):
@@ -114,6 +127,8 @@ for line in open('checksums.sha256', encoding='utf-8', errors='ignore'):
     if not line.strip():
         continue
     h, path = line.split('  ', 1)
+    if path in MUTABLE_RUNTIME_PATHS:
+        continue
     try:
         actual = hashlib.sha256(open(path, 'rb').read()).hexdigest()
     except FileNotFoundError:

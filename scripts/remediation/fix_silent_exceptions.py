@@ -46,6 +46,10 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 
 EXCLUDED_FILES = {
     os.path.join(REPO_ROOT, "monitoring", "structured_logger.py"),
+    # ECH probe handlers intentionally classify expected network/TLS failures
+    # locally; tests assert those paths do not emit global silent-failure
+    # telemetry unless the failure is unexpected.
+    os.path.join(REPO_ROOT, "ech_fingerprint_evasion.py"),
 }
 EXCLUDED_DIR_PREFIXES = (
     os.path.join(REPO_ROOT, "tests"),

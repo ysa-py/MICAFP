@@ -243,10 +243,18 @@ PORTKEY_PROVIDER_KEY=""                # Portkey provider routing key
 RIPE_ATLAS_API_KEY=""                  # RIPE Atlas measurement API key
 
 # ─────────────────────────────────────────────────────────────────────────────
-# GITHUB ACTIONS DETECTION
+# CI RUNTIME DETECTION
 # ─────────────────────────────────────────────────────────────────────────────
-# Automatically set by GitHub Actions; do not configure manually
-# GITHUB_ACTIONS="true"                # Set automatically in CI environment
+# Automatically set by GitHub Actions/CircleCI; do not override manually in
+# shared secrets contexts. Defaults mirror local/offline bootstrap behavior so
+# verification can confirm every .env key is documented in this template.
+GITHUB_ACTIONS="false"                 # Set to true automatically in GitHub Actions
+CI="false"                             # Generic CI marker
+CI_PROVIDER=""                         # CI provider name (for example: circleci)
+CIRCLE_BUILD_URL=""                    # CircleCI build URL
+CIRCLE_PROJECT_REPONAME=""             # CircleCI repository name
+CIRCLE_BRANCH="main"                   # CircleCI branch name
+CIRCLE_SHA1=""                         # CircleCI commit SHA
 
 echo "✓ TorShield-IR environment template loaded."
 echo "  Configure the [RECOMMENDED] variables above before running the pipeline."

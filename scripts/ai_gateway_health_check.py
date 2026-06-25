@@ -68,10 +68,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
     from torshield_ai_gateway.exceptions import BadRequestError, ProviderConfigurationError
 except ImportError as _remediation_exc:
+    from monitoring.structured_logger import record_silent_failure
+    record_silent_failure('scripts.ai_gateway_health_check:70', _remediation_exc)
     try:
         from monitoring.structured_logger import record_silent_failure
         record_silent_failure('scripts.ai_gateway_health_check:68', _remediation_exc)
-    except ImportError:
+    except ImportError as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('scripts.ai_gateway_health_check:74', _remediation_exc)
         pass
     # Fallback if exceptions module not available
     class ProviderConfigurationError(Exception):  # type: ignore[no-redef]

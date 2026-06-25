@@ -40,7 +40,9 @@ def coerce_utc_dt(value: Any, fallback: str = "2000-01-01T00:00:00+00:00") -> da
             if isinstance(fallback, datetime)
             else datetime.fromisoformat(str(fallback).replace("Z", "+00:00"))
         )
-    except ValueError:
+    except ValueError as _remediation_exc:
+        from monitoring.structured_logger import record_silent_failure
+        record_silent_failure('core.dt_utils:43', _remediation_exc)
         fallback_dt = datetime(1970, 1, 1, tzinfo=UTC)
     if fallback_dt.tzinfo is None:
         fallback_dt = fallback_dt.replace(tzinfo=UTC)

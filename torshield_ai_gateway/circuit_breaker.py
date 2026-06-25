@@ -284,7 +284,9 @@ class IranAwareCircuitBreaker:
                 f"[CircuitBreaker] State loaded from {path} "
                 f"({len(state)} providers)"
             )
-        except FileNotFoundError:
+        except FileNotFoundError as _remediation_exc:
+            from monitoring.structured_logger import record_silent_failure
+            record_silent_failure('torshield_ai_gateway.circuit_breaker:287', _remediation_exc)
             logger.debug(f"[CircuitBreaker] No state file at {path}; starting fresh")
             pass  # No state file yet, start fresh
         except json.JSONDecodeError as _remediation_exc:
