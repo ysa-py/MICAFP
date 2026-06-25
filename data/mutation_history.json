@@ -65,5 +65,10 @@
     "timestamp": "2026-06-25T03:29:53.565151+00:00",
     "strategy": "port_rotation+obfs4_iat_boost",
     "blocking_score": 0.92
+  },
+  {
+    "timestamp": "2026-06-25T05:38:13.351348+00:00",
+    "strategy": "port_rotation",
+    "blocking_score": 0.92
   }
 ]

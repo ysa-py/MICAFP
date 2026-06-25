@@ -1,15 +1,16 @@
 {
   "bridges": [
     {
-      "bridge_line": "134.209.113.118:9001 6D195D68B80BEDBA8FF156C5DF9064DAC1237F9A",
+      "bridge_line": "158.69.55.8:445 27FC184FF5612418A38DA1B038485AD7B63EB322",
       "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.7,
+      "iran_dpi_evasion_score": 0.8,
       "flags": [
+        "non_standard_port",
         "ech_enabled",
         "tls13_only"
       ],
-      "host": "134.209.113.118",
-      "port": 9001,
+      "host": "158.69.55.8",
+      "port": 445,
       "tls_reachable": true,
       "tls_version": "TLSv1.3",
       "ech_supported": true,
@@ -664,23 +665,6 @@
       "tls_error_type": null
     },
     {
-      "bridge_line": "158.69.55.8:445 27FC184FF5612418A38DA1B038485AD7B63EB322",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.4,
-      "flags": [
-        "non_standard_port",
-        "tls13_only"
-      ],
-      "host": "158.69.55.8",
-      "port": 445,
-      "tls_reachable": true,
-      "tls_version": "TLSv1.3",
-      "ech_supported": false,
-      "ech_grease": false,
-      "tls_probe_status": "reachable",
-      "tls_error_type": null
-    },
-    {
       "bridge_line": "159.195.29.170:9999 6D78CD28AB83C4AC2BFB87C90EE6DEE67963D756",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.4,
@@ -809,6 +793,23 @@
       ],
       "host": "173.21.185.152",
       "port": 55443,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
+      "bridge_line": "175.115.163.222:49876 BC114F5B1E286CEF641B04867927EDC8F4D44562",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.4,
+      "flags": [
+        "non_standard_port",
+        "tls13_only"
+      ],
+      "host": "175.115.163.222",
+      "port": 49876,
       "tls_reachable": true,
       "tls_version": "TLSv1.3",
       "ech_supported": false,
@@ -1411,6 +1412,22 @@
       "tls_error_type": null
     },
     {
+      "bridge_line": "134.209.113.118:9001 6D195D68B80BEDBA8FF156C5DF9064DAC1237F9A",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.3,
+      "flags": [
+        "tls13_only"
+      ],
+      "host": "134.209.113.118",
+      "port": 9001,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
       "bridge_line": "136.25.5.185:9001 9D542D1BCF5994FF21ED379AA68DD691F305E03C",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.3,
@@ -1775,8 +1792,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "121.127.33.34:443 19BFCD8AD90626A7B5293B9914ACC203C48A111A",
@@ -2123,22 +2140,6 @@
       ],
       "host": "174.136.25.230",
       "port": 33431,
-      "tls_reachable": false,
-      "tls_version": null,
-      "ech_supported": false,
-      "ech_grease": false,
-      "tls_probe_status": "timeout",
-      "tls_error_type": "TimeoutError"
-    },
-    {
-      "bridge_line": "175.115.163.222:49876 BC114F5B1E286CEF641B04867927EDC8F4D44562",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.1,
-      "flags": [
-        "non_standard_port"
-      ],
-      "host": "175.115.163.222",
-      "port": 49876,
       "tls_reachable": false,
       "tls_version": null,
       "ech_supported": false,
@@ -3109,8 +3110,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "18.116.247.121:9001 221544285A6401268EB5B7414004B824BDE3DCC8",
