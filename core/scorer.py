@@ -29,6 +29,12 @@ from pathlib import Path
 from typing import Any
 
 from core.dt_utils import coerce_utc_dt, utc_now
+from sources.bridge_scoring import (
+    load_scheduler_results,
+    load_telemetry,
+    recommended_priority,
+    score_bridge as adaptive_score_bridge,
+)
 from core.tester import detect_transport, extract_endpoint
 
 log = logging.getLogger(__name__)
@@ -199,9 +205,26 @@ class IranScorer:
         return min(max(total, 0), 100)
 
     def score_all(self, history: dict[str, dict[str, Any]]) -> None:
-        """Update the 'score' field on every record in-place."""
+        """Update score fields on every record in-place after probing.
+
+        The legacy ``score`` field remains present for backward compatibility.
+        Adaptive annotations are additive and optional for downstream consumers.
+        """
+        telemetry = load_telemetry()
+        scheduler_results = load_scheduler_results()
+        now = utc_now()
         for record in history.values():
-            record["score"] = self.score(record)
+            legacy_score = self.score(record)
+            adaptive_score, reasons = adaptive_score_bridge(
+                record,
+                telemetry=telemetry,
+                now_utc=now,
+                scheduler_results=scheduler_results,
+            )
+            record["score"] = adaptive_score
+            record["legacy_score"] = legacy_score
+            record["score_reasons"] = reasons
+            record["recommended_priority"] = recommended_priority(adaptive_score)
         log.info("Scoring complete.")
 
     def top_for_iran(
