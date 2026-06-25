@@ -92,7 +92,16 @@ jobs:
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
             const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
-            const DRY_RUN = String(process.env.DRY_RUN || 'true').toLowerCase() === 'true';
+            const rawDryRun = String(process.env.DRY_RUN || '').trim().toLowerCase();
+            const hasExplicitDryRunInput = rawDryRun === 'true' || rawDryRun === 'false';
+            const DRY_RUN = hasExplicitDryRunInput
+              ? rawDryRun === 'true'
+              : context.eventName !== 'schedule';
+            const DRY_RUN_SOURCE = hasExplicitDryRunInput
+              ? `explicit input (${rawDryRun})`
+              : context.eventName === 'schedule'
+                ? 'schedule default (live)'
+                : 'safe default for manual/reusable calls';
             const THROTTLE_MS = 250;
             const MAX_RETRIES = 4;
             const CURRENT_RUN_ID = Number(context.runId);
@@ -143,7 +152,7 @@ jobs:
             core.startGroup('🚀 Engine Initializing');
             core.info(`Repository   : ${owner}/${repo}`);
             core.info(`Policy       : Keep last ${KEEP_LAST_N} run(s) per workflow`);
-            core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'}`);
+            core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'} (${DRY_RUN_SOURCE})`);
             core.info(`Self-Guard   : Run ID ${CURRENT_RUN_ID} is protected`);
             core.info(`Throttle     : ${effectiveThrottle} ms between delete calls`);
             core.endGroup();
