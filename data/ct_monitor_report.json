@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T00:47:04.144538+00:00",
+  "generated_at": "2026-06-25T03:30:16.794314+00:00",
   "domains_checked": 6,
   "flagged_count": 0,
-  "clean_count": 1,
+  "clean_count": 2,
   "iran_ca_indicators_checked": [
     "irca",
     "tic.",
@@ -19,14 +19,16 @@
   "iran_mitm_note": "Iran's TIC (Telecommunication Infrastructure Company) has been documented issuing fraudulent certificates for MITM attacks on HTTPS traffic. CT logs are the primary detection mechanism. Bridges flagged 'high'/'critical' should be treated as potentially compromised within Iran's NIN.",
   "domains": [
     {
-      "domain": "snowflake-broker.torproject.net",
-      "risk_level": "clean",
-      "reasons": [],
-      "certs_found": 160,
-      "associated_bridges": [
-        "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
+      "domain": "a0.awsstatic.com",
+      "risk_level": "medium",
+      "reasons": [
+        "no_ct_records_found"
       ],
-      "checked_at": "2026-06-25T00:46:14.878622+00:00"
+      "certs_found": 0,
+      "associated_bridges": [
+        "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com"
+      ],
+      "checked_at": "2026-06-25T03:30:07.655703+00:00"
     },
     {
       "domain": "snowflake-broker.torproject.net.global.prod.fastly.net",
@@ -38,31 +40,7 @@
       "associated_bridges": [
         "snowflake 192.0.2.3:1 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ fronts=ftls.googlevideo.com ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
       ],
-      "checked_at": "2026-06-25T00:46:30.630198+00:00"
-    },
-    {
-      "domain": "iwantabigblackdickinmyass.nayumi.dev",
-      "risk_level": "medium",
-      "reasons": [
-        "no_ct_records_found"
-      ],
-      "certs_found": 0,
-      "associated_bridges": [
-        "webtunnel [2001:db8:b27a:137a:8132:b198:4f24:729]:443 23B7212D4D407C676FAC13582E2785A78A4E6FF5 url=https://iwantabigblackdickinmyass.nayumi.dev/gaypornissogood ver=0.0.4"
-      ],
-      "checked_at": "2026-06-25T00:46:46.377785+00:00"
-    },
-    {
-      "domain": "a0.awsstatic.com",
-      "risk_level": "medium",
-      "reasons": [
-        "no_ct_records_found"
-      ],
-      "certs_found": 0,
-      "associated_bridges": [
-        "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com"
-      ],
-      "checked_at": "2026-06-25T00:47:02.123282+00:00"
+      "checked_at": "2026-06-25T03:30:08.374169+00:00"
     },
     {
       "domain": "1098762253.rsc.cdn77.org",
@@ -75,7 +53,7 @@
         "snowflake 192.0.2.4:80 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn",
         "snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn"
       ],
-      "checked_at": "2026-06-25T00:47:03.011524+00:00"
+      "checked_at": "2026-06-25T03:30:09.866974+00:00"
     },
     {
       "domain": "meek.azureedge.net",
@@ -87,7 +65,27 @@
       "associated_bridges": [
         "meek_lite 192.0.2.18:80 BE776A53492E1E044A26F17306E1BC46A55A1625 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com"
       ],
-      "checked_at": "2026-06-25T00:47:03.894354+00:00"
+      "checked_at": "2026-06-25T03:30:10.537426+00:00"
+    },
+    {
+      "domain": "snowflake-broker.torproject.net",
+      "risk_level": "clean",
+      "reasons": [],
+      "certs_found": 160,
+      "associated_bridges": [
+        "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
+      ],
+      "checked_at": "2026-06-25T03:30:12.794470+00:00"
+    },
+    {
+      "domain": "iwantabigblackdickinmyass.nayumi.dev",
+      "risk_level": "clean",
+      "reasons": [],
+      "certs_found": 4,
+      "associated_bridges": [
+        "webtunnel [2001:db8:b27a:137a:8132:b198:4f24:729]:443 23B7212D4D407C676FAC13582E2785A78A4E6FF5 url=https://iwantabigblackdickinmyass.nayumi.dev/gaypornissogood ver=0.0.4"
+      ],
+      "checked_at": "2026-06-25T03:30:16.544130+00:00"
     }
   ]
 }
