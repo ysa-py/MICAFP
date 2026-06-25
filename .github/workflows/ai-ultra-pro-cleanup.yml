@@ -13,7 +13,7 @@
 # ║  ✅ Dry-Run Mode     — default preview mode for safe rollout             ║
 # ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
 # ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
-# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v7     ║
+# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
 # ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
 # ╠═══════════════════════════════════════════════════════════════════════════╣
 # ║  HOW TO USE                                                            ║
@@ -83,7 +83,7 @@ jobs:
     steps:
       - name: 🧠 AI Ultra-Pro Global Cleanup — Zero-Error Autonomous Engine v4.0
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
           DRY_RUN: ${{ inputs.dry_run || 'true' }}
