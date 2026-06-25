@@ -13,7 +13,7 @@
 # ║  ✅ Dry-Run Mode     — manual/caller preview; scheduled live cleanup     ║
 # ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
 # ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
-# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v7     ║
+# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
 # ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
 # ╠═══════════════════════════════════════════════════════════════════════════╣
 # ║  HOW TO USE                                                            ║
@@ -83,18 +83,16 @@ jobs:
     steps:
       - name: 🧠 AI Ultra-Pro Global Cleanup — Zero-Error Autonomous Engine v4.0
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
-          DRY_RUN_INPUT: ${{ inputs.dry_run }}
+          DRY_RUN: ${{ inputs.dry_run || 'true' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
             const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
-            const rawDryRun = String(process.env.DRY_RUN_INPUT || '').trim();
-            const defaultDryRun = context.eventName !== 'schedule';
-            const DRY_RUN = rawDryRun === '' ? defaultDryRun : rawDryRun.toLowerCase() === 'true';
+            const DRY_RUN = String(process.env.DRY_RUN || 'true').toLowerCase() === 'true';
             const THROTTLE_MS = 250;
             const MAX_RETRIES = 4;
             const CURRENT_RUN_ID = Number(context.runId);
@@ -145,7 +143,7 @@ jobs:
             core.startGroup('🚀 Engine Initializing');
             core.info(`Repository   : ${owner}/${repo}`);
             core.info(`Policy       : Keep last ${KEEP_LAST_N} run(s) per workflow`);
-            core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'}`);
+            core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'} (${DRY_RUN_SOURCE})`);
             core.info(`Self-Guard   : Run ID ${CURRENT_RUN_ID} is protected`);
             core.info(`Throttle     : ${effectiveThrottle} ms between delete calls`);
             core.endGroup();
