@@ -11,7 +11,7 @@
 # ║  ✅ Rate-Limit Check — quota pre-check plus adaptive throttle/backoff    ║
 # ║  ✅ Retry Engine     — retry transient API failures before skipping      ║
 # ║  ✅ Dry-Run Mode     — manual tests can preview before deleting          ║
-# ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
+# ║  ✅ Configurable N   — keep latest 2+ runs per workflow (min 2)       ║
 # ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
 # ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
 # ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
@@ -29,7 +29,7 @@
 # ║    dry_run: true to preview instead.                                    ║
 # ║  • Explicit caller/manual dry_run inputs always win over defaults.       ║
 # ║  • The current run and active/queued/pending runs remain protected.      ║
-# ║  • The latest 2 runs per workflow remain protected by default.          ║
+# ║  • At least the latest 2 runs per workflow always remain protected.     ║
 # ║                                                                         ║
 # ║  Reusable workflow example:                                             ║
 # ║    cleanup:                                                             ║
@@ -50,7 +50,7 @@ on:
   workflow_dispatch:
     inputs:
       keep_last_n:
-        description: 'Number of recent runs to keep per workflow'
+        description: 'Number of recent runs to keep per workflow (minimum 2)'
         required: false
         default: '2'
         type: string
@@ -62,7 +62,7 @@ on:
   workflow_call:
     inputs:
       keep_last_n:
-        description: 'Number of recent runs to keep per workflow'
+        description: 'Number of recent runs to keep per workflow (minimum 2)'
         required: false
         default: '2'
         type: string
@@ -98,7 +98,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
-            const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
+            const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 2 ? rawKeepLast : 2;
             const rawDryRunInput = String(process.env.DRY_RUN_INPUT || '').trim().toLowerCase();
             const EVENT_NAME = String(process.env.EVENT_NAME || context.eventName || '').trim();
             let DRY_RUN;
@@ -162,7 +162,7 @@ jobs:
             const effectiveThrottle = THROTTLE_MS + extraThrottle;
             core.startGroup('🚀 Engine Initializing');
             core.info(`Repository   : ${owner}/${repo}`);
-            core.info(`Policy       : Keep last ${KEEP_LAST_N} run(s) per workflow`);
+            core.info(`Policy       : Protect at least the latest 2 runs per workflow (effective keep: ${KEEP_LAST_N})`);
             core.info(`Mode         : ${DRY_RUN ? '🔵 DRY-RUN — preview only' : '🔴 LIVE — deletions enabled'} (${DRY_RUN_SOURCE})`);
             core.info(`Self-Guard   : Run ID ${CURRENT_RUN_ID} is protected`);
             core.info(`Throttle     : ${effectiveThrottle} ms between delete calls`);
@@ -251,7 +251,7 @@ jobs:
             const dryLabel = DRY_RUN ? ' — DRY-RUN MODE' : '';
             let md = `## 🧹 AI Ultra-Pro Cleanup Report${dryLabel}\n\n`;
             md += `> **Repo:** \`${owner}/${repo}\``;
-            md += ` · **Policy:** keep last ${KEEP_LAST_N} run(s) per workflow`;
+            md += ` · **Policy:** protect at least the latest 2 runs per workflow (effective keep: ${KEEP_LAST_N})`;
             md += ` · **Mode:** ${DRY_RUN ? '🔵 Dry-Run' : '🔴 Live'}`;
             md += ` · **Engine:** v4.0\n\n`;
             md += '| Workflow | Total | Kept | Deleted | Skipped | Failed | Status |\n';
