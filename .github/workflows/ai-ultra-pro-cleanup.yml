@@ -10,7 +10,7 @@
 # ║  ✅ Active-Run Guard — active/queued/pending runs are never touched      ║
 # ║  ✅ Rate-Limit Check — quota pre-check plus adaptive throttle/backoff    ║
 # ║  ✅ Retry Engine     — retry transient API failures before skipping      ║
-# ║  ✅ Dry-Run Mode     — manual/caller preview; scheduled live cleanup     ║
+# ║  ✅ Dry-Run Mode     — manual preview; schedule/calls live by default  ║
 # ║  ✅ Configurable N   — keep last N runs per workflow (default 2)         ║
 # ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
 # ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
@@ -30,10 +30,14 @@
 # ║      secrets: inherit                                                   ║
 # ║      with:                                                              ║
 # ║        keep_last_n: '2'                                                 ║
-# ║        dry_run: true                                                    ║
+# ║        dry_run: false   # explicit live cleanup for caller workflows    ║
 # ║                                                                         ║
-# ║  Inline snippets are intentionally not duplicated here; if documented,   ║
-# ║  they should note this reusable workflow is the source of truth.         ║
+# ║  POLICY: Option B — fully automatic cleanup. Manual dispatch defaults    ║
+# ║  to dry-run for safe testing. Scheduled cleanup and reusable workflow     ║
+# ║  calls default to live deletion so production cleanup can remove old      ║
+# ║  completed runs automatically. Pass dry_run: true to preview a call, or  ║
+# ║  dry_run: false to make a manual dispatch live. Current/active runs and  ║
+# ║  the latest keep_last_n runs (default 2) are always protected.           ║
 # ╚═══════════════════════════════════════════════════════════════════════════╝
 
 name: 🧹 AI Ultra-Pro Autonomous Cleanup Engine v4.0
@@ -63,7 +67,7 @@ on:
       dry_run:
         description: 'Dry-run: preview deletions without performing them'
         required: false
-        default: true
+        default: false
         type: boolean
 
 permissions:
@@ -86,13 +90,17 @@ jobs:
         uses: actions/github-script@v8
         env:
           KEEP_LAST_N: ${{ inputs.keep_last_n || '2' }}
-          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          DRY_RUN_DEFAULT: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const rawKeepLast = Number.parseInt(process.env.KEEP_LAST_N || '2', 10);
             const KEEP_LAST_N = Number.isFinite(rawKeepLast) && rawKeepLast >= 0 ? rawKeepLast : 2;
-            const DRY_RUN = String(process.env.DRY_RUN || 'true').toLowerCase() === 'true';
+            const rawDryRun = String(process.env.DRY_RUN || '').trim().toLowerCase();
+            const DRY_RUN_SOURCE = rawDryRun === '' ? 'event default' : 'input';
+            const DRY_RUN_DEFAULT = String(process.env.DRY_RUN_DEFAULT || 'false').toLowerCase() === 'true';
+            const DRY_RUN = rawDryRun === '' ? DRY_RUN_DEFAULT : rawDryRun === 'true';
             const THROTTLE_MS = 250;
             const MAX_RETRIES = 4;
             const CURRENT_RUN_ID = Number(context.runId);
