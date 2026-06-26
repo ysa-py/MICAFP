@@ -64,26 +64,52 @@ from typing import Any
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import ProviderConfigurationError for config-level error handling
-try:
-    from torshield_ai_gateway.exceptions import BadRequestError, ProviderConfigurationError
-except ImportError as _remediation_exc:
-    from monitoring.structured_logger import record_silent_failure
-    record_silent_failure('scripts.ai_gateway_health_check:70', _remediation_exc)
+# Import ProviderConfigurationError for config-level error handling.
+#
+# IMPORTANT: load the lightweight exceptions module directly from its file instead
+# of using ``from torshield_ai_gateway.exceptions ...``.  Importing a submodule by
+# package name executes ``torshield_ai_gateway.__init__`` first, and that package
+# imports monitoring helpers that re-export this health-check module.  When this
+# script itself is imported (for tests or monitoring.health_check), the package
+# import path can therefore observe a partially initialized module and fail with
+# a circular-import AttributeError.  The direct file load keeps the health-check
+# utility importable while preserving the public exception classes and fallback.
+def _load_gateway_exceptions() -> tuple[type[Exception], type[Exception]]:
     try:
-        from monitoring.structured_logger import record_silent_failure
-        record_silent_failure('scripts.ai_gateway_health_check:68', _remediation_exc)
-    except ImportError as _remediation_exc:
-        from monitoring.structured_logger import record_silent_failure
-        record_silent_failure('scripts.ai_gateway_health_check:74', _remediation_exc)
-        pass
-    # Fallback if exceptions module not available
-    class ProviderConfigurationError(Exception):  # type: ignore[no-redef]
-        """Fallback ProviderConfigurationError when torshield_ai_gateway is not available."""
-        pass
-    class BadRequestError(Exception):  # type: ignore[no-redef]
-        """Fallback BadRequestError when torshield_ai_gateway is not available."""
-        pass
+        import importlib.util
+
+        exceptions_path = (
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "torshield_ai_gateway",
+            "exceptions.py",
+        )
+        spec = importlib.util.spec_from_file_location(
+            "_torshield_ai_gateway_exceptions", os.path.join(*exceptions_path)
+        )
+        if spec is None or spec.loader is None:
+            raise ImportError("cannot load torshield_ai_gateway exceptions spec")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.BadRequestError, module.ProviderConfigurationError
+    except Exception as exc:
+        try:
+            from monitoring.structured_logger import record_silent_failure
+            record_silent_failure('scripts.ai_gateway_health_check:86', exc)
+        except Exception:
+            pass
+
+        class ProviderConfigurationError(Exception):  # type: ignore[no-redef]
+            """Fallback ProviderConfigurationError when gateway exceptions are unavailable."""
+            pass
+
+        class BadRequestError(Exception):  # type: ignore[no-redef]
+            """Fallback BadRequestError when gateway exceptions are unavailable."""
+            pass
+
+        return BadRequestError, ProviderConfigurationError
+
+
+BadRequestError, ProviderConfigurationError = _load_gateway_exceptions()
 
 logging.basicConfig(
     level=logging.INFO,
