@@ -30,14 +30,14 @@ on:
   workflow_run:
     workflows: ["*"]
     types: [completed]
+  workflow_dispatch:
 
 permissions:
   actions: write
-  contents: read
+  contents: write
 
 jobs:
   auto-diagnose-and-fix:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
@@ -83,6 +83,7 @@ jobs:
           GH_PAT_AUTOFIX:        ${{ secrets.GH_PAT_AUTOFIX }}
           GH_REPO_OWNER:         ${{ secrets.GH_REPO_OWNER }}
           GH_REPO_NAME:          ${{ secrets.GH_REPO_NAME }}
+          PARENT_CONCLUSION:      ${{ github.event.workflow_run.conclusion || 'manual' }}
         run: |
           echo "═══ Failure Categorization ═══"
           cat > /tmp/_categorize.py << 'ENDSCRIPT'
@@ -97,8 +98,28 @@ jobs:
           owner = os.environ.get("GH_REPO_OWNER", "")
           repo  = os.environ.get("GH_REPO_NAME", "")
           workflow_name = os.environ.get("GITHUB_WORKFLOW", "unknown")
+          parent_conclusion = os.environ.get("PARENT_CONCLUSION", "manual")
           category = "unknown"
           is_fixable = "false"
+          if parent_conclusion not in {"failure", "manual"}:
+              category = "no_failure"
+              is_fixable = "false"
+              print(f"  Parent workflow conclusion is {parent_conclusion}; no repair needed")
+              with open(os.environ.get("GITHUB_OUTPUT", "/dev/null"), "a") as f:
+                  f.write(f"category={category}\n")
+                  f.write(f"is_fixable={is_fixable}\n")
+              os.makedirs("data", exist_ok=True)
+              report = {
+                  "workflow_name": workflow_name,
+                  "parent_conclusion": parent_conclusion,
+                  "failure_category": category,
+                  "is_fixable": False,
+                  "has_logs": False,
+              }
+              with open("data/failure_categorization.json", "w") as f:
+                  json.dump(report, f, indent=2)
+              print(json.dumps(report, indent=2))
+              sys.exit(0)
           fixable_patterns = {
               "syntax_error": [
                   "SyntaxError", "IndentationError", "TabError",
@@ -197,6 +218,7 @@ jobs:
               f.write(f"is_fixable={is_fixable}\n")
           report = {
               "workflow_name": workflow_name,
+              "parent_conclusion": parent_conclusion,
               "failure_category": category,
               "is_fixable": is_fixable == "true",
               "has_logs": bool(log_content),
@@ -213,7 +235,9 @@ jobs:
           echo "═══ Failure Categorization Result ═══"
           echo "  Category:  ${{ steps.categorize-failure.outputs.category }}"
           echo "  Fixable:   ${{ steps.categorize-failure.outputs.is_fixable }}"
-          if [ "${{ steps.categorize-failure.outputs.is_fixable }}" = "false" ]; then
+          if [ "${{ steps.categorize-failure.outputs.category }}" = "no_failure" ]; then
+            echo "  ✅ Parent workflow succeeded — no repair needed"
+          elif [ "${{ steps.categorize-failure.outputs.is_fixable }}" = "false" ]; then
             echo "  ⏭ Skipping AutoDebugEngine — transient failure (will self-resolve)"
           else
             echo "  🔧 Proceeding with AutoDebugEngine — fixable failure detected"
@@ -267,23 +291,27 @@ jobs:
           GITHUB_REF_NAME:       ${{ github.ref_name }}
         run: |
           python -m torshield_ai_gateway.auto_debug \
-            "${{ github.event.workflow_run.name }}" \
-            "${{ github.event.workflow_run.id }}" \
+            "${{ github.event.workflow_run.name || github.workflow }}" \
+            "${{ github.event.workflow_run.id || github.run_id }}" \
           || true
 
       - name: Skip AutoDebug (Transient Failure)
         if: steps.categorize-failure.outputs.is_fixable == 'false'
         run: |
           echo "⏭ AutoDebugEngine SKIPPED"
-          echo "Failure category '${{ steps.categorize-failure.outputs.category }}' is transient — will self-resolve"
+          if [ "${{ steps.categorize-failure.outputs.category }}" = "no_failure" ]; then
+            echo "Parent workflow completed successfully — no automated patch needed"
+          else
+            echo "Failure category '${{ steps.categorize-failure.outputs.category }}' is transient — will self-resolve"
+          fi
           echo "No automated patch will be applied"
 
       - name: Report Outcome
         if: always()
         run: |
-          echo "Auto-debug completed for: ${{ github.event.workflow_run.name }}"
-          echo "Original run ID: ${{ github.event.workflow_run.id }}"
-          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Auto-debug completed for: ${{ github.event.workflow_run.name || github.workflow }}"
+          echo "Original run ID: ${{ github.event.workflow_run.id || github.run_id }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion || 'manual' }}"
           echo "Failure category: ${{ steps.categorize-failure.outputs.category }}"
           echo "Was fixable: ${{ steps.categorize-failure.outputs.is_fixable }}"
 
