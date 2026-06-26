@@ -348,6 +348,21 @@ class TestExitCodeLogic(unittest.TestCase):
         self.assertEqual(expected_exit, 2)
 
 
+class TestHealthCheckImportability(unittest.TestCase):
+    """Regression tests for health-check import paths used by CI and monitoring."""
+
+    def test_monitoring_reexport_imports_without_circular_package_import(self):
+        from monitoring.health_check import ExponentialBackoffRetry
+
+        retry = ExponentialBackoffRetry(max_retries=0)
+        self.assertEqual(retry.max_retries, 0)
+
+    def test_script_import_keeps_gateway_exception_classes_available(self):
+        from scripts.ai_gateway_health_check import BadRequestError, ProviderConfigurationError
+
+        self.assertTrue(issubclass(BadRequestError, Exception))
+        self.assertTrue(issubclass(ProviderConfigurationError, Exception))
+
 
 __all__ = [
     'json',
