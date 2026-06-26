@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T16:02:09.179870+00:00",
+  "generated_at": "2026-06-26T18:21:09.883072+00:00",
   "total_bridges": 631,
   "green_count": 6,
   "yellow_count": 254,
@@ -440,14 +440,6 @@
       "transport": "vanilla",
       "ip": "176.223.133.126",
       "port": 6010,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
-      "transport": "vanilla",
-      "ip": "185.112.147.158",
-      "port": 19001,
       "sni": "",
       "tier": "RED"
     },
@@ -1312,6 +1304,14 @@
       "transport": "vanilla",
       "ip": "89.236.127.72",
       "port": 9001,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "89.58.12.52:3445 48A2BD4E1A942A3F4A73B4F5EE8D078725903411",
+      "transport": "vanilla",
+      "ip": "89.58.12.52",
+      "port": 3445,
       "sni": "",
       "tier": "RED"
     },
