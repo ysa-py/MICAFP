@@ -9,16 +9,22 @@ from .resilient_orchestrator import (
     AgentRole,
     AutonomousTask,
     EndpointState,
+    ModelCandidate,
     NetworkHealth,
+    ResourceSnapshot,
     ResilientOrchestrator,
     TaskStatus,
+    ValidationResult,
 )
 
 __all__ = [
     "AgentRole",
     "AutonomousTask",
     "EndpointState",
+    "ModelCandidate",
     "NetworkHealth",
+    "ResourceSnapshot",
     "ResilientOrchestrator",
     "TaskStatus",
+    "ValidationResult",
 ]
