@@ -22,11 +22,16 @@ logger = logging.getLogger("torshield.autodebug")
 
 class AutoDebugEngine:
     def __init__(self):
-        self.token = os.environ["GH_PAT_AUTOFIX"]
-        self.owner = os.environ["GH_REPO_OWNER"]
-        self.repo  = os.environ["GH_REPO_NAME"]
-        self.base  = f"https://api.github.com/repos/{self.owner}/{self.repo}"
+        self.token = os.environ.get("GH_PAT_AUTOFIX", "").strip()
+        self.owner = os.environ.get("GH_REPO_OWNER", "").strip()
+        self.repo  = os.environ.get("GH_REPO_NAME", "").strip()
+        self.base  = f"https://api.github.com/repos/{self.owner}/{self.repo}" if self.owner and self.repo else ""
         self.intel = IranIntelligenceLayer()
+
+    @property
+    def github_configured(self) -> bool:
+        """Return True when AutoDebug can fetch logs and push patches via GitHub API."""
+        return bool(self.token and self.owner and self.repo and self.base)
 
     def _gh_get(self, url: str) -> dict:
         req = urllib.request.Request(url, headers={
@@ -49,6 +54,11 @@ class AutoDebugEngine:
             return json.loads(r.read())
 
     def fetch_failed_run_logs(self, run_id: str) -> str:
+        if not self.github_configured:
+            return (
+                "[AutoDebug] GitHub credentials/repository metadata unavailable; "
+                "running internal AI diagnosis without remote workflow logs."
+            )
         url = f"{self.base}/actions/runs/{run_id}/logs"
         req = urllib.request.Request(url, headers={
             "Authorization": f"Bearer {self.token}",
@@ -79,6 +89,14 @@ class AutoDebugEngine:
         Update a file via GitHub API.
         SAFETY: New content must be at least as long as existing (additive policy).
         """
+        if not self.github_configured:
+            logger.warning(
+                "[AutoDebug] GitHub credentials unavailable -- generated patch for %s "
+                "but cannot push automatically",
+                file_path,
+            )
+            return False
+
         try:
             existing = self._gh_get(f"{self.base}/contents/{file_path}")
             old_content = base64.b64decode(existing["content"]).decode(
