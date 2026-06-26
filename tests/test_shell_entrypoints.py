@@ -18,3 +18,9 @@ def test_shebang_file_without_extension_requires_executable_bit(tmp_path):
 
     assert result.returncode == 1
     assert f"Missing executable bit for shebang script: {script}" in result.stdout
+
+
+def test_resilient_orchestrator_is_import_only_without_shebang():
+    module = REPO_ROOT / "autonomous" / "resilient_orchestrator.py"
+    first_line = module.read_text(encoding="utf-8").splitlines()[0]
+    assert not first_line.startswith("#!")
