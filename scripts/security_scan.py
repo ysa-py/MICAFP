@@ -426,7 +426,7 @@ def _check_shell_script(filepath: str, source: str) -> list[dict[str, Any]]:
         if stripped.startswith("#"):
             continue
 
-        if re.search(r"\bsudo\s+rm\s+-rf\s+/", stripped):
+        if re.search(r"\bsudo\s+rm\s+-rf\s+/(?:\s|$)", stripped):
             issues.append({
                 "type": "dangerous_sudo_rm",
                 "file": filepath,

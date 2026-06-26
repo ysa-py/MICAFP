@@ -1,31 +1,30 @@
 {
   "summary": {
-    "total_issues": 99,
+    "total_issues": 244,
     "severity_counts": {
-      "critical": 2,
-      "high": 87,
+      "critical": 0,
+      "high": 85,
       "medium": 8,
-      "low": 2,
+      "low": 151,
       "info": 0
     },
     "type_counts": {
-      "raw_sql_fstring": 78,
+      "raw_sql_fstring": 77,
       "pickle_load": 1,
       "md5_usage": 4,
       "raw_sql_concat": 2,
+      "assert_in_production": 149,
       "http_url": 2,
       "insecure_temp_file": 2,
-      "subprocess_shell_true": 1,
       "des_usage": 1,
       "rc4_usage": 1,
       "yaml_unsafe_load": 4,
-      "curl_pipe_sh": 1,
-      "dangerous_sudo_rm": 2
+      "curl_pipe_sh": 1
     },
     "files_scanned": {
-      "python": 143,
-      "shell": 9,
-      "go": 9,
+      "python": 167,
+      "shell": 14,
+      "go": 11,
       "rust": 3,
       "zig": 2,
       "yaml": 1
@@ -33,23 +32,9 @@
   },
   "issues": [
     {
-      "type": "dangerous_sudo_rm",
-      "file": "install.sh",
-      "line": 121,
-      "severity": "critical",
-      "description": "Dangerous sudo rm -rf / pattern in shell script"
-    },
-    {
-      "type": "dangerous_sudo_rm",
-      "file": "setup_env.sh",
-      "line": 101,
-      "severity": "critical",
-      "description": "Dangerous sudo rm -rf / pattern in shell script"
-    },
-    {
       "type": "raw_sql_fstring",
       "file": "adaptive_transport.py",
-      "line": 176,
+      "line": 180,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"Weight history update"
@@ -57,7 +42,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "circuit_breaker_11slot.py",
-      "line": 263,
+      "line": 267,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CircuitBreaker] Slot select"
@@ -65,7 +50,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "circuit_breaker_11slot.py",
-      "line": 289,
+      "line": 293,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CircuitBreaker] Gateway slot select"
@@ -73,7 +58,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "elite_registry.py",
-      "line": 708,
+      "line": 726,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[EliteRegistry] Best model select"
@@ -81,7 +66,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "iran_smart_anti_filter.py",
-      "line": 290,
+      "line": 316,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiFilter] Selected {len(select"
@@ -89,14 +74,14 @@
     {
       "type": "pickle_load",
       "file": "ml_predictor.py",
-      "line": 280,
+      "line": 282,
       "severity": "high",
       "description": "Use of pickle.load() — deserialization vulnerability"
     },
     {
       "type": "raw_sql_fstring",
       "file": "ml_predictor.py",
-      "line": 343,
+      "line": 345,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"AI predictions applied to {update"
@@ -104,7 +89,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "quarantine_manager.py",
-      "line": 254,
+      "line": 256,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"Quarantine update"
@@ -128,7 +113,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "uTLS_evasion_layer.py",
-      "line": 486,
+      "line": 492,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[uTLS] Profile select"
@@ -136,31 +121,15 @@
     {
       "type": "raw_sql_fstring",
       "file": "uTLS_evasion_layer.py",
-      "line": 714,
+      "line": 724,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[uTLS] Stealth endpoint select"
     },
     {
       "type": "raw_sql_fstring",
-      "file": "core/notifier.py",
-      "line": 87,
-      "severity": "high",
-      "description": "Possible SQL injection via f-string",
-      "match": "f\"_Update"
-    },
-    {
-      "type": "raw_sql_fstring",
-      "file": "monitoring/structured_logging.py",
-      "line": 366,
-      "severity": "high",
-      "description": "Possible SQL injection via f-string",
-      "match": "f\"Could not fetch model select"
-    },
-    {
-      "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
-      "line": 1473,
+      "line": 1477,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiDPIV2] ML model trained: {num_update"
@@ -168,7 +137,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
-      "line": 1655,
+      "line": 1659,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"({score:.0%}). Consider running automated DPI tests to update"
@@ -176,7 +145,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/anti_censorship.py",
-      "line": 340,
+      "line": 342,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiCensorship] Select"
@@ -184,7 +153,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/dynamic_brain_anti_dpi.py",
-      "line": 574,
+      "line": 595,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPISelect"
@@ -192,7 +161,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/dynamic_brain_v3.py",
-      "line": 694,
+      "line": 705,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"\\n→ Select"
@@ -200,7 +169,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
-      "line": 571,
+      "line": 583,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiFilter-V3] Selected evasion strategy: {select"
@@ -208,7 +177,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
-      "line": 627,
+      "line": 639,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiFilter-V3] Selected fingerprint: ja3={select"
@@ -216,7 +185,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
-      "line": 628,
+      "line": 640,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"score={select"
@@ -224,7 +193,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
-      "line": 629,
+      "line": 641,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"success_rate={selected.success_count}/{selected.success_count + select"
@@ -232,7 +201,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
-      "line": 170,
+      "line": 172,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPISelect"
@@ -240,7 +209,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
-      "line": 178,
+      "line": 180,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPISelect"
@@ -248,7 +217,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
-      "line": 188,
+      "line": 190,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPISelect"
@@ -256,7 +225,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_dpi_model_selector.py",
-      "line": 222,
+      "line": 224,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPISelect"
@@ -264,7 +233,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_intelligence.py",
-      "line": 242,
+      "line": 243,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f'Also include \"update"
@@ -272,7 +241,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_intelligence.py",
-      "line": 292,
+      "line": 293,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"avoid (list), bridge_select"
@@ -280,7 +249,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
-      "line": 1240,
+      "line": 1308,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiFilterV2] NIN survival pack: {len(select"
@@ -288,7 +257,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
-      "line": 1447,
+      "line": 1520,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[AntiFilterV2] Transport effectiveness update"
@@ -296,7 +265,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/iran_smart_anti_filter_v2.py",
-      "line": 1448,
+      "line": 1521,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"{'success' if success else 'failure'} → {update"
@@ -368,7 +337,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 722,
+      "line": 724,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -376,7 +345,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 734,
+      "line": 738,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -384,7 +353,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 794,
+      "line": 798,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -392,7 +361,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 802,
+      "line": 806,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -400,7 +369,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 817,
+      "line": 821,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -408,7 +377,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 832,
+      "line": 836,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelector] Select"
@@ -416,7 +385,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 844,
+      "line": 848,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelector] Select"
@@ -424,7 +393,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 853,
+      "line": 857,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -432,7 +401,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 858,
+      "line": 862,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -440,7 +409,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 867,
+      "line": 871,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelector] ✓ Select"
@@ -448,7 +417,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 873,
+      "line": 877,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -456,7 +425,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 881,
+      "line": 885,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -464,7 +433,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 892,
+      "line": 896,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -472,7 +441,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 903,
+      "line": 907,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ModelSelect"
@@ -480,7 +449,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 1079,
+      "line": 1083,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ProviderAwareModelSelect"
@@ -488,7 +457,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 1086,
+      "line": 1090,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ProviderAwareModelSelect"
@@ -496,7 +465,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 1131,
+      "line": 1135,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ProviderAwareModelSelect"
@@ -504,7 +473,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 1138,
+      "line": 1142,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ProviderAwareModelSelect"
@@ -512,7 +481,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/model_selector.py",
-      "line": 1204,
+      "line": 1208,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[ProviderAwareModelSelect"
@@ -544,7 +513,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 558,
+      "line": 603,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"will be silently skipped (NOT delete"
@@ -552,7 +521,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 881,
+      "line": 929,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[DPI-Override] iran_dpi_model_select"
@@ -560,7 +529,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2022,
+      "line": 2089,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[Cerebras] Update"
@@ -568,7 +537,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2250,
+      "line": 2321,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"broken slot(s): {skipped_slots}. These slots are NOT delete"
@@ -576,7 +545,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2370,
+      "line": 2445,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CF-Workers-AI] Dynamic model [{task}]: {select"
@@ -584,7 +553,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2375,
+      "line": 2450,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"'{select"
@@ -592,7 +561,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2388,
+      "line": 2463,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CF-Workers-AI] Model select"
@@ -600,7 +569,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2638,
+      "line": 2715,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"broken slot(s): {skipped_slots}. These slots are NOT delete"
@@ -608,7 +577,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2808,
+      "line": 2887,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CF-AI-GW] Dynamic model [{task}]: {select"
@@ -616,7 +585,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2813,
+      "line": 2892,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"'{select"
@@ -624,7 +593,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/providers.py",
-      "line": 2826,
+      "line": 2905,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"[CF-AI-GW] Model select"
@@ -632,31 +601,39 @@
     {
       "type": "raw_sql_fstring",
       "file": "torshield_ai_gateway/smart_bypass_engine.py",
-      "line": 994,
+      "line": 998,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"Recommended: {self._select"
     },
     {
       "type": "raw_sql_fstring",
-      "file": "sources/direct_scraper.py",
-      "line": 174,
-      "severity": "high",
-      "description": "Possible SQL injection via f-string",
-      "match": "f\"Cleaned up {len(to_delete"
-    },
-    {
-      "type": "raw_sql_fstring",
       "file": "sources/legacy_scraper.py",
-      "line": 319,
+      "line": 327,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"*Tor Bridges Update"
     },
     {
       "type": "raw_sql_fstring",
+      "file": "monitoring/structured_logging.py",
+      "line": 368,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"Could not fetch model select"
+    },
+    {
+      "type": "raw_sql_fstring",
+      "file": "core/notifier.py",
+      "line": 92,
+      "severity": "high",
+      "description": "Possible SQL injection via f-string",
+      "match": "f\"_Update"
+    },
+    {
+      "type": "raw_sql_fstring",
       "file": "scripts/ai_gateway_health_check.py",
-      "line": 133,
+      "line": 168,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"{preferred} (override: {select"
@@ -664,7 +641,7 @@
     {
       "type": "raw_sql_fstring",
       "file": "scripts/ai_gateway_health_check.py",
-      "line": 1205,
+      "line": 1259,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"  ✓ Model select"
@@ -672,17 +649,10 @@
     {
       "type": "raw_sql_fstring",
       "file": "scripts/ai_gateway_health_check.py",
-      "line": 1214,
+      "line": 1268,
       "severity": "high",
       "description": "Possible SQL injection via f-string",
       "match": "f\"  ⚠ Model select"
-    },
-    {
-      "type": "subprocess_shell_true",
-      "file": "scripts/build_vip_package.py",
-      "line": 38,
-      "severity": "high",
-      "description": "subprocess.run with shell=True — shell injection risk"
     },
     {
       "type": "des_usage",
@@ -742,7 +712,7 @@
     {
       "type": "md5_usage",
       "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
-      "line": 910,
+      "line": 914,
       "severity": "medium",
       "description": "MD5 is cryptographically broken — avoid for security purposes",
       "match": "hashlib.md5"
@@ -750,7 +720,7 @@
     {
       "type": "md5_usage",
       "file": "torshield_ai_gateway/ai_anti_dpi_iran_v2.py",
-      "line": 913,
+      "line": 917,
       "severity": "medium",
       "description": "MD5 is cryptographically broken — avoid for security purposes",
       "match": "hashlib.md5"
@@ -758,7 +728,7 @@
     {
       "type": "raw_sql_concat",
       "file": "torshield_ai_gateway/iran_anti_filter_v3.py",
-      "line": 629,
+      "line": 641,
       "severity": "medium",
       "description": "Possible SQL injection via string concatenation",
       "match": "selected.success_count}/{selected.success_count + s"
@@ -774,7 +744,7 @@
     {
       "type": "raw_sql_concat",
       "file": "torshield_ai_gateway/local_ai_engine.py",
-      "line": 522,
+      "line": 700,
       "severity": "medium",
       "description": "Possible SQL injection via string concatenation",
       "match": "selection_hint\": \"Snowflake short-lived + W"
@@ -804,12 +774,1204 @@
       "match": "MD5"
     },
     {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 26,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 28,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 35,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 37,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 38,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 39,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 40,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autodebug_engine.py",
+      "line": 41,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 8,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 16,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 18,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 26,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 35,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_autonomous_orchestrator.py",
+      "line": 36,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 37,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 39,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 44,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 46,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 47,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 54,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 56,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 57,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 69,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_bridge_scoring.py",
+      "line": 71,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 10,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 15,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 16,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 17,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 21,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_dt_utils.py",
+      "line": 22,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 32,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 34,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 35,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 62,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 64,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 65,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 92,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 94,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 95,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 109,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_ech_fingerprint_evasion.py",
+      "line": 111,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_generated_json_loader.py",
+      "line": 8,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_generated_json_loader.py",
+      "line": 15,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_generated_json_loader.py",
+      "line": 22,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_generated_json_loader.py",
+      "line": 28,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_generated_json_loader.py",
+      "line": 40,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 25,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 28,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 29,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 30,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 31,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 32,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 33,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 34,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 35,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 48,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 50,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 51,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 71,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 87,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 88,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 105,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 133,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "        assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 134,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "        assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 137,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 143,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 151,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 159,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 183,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 185,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 186,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 187,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 189,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 190,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 191,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 192,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 193,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 194,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 195,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 196,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 207,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 224,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 229,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 231,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 236,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 238,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 248,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 253,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 254,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 284,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 289,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 308,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 328,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 347,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_history_timestamp_migration.py",
+      "line": 366,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 30,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 32,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 45,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 47,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 54,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 64,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 78,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_iran_bridge_prioritizer.py",
+      "line": 80,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 10,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 12,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 13,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 14,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 15,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 27,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 29,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 30,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 31,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 32,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 42,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_local_ai_rl_morphing.py",
+      "line": 44,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
       "type": "http_url",
       "file": "tests/test_providers.py",
       "line": 324,
       "severity": "low",
       "description": "HTTP URL found — verify HTTPS is used for sensitive data",
       "match": "http://gateway.ai.cloudflare.com/v1/abc123/gw"
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_security_scan_shell.py",
+      "line": 6,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_security_scan_shell.py",
+      "line": 11,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 17,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 19,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 38,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 44,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 46,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_self_heal.py",
+      "line": 62,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_shell_entrypoints.py",
+      "line": 18,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_shell_entrypoints.py",
+      "line": 20,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 31,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 33,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 34,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 40,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 42,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 88,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 90,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 91,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 92,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 93,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 94,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 95,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 96,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 100,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 122,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "\n    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 124,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 125,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_telemetry_watcher.py",
+      "line": 126,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 58,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 59,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 60,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 61,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 62,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
+    },
+    {
+      "type": "assert_in_production",
+      "file": "tests/test_zero_error_engine_v5.py",
+      "line": 63,
+      "severity": "low",
+      "description": "assert statements are stripped with -O flag — avoid for security checks",
+      "match": "    assert "
     },
     {
       "type": "http_url",
