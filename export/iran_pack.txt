@@ -1,5 +1,5 @@
 # Tor Bridge Iran Pack — sorted by Iran effectiveness score
-# Generated: 2026-06-25 12:31 UTC
+# Generated: 2026-06-26 11:16 UTC
 # Usage: paste lines below into Tor Browser → Settings → Connection → Bridges
 
 snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn

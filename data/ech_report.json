@@ -817,6 +817,23 @@
       "tls_error_type": null
     },
     {
+      "bridge_line": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
+      "transport": "vanilla",
+      "iran_dpi_evasion_score": 0.4,
+      "flags": [
+        "non_standard_port",
+        "tls13_only"
+      ],
+      "host": "185.112.147.158",
+      "port": 19001,
+      "tls_reachable": true,
+      "tls_version": "TLSv1.3",
+      "ech_supported": false,
+      "ech_grease": false,
+      "tls_probe_status": "reachable",
+      "tls_error_type": null
+    },
+    {
       "bridge_line": "185.132.41.102:443 4FBCA9FC7A7882D6DF090B89AEEECA8FC3E05D6C",
       "transport": "vanilla",
       "iran_dpi_evasion_score": 0.4,
@@ -2175,22 +2192,6 @@
       "ech_grease": false,
       "tls_probe_status": "timeout",
       "tls_error_type": "TimeoutError"
-    },
-    {
-      "bridge_line": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
-      "transport": "vanilla",
-      "iran_dpi_evasion_score": 0.1,
-      "flags": [
-        "non_standard_port"
-      ],
-      "host": "185.112.147.158",
-      "port": 19001,
-      "tls_reachable": false,
-      "tls_version": null,
-      "ech_supported": false,
-      "ech_grease": false,
-      "tls_probe_status": "connection_refused",
-      "tls_error_type": "ConnectionRefusedError"
     },
     {
       "bridge_line": "185.161.210.189:47281 96FE8631C0047C67E0C1572C7EB5A7B3F84C5FE8",
