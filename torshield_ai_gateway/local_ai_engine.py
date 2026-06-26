@@ -28,10 +28,13 @@ USAGE:
 """
 
 
+import hashlib
 import json
 import logging
+import random
 import re
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 log = logging.getLogger("torshield.ai.local")
@@ -235,6 +238,19 @@ _WORKFLOW_FIXES = {
 }
 
 
+
+
+_DEFAULT_STATE_PATH = Path("data/local_ai_censorship_state.json")
+
+
+def _clamp(value: float, low: float = 0.0, high: float = 1.0) -> float:
+    return max(low, min(high, value))
+
+
+def _stable_unit_interval(*parts: object) -> float:
+    digest = hashlib.sha256("|".join(map(str, parts)).encode("utf-8")).hexdigest()
+    return int(digest[:12], 16) / float(0xFFFFFFFFFFFF)
+
 # ════════════════════════════════════════════════════════════════════════════
 # LOCAL AI ENGINE
 # ════════════════════════════════════════════════════════════════════════════
@@ -246,9 +262,103 @@ class LocalAIEngine:
     Provides rule-based scoring, censorship detection, and fix suggestions.
     """
 
-    def __init__(self):
+    def __init__(self, state_path: str | Path | None = None):
         self._cache: dict[str, Any] = {}
-        log.info("[LocalAI] Initialized — zero external dependencies")
+        self.state_path = Path(state_path) if state_path is not None else _DEFAULT_STATE_PATH
+        self.state_matrix = self._load_state_matrix()
+        log.info("[LocalAI] Initialized — zero external dependencies with adaptive RL state")
+
+    def _default_state_matrix(self) -> dict[str, Any]:
+        transports = list(_IRAN_TRANSPORT_SCORES)
+        isps = list(_IRAN_ISP_DATA) + ["unknown"]
+        return {
+            "version": 1,
+            "updated_at": datetime.now(UTC).isoformat(),
+            "learning_rate": 0.18,
+            "discount_factor": 0.72,
+            "epsilon_floor": 0.05,
+            "patterns": {
+                isp: {
+                    t: {
+                        "q_value": float(_IRAN_TRANSPORT_SCORES[t]["base"]),
+                        "successes": 0,
+                        "failures": 0,
+                        "handshake_failures": 0,
+                        "dpi_triggers": 0,
+                        "last_reward": 0.0,
+                    }
+                    for t in transports
+                }
+                for isp in isps
+            },
+        }
+
+    def _load_state_matrix(self) -> dict[str, Any]:
+        default = self._default_state_matrix()
+        try:
+            if self.state_path.exists():
+                loaded = json.loads(self.state_path.read_text(encoding="utf-8"))
+                if isinstance(loaded, dict) and isinstance(loaded.get("patterns"), dict):
+                    for isp, transports in default["patterns"].items():
+                        loaded.setdefault("patterns", {}).setdefault(isp, {})
+                        for transport, cell in transports.items():
+                            loaded["patterns"][isp].setdefault(transport, cell)
+                    loaded.setdefault("learning_rate", default["learning_rate"])
+                    loaded.setdefault("discount_factor", default["discount_factor"])
+                    loaded.setdefault("epsilon_floor", default["epsilon_floor"])
+                    return loaded
+        except (OSError, json.JSONDecodeError, TypeError) as exc:
+            log.warning("[LocalAI] State matrix load failed; using defaults: %s", exc)
+        return default
+
+    def persist_state_matrix(self) -> bool:
+        try:
+            self.state_path.parent.mkdir(parents=True, exist_ok=True)
+            self.state_matrix["updated_at"] = datetime.now(UTC).isoformat()
+            self.state_path.write_text(json.dumps(self.state_matrix, indent=2, sort_keys=True), encoding="utf-8")
+            return True
+        except OSError as exc:
+            log.warning("[LocalAI] State matrix persistence failed: %s", exc)
+            return False
+
+    def observe_feedback(self, isp: str, transport: str, outcome: str, latency_ms: float | None = None, persist: bool = True) -> dict[str, Any]:
+        isp_key = isp if isp in self.state_matrix["patterns"] else "unknown"
+        transport_key = transport if transport in _IRAN_TRANSPORT_SCORES else "vanilla"
+        cell = self.state_matrix["patterns"][isp_key][transport_key]
+        outcome_l = outcome.lower()
+        reward = 0.6
+        if outcome_l in {"success", "ok", "reachable"}:
+            cell["successes"] += 1; reward = 1.0
+        elif "handshake" in outcome_l or "tls" in outcome_l or "tcp" in outcome_l:
+            cell["failures"] += 1; cell["handshake_failures"] += 1; reward = -0.45
+        elif "dpi" in outcome_l or "fingerprint" in outcome_l or "blocked" in outcome_l:
+            cell["failures"] += 1; cell["dpi_triggers"] += 1; reward = -0.85
+        else:
+            cell["failures"] += 1; reward = -0.25
+        if latency_ms is not None and latency_ms > 0:
+            reward -= min(0.25, latency_ms / 10000.0)
+        lr = float(self.state_matrix.get("learning_rate", 0.18))
+        gamma = float(self.state_matrix.get("discount_factor", 0.72))
+        old_q = float(cell.get("q_value", 0.5))
+        cell["q_value"] = round(_clamp(old_q + lr * (reward + gamma * old_q - old_q)), 4)
+        cell["last_reward"] = round(reward, 4)
+        if persist:
+            self.persist_state_matrix()
+        return {"isp": isp_key, "transport": transport_key, "q_value": cell["q_value"], "reward": cell["last_reward"], "source": "local_ai_engine_rl"}
+
+    def choose_dynamic_transport(self, isp: str = "unknown", censorship_level: int = 4) -> dict[str, Any]:
+        isp_key = isp if isp in self.state_matrix["patterns"] else "unknown"
+        pressure = _clamp((censorship_level - 1) / 4.0)
+        epsilon = max(float(self.state_matrix.get("epsilon_floor", 0.05)), 0.22 - pressure * 0.14)
+        rows = []
+        for transport, cell in self.state_matrix["patterns"][isp_key].items():
+            base = _IRAN_TRANSPORT_SCORES.get(transport, _IRAN_TRANSPORT_SCORES["vanilla"])
+            score = _clamp(float(cell.get("q_value", base["base"])) * 0.65 + base["dpi_resist"] * 0.25 + base["nin_survival"] * pressure * 0.10)
+            rows.append({"transport": transport, "score": round(score, 4), "q_value": cell.get("q_value", 0.0)})
+        rows.sort(key=lambda r: r["score"], reverse=True)
+        explore = _stable_unit_interval(isp_key, censorship_level, self.state_matrix.get("updated_at")) < epsilon
+        choice = rows[min(1, len(rows)-1)] if explore and len(rows) > 1 else rows[0]
+        return {"isp": isp_key, "selected_transport": choice["transport"], "score": choice["score"], "exploration": explore, "candidates": rows[:5], "source": "local_ai_engine_rl"}
 
     # ── Bridge Parsing ────────────────────────────────────────────────────
 
@@ -341,8 +451,10 @@ class LocalAIEngine:
         # external-provider outages produced only mediocre tiers.
         pressure = max(0.0, min(1.0, (censorship_level - 1) / 4.0))
 
-        # Compute composite score
-        base_score = t_scores["base"] * 0.5 + port_bonus * 0.2 + t_scores["dpi_resist"] * 0.3
+        # Compute composite score; fold in the local RL state for unknown/aggregate ISP.
+        rl_cell = self.state_matrix.get("patterns", {}).get("unknown", {}).get(transport, {})
+        rl_q = float(rl_cell.get("q_value", t_scores["base"]))
+        base_score = rl_q * 0.2 + t_scores["base"] * 0.35 + port_bonus * 0.2 + t_scores["dpi_resist"] * 0.25
         dpi_bonus = pressure * t_scores["dpi_resist"] * 0.12
         weak_transport_penalty = pressure * (1.0 - t_scores["dpi_resist"]) * 0.35
         nin_bonus = pressure * t_scores["nin_survival"] * 0.08
@@ -369,7 +481,7 @@ class LocalAIEngine:
         if transport == "obfs4":
             iat_mode = parsed["params"].get("iat-mode", "0")
             if iat_mode != "2":
-                mutation_hint = "Set iat-mode=1 for better DPI evasion"
+                mutation_hint = "Set iat-mode=2 for better DPI evasion"
             if port != 443:
                 mutation_hint += "; move to port 443 if possible"
         elif transport == "vanilla":
@@ -383,7 +495,64 @@ class LocalAIEngine:
             "isp_block_risk": isp_risk,
             "recommendation": recommendation,
             "mutation_hint": mutation_hint,
+            "rl_q_value": round(rl_q, 3),
             "source": "local_ai_engine",
+        }
+
+    def build_polymorphic_morphing_profile(
+        self,
+        transport: str = "obfs4",
+        isp: str = "unknown",
+        censorship_level: int = 4,
+        handshake_failure: bool = False,
+        dpi_trigger: bool = False,
+    ) -> dict[str, Any]:
+        """Return a local-only traffic morphing profile for runners/clients.
+
+        The method emits configuration hints rather than touching packets itself, so
+        callers can apply them in their own transport layer with a non-blocking
+        fallback path. It adapts padding, header rotation, and fragmentation timing
+        from the RL state plus TCP/TLS/DPI feedback.
+        """
+        if handshake_failure:
+            self.observe_feedback(isp, transport, "handshake_failure", persist=False)
+        if dpi_trigger:
+            self.observe_feedback(isp, transport, "dpi_trigger", persist=False)
+        decision = self.choose_dynamic_transport(isp=isp, censorship_level=censorship_level)
+        selected = decision["selected_transport"]
+        pressure = _clamp((censorship_level - 1) / 4.0)
+        seed = int(_stable_unit_interval(selected, isp, censorship_level) * 10_000)
+        rng = random.Random(seed)
+        padding_min = int(16 + pressure * 96)
+        padding_max = int(128 + pressure * 640)
+        if dpi_trigger:
+            padding_max += 256
+        if handshake_failure:
+            padding_min = 0
+            padding_max = min(padding_max, 256)
+        return {
+            "selected_transport": selected,
+            "fallback_transport": self.recommend_transport_stack(censorship_level, isp).get("fallback_transport"),
+            "packet_headers": {
+                "rotate_user_agent": True,
+                "accept_language": rng.choice(["fa-IR,fa;q=0.9,en;q=0.7", "en-US,en;q=0.9", "fa,en;q=0.8"]),
+                "tls_profile": rng.choice(["chrome_stable", "firefox_esr", "android_webview"]),
+            },
+            "padding": {"mode": "polymorphic", "min_bytes": padding_min, "max_bytes": padding_max},
+            "fragmentation_timing": {
+                "enabled": censorship_level >= 3 and not handshake_failure,
+                "min_delay_ms": int(5 + pressure * 20),
+                "max_delay_ms": int(35 + pressure * 120),
+                "burst_jitter_ms": rng.randint(8, 48),
+            },
+            "retry_reconfigure_loop": {
+                "tcp_tls_handshake_failure": "reduce padding, disable fragmentation for one attempt, switch TLS profile",
+                "dpi_fingerprint_trigger": "increase polymorphic padding, rotate transport, widen timing jitter",
+                "max_attempts": 3,
+                "non_blocking_fallback": "LocalAIEngine.choose_dynamic_transport",
+            },
+            "decision": decision,
+            "source": "local_ai_engine_rl",
         }
 
     def rank_bridges(self, bridge_lines: list[str], censorship_level: int = 4) -> list[dict[str, Any]]:
@@ -805,5 +974,6 @@ class LocalAIEngine:
                 "score_bridge", "detect_censorship_level", "isp_block_matrix",
                 "recommend_transport_stack", "predict_nin_survival",
                 "analyze_workflow_failure", "batch_ai_score",
+                "observe_feedback", "choose_dynamic_transport", "build_polymorphic_morphing_profile",
             ],
         })
