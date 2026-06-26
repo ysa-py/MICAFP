@@ -113,8 +113,9 @@ class TorShieldAIGateway:
                 self._providers[name] = cls()
                 logger.info(f"[Gateway] Initialized provider: {name}")
             except (ValueError, KeyError) as e:
-                from monitoring.structured_logger import record_silent_failure
-                record_silent_failure('torshield_ai_gateway.gateway:115', e)
+                # Optional providers are allowed to be absent.  Keep this as a
+                # warning only so CI logs do not show false ERROR entries when
+                # LocalAIEngine is expected to provide autonomous fallback.
                 logger.warning(f"[Gateway] Provider {name} not available: {e}")
 
     def chat(

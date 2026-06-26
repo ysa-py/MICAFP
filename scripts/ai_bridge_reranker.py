@@ -182,13 +182,21 @@ def _attach_scores(
         else:
             final = 50.0
 
+        final_tier = (
+            "excellent" if final >= 80.0 else
+            "good" if final >= 60.0 else
+            "capable" if final >= 40.0 else
+            "poor"
+        )
+
         rec["smart_iran_scores"] = {
             **heuristic_entry,
             **ai_entry,
+            "tier":             final_tier,
             "final_score":      round(final, 1),
             "censorship_level": level,
             "level_confidence": round(level_conf, 3),
-            "model_version":    "torshield-ir-v9.0",
+            "model_version":    "torshield-ir-v9.1-local-autonomy",
         }
         output.append(rec)
 

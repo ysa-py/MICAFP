@@ -24,6 +24,7 @@ import time
 from typing import Any
 
 from .gateway import get_gateway
+from .local_ai_engine import LocalAIEngine
 
 log = logging.getLogger("torshield.ai.iran")
 
@@ -388,17 +389,18 @@ class IranIntelligenceLayer:
                 max_tokens=2048, temperature=0.05, task="reasoning"
             )
             chunk_results = _safe_json(raw, [])
-            if isinstance(chunk_results, list) and chunk_results:
+            if isinstance(chunk_results, list) and len(chunk_results) >= len(chunk):
                 results.extend(chunk_results)
             else:
-                # Fallback: add neutrals
-                for b in chunk:
-                    results.append({
-                        "bridge_line":    b,
-                        "score":          0.5,
-                        "recommendation": "test",
-                        "tier":           "capable",
-                    })
+                # Fully automatic local AI fallback.  This is used when cloud
+                # providers are unavailable/rate-limited or when the gateway
+                # response was a degraded LocalAI status envelope rather than
+                # the requested JSON array.
+                log.info("[IranAI] Using LocalAIEngine batch fallback for chunk")
+                local_results = LocalAIEngine().batch_ai_score(
+                    chunk, censorship_level=censorship_level
+                )
+                results.extend(local_results)
 
             # Brief pause between chunks to avoid rate limiting
             if i + batch_size < total:
