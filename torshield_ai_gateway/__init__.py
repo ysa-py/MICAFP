@@ -78,6 +78,7 @@ from .exceptions import BadRequestError, ProviderConfigurationError
 from .gateway import TorShieldAIGateway, get_gateway
 from .iran_auto_defense import IranAutoDefense, get_auto_defense, run_defense_cycle
 from .local_ai_engine import LocalAIEngine
+from .polymorphic_traffic_morpher import PolymorphicTrafficMorpher
 from .model_selector import (
     CloudflareModelSelector,
     best_cf_model,
@@ -665,4 +666,5 @@ __all__ = [
     "ProviderDPIProfile",
     "PROVIDER_DPI_PROFILES",
     "DPIAwareProviderSelector",
+    "PolymorphicTrafficMorpher",
 ]
