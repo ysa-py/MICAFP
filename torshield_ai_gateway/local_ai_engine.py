@@ -334,12 +334,19 @@ class LocalAIEngine:
         # Port bonus
         port_bonus = _IRAN_PORT_SCORES.get(port, 0.3)
 
-        # Censorship level modifier
-        level_mod = max(0.1, 1.0 - (censorship_level - 1) * 0.15)
+        # Iran pressure modifier: harsh censorship should penalize weak
+        # transports, but it should not unfairly demote transports designed for
+        # DPI evasion (Snowflake/WebTunnel/meek).  The previous whole-score
+        # multiplier made excellent local scores impossible at level >= 3, so
+        # external-provider outages produced only mediocre tiers.
+        pressure = max(0.0, min(1.0, (censorship_level - 1) / 4.0))
 
         # Compute composite score
         base_score = t_scores["base"] * 0.5 + port_bonus * 0.2 + t_scores["dpi_resist"] * 0.3
-        score = min(1.0, base_score * level_mod)
+        dpi_bonus = pressure * t_scores["dpi_resist"] * 0.12
+        weak_transport_penalty = pressure * (1.0 - t_scores["dpi_resist"]) * 0.35
+        nin_bonus = pressure * t_scores["nin_survival"] * 0.08
+        score = min(1.0, max(0.0, base_score + dpi_bonus + nin_bonus - weak_transport_penalty))
 
         # Determine recommendation
         if score >= 0.75:
@@ -741,11 +748,32 @@ class LocalAIEngine:
             })
 
         # Route to appropriate method based on message content
-        if "score" in user_msg.lower() and "bridge" in user_msg.lower():
-            # Try to extract bridge line from message
+        lowered_msg = user_msg.lower()
+        if "score" in lowered_msg and "bridge" in lowered_msg:
+            level_match = re.search(r"level\s+(\d+)", lowered_msg)
+            censorship_level = int(level_match.group(1)) if level_match else 4
+
+            # Batch prompts include a JSON array after "Bridges:".  Prefer a
+            # complete local batch response so callers receive one result per
+            # bridge even when every external provider is rate-limited.
+            batch_match = re.search(r"Bridges:\s*(\[.*\])", user_msg, re.DOTALL)
+            if batch_match:
+                try:
+                    bridge_lines = json.loads(batch_match.group(1))
+                    if isinstance(bridge_lines, list):
+                        return json.dumps(
+                            self.batch_ai_score(
+                                [str(line) for line in bridge_lines],
+                                censorship_level=censorship_level,
+                            )
+                        )
+                except json.JSONDecodeError:
+                    log.debug("[LocalAI] Could not parse batch bridge JSON", exc_info=True)
+
+            # Try to extract a single bridge line from message
             bridge_match = re.search(r'(obfs4|webtunnel|snowflake|meek_lite|vanilla)\s+\S+:\d+', user_msg)
             if bridge_match:
-                result = self.score_bridge(bridge_match.group(0))
+                result = self.score_bridge(bridge_match.group(0), censorship_level=censorship_level)
                 return json.dumps(result)
 
         if "censorship" in user_msg.lower() or "level" in user_msg.lower():
