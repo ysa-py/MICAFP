@@ -27,8 +27,9 @@ import json
 import logging
 import os
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
+UTC = timezone.utc
 
 # Additive: pull in the existing NIN detector (function-based API) so we
 # can detect NIN state without duplicating logic.

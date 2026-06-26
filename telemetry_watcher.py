@@ -53,9 +53,10 @@ import threading
 import time
 from collections import defaultdict
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.telemetry")
 

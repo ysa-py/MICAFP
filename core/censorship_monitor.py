@@ -36,8 +36,9 @@ import asyncio
 import json
 import logging
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

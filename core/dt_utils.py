@@ -13,8 +13,9 @@ Fix applied everywhere: always work in UTC-aware datetimes.
   parse_dt()   replaces  datetime.fromisoformat() in comparisons
 """
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
+UTC = timezone.utc
 
 
 def utc_now() -> datetime:

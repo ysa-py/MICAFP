@@ -31,8 +31,9 @@ import json
 import logging
 import os
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
+UTC = timezone.utc
 
 # Additive: import V1 — never replace it. We wrap and extend.
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))

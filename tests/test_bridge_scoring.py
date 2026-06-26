@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from sources.bridge_scoring import recommended_priority, score_bridge
+UTC = timezone.utc
 
 NOW = datetime(2026, 6, 25, tzinfo=UTC)
 HIGH_DPI = {"counters": {"dpi_total": 4, "dpi_camouflaged": 3, "self_heal_total": 1}}
