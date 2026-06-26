@@ -275,7 +275,7 @@ def test_onionhop_cleanup_history_and_recent_filter_accept_legacy_naive_values(m
     }
 
     cleaned = onionhop_collector._cleanup_history(history)
-    recent_cutoff = datetime.now(UTC) - timedelta(hours=onionhop_collector.RECENT_HOURS)
+    recent_cutoff = fixed_now - timedelta(hours=onionhop_collector.RECENT_HOURS)
     recent = [
         bridge
         for bridge, entry in cleaned.items()
