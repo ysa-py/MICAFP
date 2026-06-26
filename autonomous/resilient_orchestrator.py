@@ -15,9 +15,11 @@ import heapq
 import json
 import math
 import os
+import platform
+import shutil
 import time
 import uuid
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -39,6 +41,61 @@ class AgentRole(str, Enum):
     RECOVERY = "recovery"
     OPTIMIZER = "optimizer"
     DOCUMENTATION = "documentation"
+    MODEL_ROUTER = "model_router"
+    MEMORY = "memory"
+
+
+@dataclass(slots=True)
+class ResourceSnapshot:
+    """Point-in-time local resource telemetry for self-healing decisions."""
+
+    cpu_load_1m: float = 0.0
+    memory_available_mb: float = 0.0
+    storage_free_mb: float = 0.0
+    process_count: int = 0
+    captured_at: float = field(default_factory=time.time)
+
+    @classmethod
+    def capture(cls, path: str | os.PathLike[str] = ".") -> "ResourceSnapshot":
+        load = os.getloadavg()[0] if hasattr(os, "getloadavg") else 0.0
+        storage = shutil.disk_usage(path)
+        memory_available_mb = 0.0
+        meminfo = Path("/proc/meminfo")
+        if meminfo.exists():
+            for line in meminfo.read_text(encoding="utf-8", errors="replace").splitlines():
+                if line.startswith("MemAvailable:"):
+                    memory_available_mb = float(line.split()[1]) / 1024.0
+                    break
+        process_count = 0
+        proc = Path("/proc")
+        if proc.exists():
+            process_count = sum(1 for child in proc.iterdir() if child.name.isdigit())
+        return cls(
+            cpu_load_1m=load,
+            memory_available_mb=memory_available_mb,
+            storage_free_mb=storage.free / (1024 * 1024),
+            process_count=process_count,
+        )
+
+
+@dataclass(slots=True)
+class ModelCandidate:
+    """Model-routing candidate used for internal AI fallback decisions."""
+
+    name: str
+    quality: float
+    latency_ms: float
+    cost_per_1k: float = 0.0
+    available: bool = True
+    context_tokens: int = 8192
+
+    @property
+    def routing_score(self) -> float:
+        latency_penalty = min(max(self.latency_ms, 0.0) / 10_000.0, 1.0)
+        cost_penalty = min(max(self.cost_per_1k, 0.0) / 0.10, 1.0)
+        context_bonus = min(max(self.context_tokens, 1) / 128_000.0, 1.0)
+        availability = 1.0 if self.available else 0.0
+        return max(0.0, min(1.0, availability * (self.quality * 0.60 + (1 - latency_penalty) * 0.20 + (1 - cost_penalty) * 0.10 + context_bonus * 0.10)))
 
 
 @dataclass(slots=True)
@@ -105,6 +162,10 @@ class ResilientOrchestrator:
         self._dedupe: set[str] = set()
         self.reflection_log: list[dict[str, Any]] = []
         self.handlers: dict[str, Callable[[AutonomousTask, EndpointState | None], dict[str, Any]]] = {}
+        self.local_cache: dict[str, dict[str, Any]] = {}
+        self.session_recovery: dict[str, dict[str, Any]] = {}
+        self.models: dict[str, ModelCandidate] = {}
+        self.resource_snapshots: list[ResourceSnapshot] = []
         self.load()
 
     def register_endpoint(self, name: str, url: str, health: NetworkHealth | None = None) -> EndpointState:
@@ -118,6 +179,41 @@ class ResilientOrchestrator:
 
     def register_handler(self, action: str, handler: Callable[[AutonomousTask, EndpointState | None], dict[str, Any]]) -> None:
         self.handlers[action] = handler
+
+    def register_model(self, candidate: ModelCandidate) -> ModelCandidate:
+        self.models[candidate.name] = candidate
+        self.save()
+        return candidate
+
+    def route_model(self, required_context_tokens: int = 0) -> ModelCandidate | None:
+        candidates = [
+            candidate
+            for candidate in self.models.values()
+            if candidate.available and candidate.context_tokens >= required_context_tokens
+        ]
+        if not candidates:
+            candidates = [candidate for candidate in self.models.values() if candidate.available]
+        if not candidates:
+            self.reflect("model_route_unavailable", {"required_context_tokens": required_context_tokens})
+            return None
+        selected = max(candidates, key=lambda candidate: candidate.routing_score)
+        self.reflect("model_routed", {"model": selected.name, "score": round(selected.routing_score, 4)})
+        return selected
+
+    def cache_response(self, key: str, value: Any, *, ttl_seconds: float = 300.0) -> None:
+        self.local_cache[key] = {"value": value, "expires_at": time.time() + max(ttl_seconds, 0.0)}
+        self.save()
+
+    def cached_response(self, key: str) -> Any | None:
+        entry = self.local_cache.get(key)
+        if not entry:
+            return None
+        if entry["expires_at"] < time.time():
+            self.local_cache.pop(key, None)
+            self.reflect("cache_expired", {"key": key})
+            self.save()
+            return None
+        return entry["value"]
 
     def schedule(self, action: str, payload: dict[str, Any] | None = None, *, role: AgentRole = AgentRole.PLANNER, priority: int = 50, delay_seconds: float = 0.0, idempotency_key: str = "") -> AutonomousTask:
         task = AutonomousTask(run_at=time.time() + max(delay_seconds, 0.0), priority=priority, action=action, payload=payload or {}, role=role, idempotency_key=idempotency_key)
@@ -193,6 +289,54 @@ class ResilientOrchestrator:
         self.reflect("heartbeat", {"endpoint_count": len(self.endpoints)})
         self.save()
 
+    def record_resource_snapshot(self, snapshot: ResourceSnapshot | None = None) -> ResourceSnapshot:
+        captured = snapshot or ResourceSnapshot.capture(self.state_path.parent)
+        self.resource_snapshots.append(captured)
+        self.resource_snapshots = self.resource_snapshots[-100:]
+        self.reflect(
+            "resource_snapshot",
+            {
+                "cpu_load_1m": round(captured.cpu_load_1m, 3),
+                "memory_available_mb": round(captured.memory_available_mb, 1),
+                "storage_free_mb": round(captured.storage_free_mb, 1),
+                "platform": platform.system(),
+            },
+        )
+        self.save()
+        return captured
+
+    def recover_sessions(self) -> list[AutonomousTask]:
+        recovered: list[AutonomousTask] = []
+        for task in self._queue:
+            if task.status in {TaskStatus.RUNNING, TaskStatus.DEFERRED}:
+                task.status = TaskStatus.PENDING
+                task.run_at = min(task.run_at, time.time())
+                recovered.append(task)
+        if recovered:
+            self.reflect("sessions_recovered", {"count": len(recovered)})
+            self.save()
+        return recovered
+
+    def synchronize_offline_queue(self, *, budget: int = 10) -> list[AutonomousTask]:
+        if not self.choose_endpoint():
+            self.reflect("sync_deferred_offline", {"queued": len(self._queue)})
+            return []
+        return self.run_ready(budget=budget)
+
+    def plan_validation_cycle(self, commands: Sequence[str]) -> list[AutonomousTask]:
+        planned: list[AutonomousTask] = []
+        for index, command in enumerate(commands):
+            planned.append(
+                self.schedule(
+                    "validation_command",
+                    {"command": command},
+                    role=AgentRole.VALIDATOR,
+                    priority=10 + index,
+                )
+            )
+        self.reflect("validation_cycle_planned", {"count": len(planned)})
+        return planned
+
     def reflect(self, event: str, detail: dict[str, Any]) -> None:
         self.reflection_log.append({"ts": time.time(), "event": event, "detail": detail})
         self.reflection_log = self.reflection_log[-200:]
@@ -206,6 +350,10 @@ class ResilientOrchestrator:
             "endpoints": {name: asdict(endpoint) for name, endpoint in self.endpoints.items()},
             "queue": [asdict(task) for task in sorted(self._queue)],
             "reflection_log": self.reflection_log,
+            "local_cache": self.local_cache,
+            "session_recovery": self.session_recovery,
+            "models": {name: asdict(model) for name, model in self.models.items()},
+            "resource_snapshots": [asdict(snapshot) for snapshot in self.resource_snapshots],
         }
         self.state_path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
 
@@ -226,3 +374,7 @@ class ResilientOrchestrator:
             self._dedupe.add(task.idempotency_key)
             heapq.heappush(self._queue, task)
         self.reflection_log = payload.get("reflection_log", [])[-200:]
+        self.local_cache = payload.get("local_cache", {})
+        self.session_recovery = payload.get("session_recovery", {})
+        self.models = {name: ModelCandidate(**raw) for name, raw in payload.get("models", {}).items()}
+        self.resource_snapshots = [ResourceSnapshot(**raw) for raw in payload.get("resource_snapshots", [])][-100:]
