@@ -40,9 +40,10 @@ import json
 import logging
 import pickle
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 logging.basicConfig(
     level=logging.INFO,

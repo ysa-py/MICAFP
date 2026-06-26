@@ -41,7 +41,7 @@ import json
 import re
 import socket
 import ssl
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -49,6 +49,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from core.dt_utils import coerce_utc_dt
+UTC = timezone.utc
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 

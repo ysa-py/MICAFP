@@ -23,7 +23,7 @@ Usage:
 
 
 from dataclasses import dataclass
-from datetime import UTC
+from datetime import timezone
 
 
 @dataclass
@@ -404,6 +404,7 @@ def rotate_ja3_fingerprints() -> int:
 # ── --rotate CLI entry point ──────────────────────────────────────────────────
 import argparse as _argparse
 import random
+UTC = timezone.utc
 
 
 def _ja3_cli_main() -> None:

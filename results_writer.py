@@ -38,11 +38,12 @@ import logging
 import os
 import sys
 import zipfile
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import requests
+UTC = timezone.utc
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging
