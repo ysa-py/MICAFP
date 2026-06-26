@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-26T12:49:27.237637+00:00",
-  "total_bridges": 633,
+  "generated_at": "2026-06-26T16:02:09.179870+00:00",
+  "total_bridges": 631,
   "green_count": 6,
   "yellow_count": 254,
-  "red_count": 373,
+  "red_count": 371,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -440,6 +440,14 @@
       "transport": "vanilla",
       "ip": "176.223.133.126",
       "port": 6010,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
+      "transport": "vanilla",
+      "ip": "185.112.147.158",
+      "port": 19001,
       "sni": "",
       "tier": "RED"
     },
@@ -1148,14 +1156,6 @@
       "tier": "RED"
     },
     {
-      "raw": "79.199.122.90:9001 65FF7447FF845605D331522487DE411CB1247F55",
-      "transport": "vanilla",
-      "ip": "79.199.122.90",
-      "port": 9001,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
       "raw": "80.67.172.3:443 088ACF1F2F1720AA41BE8575F45AD202FBD59296",
       "transport": "vanilla",
       "ip": "80.67.172.3",
@@ -1268,14 +1268,6 @@
       "tier": "RED"
     },
     {
-      "raw": "87.121.52.247:9118 8C51BB761FF9D89B09A3670892E84019D60D7210",
-      "transport": "vanilla",
-      "ip": "87.121.52.247",
-      "port": 9118,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
       "raw": "87.205.19.58:5001 4E77C30111284434D1EB25C8CBEA6F752736E460",
       "transport": "vanilla",
       "ip": "87.205.19.58",
@@ -1320,14 +1312,6 @@
       "transport": "vanilla",
       "ip": "89.236.127.72",
       "port": 9001,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "89.58.12.52:3445 48A2BD4E1A942A3F4A73B4F5EE8D078725903411",
-      "transport": "vanilla",
-      "ip": "89.58.12.52",
-      "port": 3445,
       "sni": "",
       "tier": "RED"
     },

@@ -2,7 +2,7 @@
 
 > Polyglot (Python · Go · Rust) bridge collector with 8-layer Iran DPI analysis.<br>
 > OONI-verified · ASN-filtered · Composite-scored · Auto-updated hourly.<br>
-> **Last update:** `2026-06-26 12:49 UTC`
+> **Last update:** `2026-06-26 16:02 UTC`
 
 ---
 

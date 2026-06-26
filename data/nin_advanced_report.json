@@ -857,17 +857,6 @@
       "tcp_reachable": true
     },
     {
-      "bridge_line": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
-      "transport": "vanilla",
-      "host": "185.112.147.158",
-      "port": 19001,
-      "nin_score": 0.15,
-      "nin_flags": [
-        "tcp_alive"
-      ],
-      "tcp_reachable": true
-    },
-    {
       "bridge_line": "185.177.207.133:9443 AC21198DB43D0AA09A0F1EBC07CC9AA2A1976B1A",
       "transport": "vanilla",
       "host": "185.177.207.133",
@@ -2043,6 +2032,15 @@
       "transport": "vanilla",
       "host": "180.21.148.123",
       "port": 49328,
+      "nin_score": 0.05,
+      "nin_flags": [],
+      "tcp_reachable": false
+    },
+    {
+      "bridge_line": "185.112.147.158:19001 F3E390221D8384F8AD99783DAC6749338D2A7433",
+      "transport": "vanilla",
+      "host": "185.112.147.158",
+      "port": 19001,
       "nin_score": 0.05,
       "nin_flags": [],
       "tcp_reachable": false
