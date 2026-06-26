@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T21:56:37.027262+00:00",
+  "generated_at": "2026-06-26T23:42:50.862397+00:00",
   "provider_count": 1,
   "consensus_score": 0.92,
   "selected_strategies": [
@@ -13,11 +13,11 @@
       "mutation_needed": true,
       "confidence": 0.92,
       "recommended_strategies": [
-        "port_rotation",
         "obfs4_iat_boost",
+        "port_rotation",
         "ja3_randomize"
       ],
-      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate transport mutation and timing/packet obfuscation to evade SIAM DPI's ML classifiers.",
+      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate timing randomization and port diversification to evade SIAM's ML classifiers.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]
