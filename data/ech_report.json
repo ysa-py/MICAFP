@@ -1837,8 +1837,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "unreachable",
-      "tls_error_type": "ConnectionResetError"
+      "tls_probe_status": "timeout",
+      "tls_error_type": "TimeoutError"
     },
     {
       "bridge_line": "142.93.128.78:34689 9BC96DE81181DB5503E16B89D3B2694E2FBF1C34",

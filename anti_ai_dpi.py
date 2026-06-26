@@ -98,7 +98,7 @@ def score_anti_ai_dpi(line: str) -> dict[str, Any]:
         bonus -= 0.10; flags.append("tor_known_port")  # Iran explicitly blocks these
 
     # obfs4 with iat-mode: traffic timing randomisation defeats ML
-    if "iat-mode=1" in line or "iat-mode=1" in line:
+    if "iat-mode=2" in line or "iat-mode=2" in line:
         bonus += 0.08; flags.append("obfs4_iat_timing_randomised")
 
     # CDN hint in line

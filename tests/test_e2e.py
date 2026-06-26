@@ -37,7 +37,7 @@ class TestBridgeIntelligencePipeline(unittest.TestCase):
 
         # Simulate scraped bridge records
         bridges = [
-            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=1", "transport": "obfs4", "port": 443},
+            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=2", "transport": "obfs4", "port": 443},
             {"raw": "webtunnel 5.6.7.8:443 url=https://example.com", "transport": "webtunnel", "port": 443},
             {"raw": "snowflake 9.10.11.12:443", "transport": "snowflake", "port": 443},
         ]
@@ -70,7 +70,7 @@ class TestBridgeIntelligencePipeline(unittest.TestCase):
         from anti_ai_dpi import score_anti_ai_dpi
 
         bridges = [
-            "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1",
+            "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2",
             "webtunnel 5.6.7.8:443 url=https://example.com/webtunnel",
             "snowflake 9.10.11.12:443",
         ]
@@ -83,7 +83,7 @@ class TestBridgeIntelligencePipeline(unittest.TestCase):
         """Test that bridge records can be formatted for export."""
         # Simulate a scored bridge list
         bridges = [
-            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=1", "transport": "obfs4",
+            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=2", "transport": "obfs4",
              "score": 85, "port": 443},
             {"raw": "webtunnel 5.6.7.8:443 url=https://example.com", "transport": "webtunnel",
              "score": 78, "port": 443},
@@ -109,7 +109,7 @@ class TestBridgeIntelligencePipeline(unittest.TestCase):
         bridges = [
             {"raw": "snowflake 1.2.3.4:443", "transport": "snowflake", "score": 92},
             {"raw": "webtunnel 5.6.7.8:443 url=https://example.com", "transport": "webtunnel", "score": 85},
-            {"raw": "obfs4 9.10.11.12:443 cert=abc iat-mode=1", "transport": "obfs4", "score": 80},
+            {"raw": "obfs4 9.10.11.12:443 cert=abc iat-mode=2", "transport": "obfs4", "score": 80},
         ]
 
         # Sort by score descending (Iran pack is top-N)
@@ -126,7 +126,7 @@ class TestBridgeIntelligencePipeline(unittest.TestCase):
 
         # Mock scraper results
         mock_bridges = [
-            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=1", "transport": "obfs4", "port": 443},
+            {"raw": "obfs4 1.2.3.4:443 cert=abc iat-mode=2", "transport": "obfs4", "port": 443},
         ]
 
         scorer = IranScorer()
@@ -331,7 +331,7 @@ class TestAntiCensorshipPipeline(unittest.TestCase):
         from ai_anti_dpi_iran import IranAntiDPI
 
         engine = IranAntiDPI()
-        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=1"
+        bridge = "obfs4 1.2.3.4:443 cert=testfingerprint iat-mode=2"
         strategy = engine.get_evasion_strategy(bridge)
         self.assertIsNotNone(strategy)
 
@@ -390,7 +390,7 @@ class TestAntiCensorshipPipeline(unittest.TestCase):
         saf = IranSmartAntiFilter()
         bridges_dict = {
             "obfs4_1": {
-                "line": "obfs4 1.2.3.4:443 cert=fingerprint iat-mode=1",
+                "line": "obfs4 1.2.3.4:443 cert=fingerprint iat-mode=2",
                 "transport": "obfs4",
             },
             "webtunnel_1": {

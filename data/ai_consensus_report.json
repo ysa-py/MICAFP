@@ -1,8 +1,24 @@
 {
-  "generated_at": "2026-06-26T16:01:55.161695+00:00",
-  "provider_count": 0,
-  "consensus_score": 0.0,
-  "selected_strategies": [],
-  "mutation_triggered": false,
-  "individual_responses": []
+  "generated_at": "2026-06-26T18:19:39.664397+00:00",
+  "provider_count": 1,
+  "consensus_score": 0.98,
+  "selected_strategies": [
+    "ja3_randomize",
+    "obfs4_iat_boost",
+    "port_rotation"
+  ],
+  "mutation_triggered": true,
+  "individual_responses": [
+    {
+      "mutation_needed": true,
+      "confidence": 0.98,
+      "recommended_strategies": [
+        "port_rotation",
+        "obfs4_iat_boost",
+        "ja3_randomize"
+      ],
+      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate protocol mutation to evade SIAM's ML classifiers and maintain resilience during NIN cuts.",
+      "_provider": "Provider 10 -- Mistral-Large-2"
+    }
+  ]
 }
