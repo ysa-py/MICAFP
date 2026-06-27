@@ -15,7 +15,7 @@ rust-version = "1.78"
 
 [workspace.dependencies]
 reqwest = { version = "=0.12.22", default-features = false, features = ["rustls-tls", "json"] }
-tokio = { version = "=1.45.1", features = ["macros", "rt-multi-thread", "time", "fs"] }
+tokio = { version = "=1.52.3", features = ["macros", "rt-multi-thread", "time", "fs", "process", "full"] }
 quinn = "=0.11.8"
 scraper = "=0.23.1"
 html5ever = "=0.29.1"
@@ -32,14 +32,18 @@ console = "=0.15.11"
 owo-colors = "=4.2.2"
 serde_yaml = "=0.9.34+deprecated"
 backoff = "=0.4.0"
-tracing = "=0.1.41"
-tracing-subscriber = "=0.3.19"
+tracing = "=0.1.44"
+tracing-subscriber = "=0.3.23"
 prometheus = "=0.13.4"
 printpdf = "=0.8.2"
 genpdf = "=0.2.0"
 thiserror = "=2.0.12"
-serde = { version = "=1.0.219", features = ["derive"] }
+serde = { version = "=1.0.228", features = ["derive"] }
 serde_json = "=1.0.150"
+anyhow = "=1.0.103"
+clap = { version = "=4.5.61", features = ["derive"] }
+clap_lex = "=0.7.7"
+regex = "=1.12.4"
 
 [dependencies]
 serde_json = "=1.0.150"
@@ -54,3 +58,10 @@ iran_bridge = []
 bridge = []
 dpi = []
 nin = []
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
