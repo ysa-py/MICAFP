@@ -32,3 +32,14 @@ currently declared in `pyproject.toml`:
 No `.py` file has been deleted. Future deletions must be gated on a parity test
 that invokes the Python original and Rust replacement on the same branch-covering
 golden inputs, including error paths.
+
+## Phase 1 parity anchor: generated_json_loader.py
+
+`generated_json_loader.py::load_generated_json` now has a Rust replacement in
+`src/generated_json_loader.rs` and a root-workspace parity suite in
+`tests/parity/generated_json_loader_parity.rs`. The parity suite invokes the
+original Python function at test time and compares missing-file, empty-file,
+invalid-JSON, top-level type mismatch, dict list-field normalization, and valid
+array pass-through branches. The Python file remains in place because the full
+repository migration is not complete and deletion is still gated on maintained
+parity evidence.
