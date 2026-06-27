@@ -21,6 +21,18 @@ const GLOBAL_TRANSPORTS: &[&str] = &["obfs4", "webtunnel", "vanilla"];
 /// File-generation failures for the Rust `results_writer.py` parity port.
 #[derive(Debug)]
 pub enum ResultsWriterError {
+    /// `iran_results.json` does not exist at the configured path.
+    MissingIranResults { path: PathBuf },
+    /// Reading `iran_results.json` failed after the file was found.
+    ReadIranResults {
+        path: PathBuf,
+        source: std::io::Error,
+    },
+    /// Parsing `iran_results.json` as JSON failed.
+    ParseIranResults {
+        path: PathBuf,
+        source: serde_json::Error,
+    },
     /// Creating the bridge output directory failed.
     CreateDir {
         path: PathBuf,
@@ -43,6 +55,23 @@ pub enum ResultsWriterError {
 impl std::fmt::Display for ResultsWriterError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::MissingIranResults { path } => {
+                write!(f, "iran_results.json not found at {}", path.display())
+            }
+            Self::ReadIranResults { path, source } => {
+                write!(
+                    f,
+                    "failed to read iran results {}: {source}",
+                    path.display()
+                )
+            }
+            Self::ParseIranResults { path, source } => {
+                write!(
+                    f,
+                    "failed to parse iran results {}: {source}",
+                    path.display()
+                )
+            }
             Self::CreateDir { path, source } => {
                 write!(
                     f,
@@ -78,12 +107,37 @@ impl std::fmt::Display for ResultsWriterError {
 impl std::error::Error for ResultsWriterError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
+            Self::ReadIranResults { source, .. } => Some(source),
+            Self::ParseIranResults { source, .. } => Some(source),
             Self::CreateDir { source, .. }
             | Self::WriteFile { source, .. }
             | Self::ReadFile { source, .. } => Some(source),
-            Self::Integrity { .. } => None,
+            Self::MissingIranResults { .. } | Self::Integrity { .. } => None,
         }
     }
+}
+
+/// Load the Go tester JSON output that `results_writer.py` reads from
+/// `BRIDGE_DIR/iran_results.json`.
+///
+/// Unlike the Python original, which calls `sys.exit(1)` for a missing file and
+/// lets read/JSON exceptions escape, this Rust replacement exposes each branch
+/// as a typed [`Result`] error for callers and parity tests.
+pub fn load_iran_results(path: &Path) -> Result<Value, ResultsWriterError> {
+    if !path.exists() {
+        return Err(ResultsWriterError::MissingIranResults {
+            path: path.to_path_buf(),
+        });
+    }
+
+    let text = fs::read_to_string(path).map_err(|source| ResultsWriterError::ReadIranResults {
+        path: path.to_path_buf(),
+        source,
+    })?;
+    serde_json::from_str(&text).map_err(|source| ResultsWriterError::ParseIranResults {
+        path: path.to_path_buf(),
+        source,
+    })
 }
 
 /// Categorise bridges and write all `results_writer.py` bridge text outputs.
