@@ -187,3 +187,21 @@ Generated from `data/migration_phase0_inventory.json`. This table is intentional
 | `warp_bootstrap.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `xtls_reality_wrapper.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `ztunnel_ct_monitor.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
+
+## Additional guardrail verification
+
+`MIGRATION_STATUS.md` is also the required destination for unverifiable behavior
+flags during this migration. If a behavior contract cannot be proven with a
+Rust/Python parity test, the Python file must stay in place and the exact
+unverified branch must be recorded here instead of being guessed, simplified, or
+silently dropped.
+
+The latest local verification regenerated `data/migration_phase0_inventory.json`
+from the real Python import graph. It inventoried 179 Python files and 2496
+function/class contracts, confirmed zero undeclared third-party requirements,
+and preserved all Python files.
+
+For Phase 5 DPI/evasion modules, only public Tor-bridge reachability checks and
+passive classification of public OONI/RIPE Atlas data may be ported. Any code
+path that could be repurposed to attack or fingerprint third-party infrastructure
+outside that public dataset must remain unported and be flagged in this file.
