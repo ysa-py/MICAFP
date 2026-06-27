@@ -7,7 +7,7 @@ def test_ai_batch_refine_auto_uses_local_engine_by_default(monkeypatch):
     monkeypatch.delenv("AI_RERANK_EXTERNAL_AI", raising=False)
     bridges = [
         "snowflake 192.0.2.3:443 ABCDEF url=https://snowflake.example/ front=cdn.example",
-        "obfs4 198.51.100.10:9001 ABCDEF cert=abc iat-mode=0",
+        "obfs4 198.51.100.10:9001 ABCDEF cert=abc iat-mode=2",
     ]
 
     scored = _ai_batch_refine(
