@@ -9,7 +9,7 @@
         "name": "requests",
         "import_name": "requests",
         "importable": true,
-        "installed_version": "2.32.5",
+        "installed_version": "2.34.2",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
@@ -19,51 +19,41 @@
         "name": "beautifulsoup4",
         "import_name": "bs4",
         "importable": true,
-        "installed_version": "4.14.3",
+        "installed_version": "4.15.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
         "source_line": 6
       },
       {
-        "name": "lxml",
-        "import_name": "lxml",
-        "importable": true,
-        "installed_version": "6.0.2",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 7
-      },
-      {
         "name": "aiohttp",
         "import_name": "aiohttp",
         "importable": true,
-        "installed_version": "3.13.3",
+        "installed_version": "3.14.1",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 10
+        "source_line": 9
       },
       {
         "name": "scikit-learn",
         "import_name": "sklearn",
         "importable": true,
-        "installed_version": "1.5.2",
+        "installed_version": "1.9.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 13
+        "source_line": 12
       },
       {
         "name": "numpy",
         "import_name": "numpy",
         "importable": true,
-        "installed_version": "2.1.3",
+        "installed_version": "2.5.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 14
+        "source_line": 13
       },
       {
         "name": "aioquic",
@@ -73,37 +63,27 @@
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 18
+        "source_line": 17
       },
       {
         "name": "cryptography",
         "import_name": "cryptography",
         "importable": true,
-        "installed_version": "44.0.3",
+        "installed_version": "49.0.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 21
-      },
-      {
-        "name": "pycryptodome",
-        "import_name": "Crypto",
-        "importable": true,
-        "installed_version": "3.23.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 25
+        "source_line": 20
       },
       {
         "name": "rich",
         "import_name": "rich",
         "importable": true,
-        "installed_version": "14.3.3",
+        "installed_version": "15.0.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 28
+        "source_line": 23
       },
       {
         "name": "pyyaml",
@@ -113,77 +93,27 @@
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 31
-      },
-      {
-        "name": "ruff",
-        "import_name": "ruff",
-        "importable": true,
-        "installed_version": "0.15.18",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 34
-      },
-      {
-        "name": "mypy",
-        "import_name": "mypy",
-        "importable": true,
-        "installed_version": "2.1.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 35
+        "source_line": 26
       },
       {
         "name": "pytest",
         "import_name": "pytest",
         "importable": true,
-        "installed_version": "9.0.2",
+        "installed_version": "9.0.3",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 38
+        "source_line": 29
       },
       {
-        "name": "pytest-cov",
-        "import_name": "pytest_cov",
+        "name": "reportlab",
+        "import_name": "reportlab",
         "importable": true,
-        "installed_version": "7.0.0",
+        "installed_version": "5.0.0",
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 39
-      },
-      {
-        "name": "pytest-asyncio",
-        "import_name": "pytest_asyncio",
-        "importable": true,
-        "installed_version": "1.3.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 40
-      },
-      {
-        "name": "dnspython",
-        "import_name": "dns",
-        "importable": true,
-        "installed_version": "2.8.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 44
-      },
-      {
-        "name": "dpkt",
-        "import_name": "dpkt",
-        "importable": true,
-        "installed_version": "1.9.8",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 46
+        "source_line": 34
       },
       {
         "name": "nest-asyncio",
@@ -193,62 +123,12 @@
         "version_compatible": true,
         "issues": [],
         "source_file": "requirements.txt",
-        "source_line": 50
-      },
-      {
-        "name": "httpx",
-        "import_name": "httpx",
-        "importable": true,
-        "installed_version": "0.28.1",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 52
-      },
-      {
-        "name": "tenacity",
-        "import_name": "tenacity",
-        "importable": true,
-        "installed_version": "9.1.4",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 54
-      },
-      {
-        "name": "structlog",
-        "import_name": "structlog",
-        "importable": true,
-        "installed_version": "26.1.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 56
-      },
-      {
-        "name": "prometheus-client",
-        "import_name": "prometheus_client",
-        "importable": true,
-        "installed_version": "0.24.1",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 58
-      },
-      {
-        "name": "pytest-timeout",
-        "import_name": "pytest_timeout",
-        "importable": true,
-        "installed_version": "2.4.0",
-        "version_compatible": true,
-        "issues": [],
-        "source_file": "requirements.txt",
-        "source_line": 60
+        "source_line": 38
       }
     ],
     "summary": {
-      "total": 24,
-      "importable": 24,
+      "total": 12,
+      "importable": 12,
       "not_importable": 0,
       "version_mismatches": 0
     }
@@ -270,7 +150,7 @@
       },
       {
         "file": "go_tester/go.mod",
-        "module_path": "github.com/user/tor-bridge-tester",
+        "module_path": "github.com/ysa-py/MICAFP-tor-bridge-tester",
         "go_version": "1.21",
         "path_valid": true,
         "dependencies": [],
@@ -287,9 +167,31 @@
   "rust": {
     "language": "rust",
     "files_checked": [
-      "bridge-probe/Cargo.toml"
+      "Cargo.toml",
+      "bridge-probe/Cargo.toml",
+      "rust/torshield-ir-ultra/Cargo.toml"
     ],
     "packages": [
+      {
+        "file": "Cargo.toml",
+        "package": {
+          "name": "torshield-ir-ultra",
+          "version": "1.0.0",
+          "edition": "2021",
+          "rust-version": "1.78",
+          "publish": "false"
+        },
+        "dependencies": [
+          {
+            "name": "serde_json",
+            "version": "=1.0.150",
+            "features": [],
+            "optional": false,
+            "issues": []
+          }
+        ],
+        "issues": []
+      },
       {
         "file": "bridge-probe/Cargo.toml",
         "package": {
@@ -375,11 +277,31 @@
           }
         ],
         "issues": []
+      },
+      {
+        "file": "rust/torshield-ir-ultra/Cargo.toml",
+        "package": {
+          "name": "torshield-ir-ultra",
+          "version": "1.0.0",
+          "edition": "2021",
+          "rust-version": "1.78",
+          "publish": "false"
+        },
+        "dependencies": [
+          {
+            "name": "serde_json",
+            "version": "=1.0.150",
+            "features": [],
+            "optional": false,
+            "issues": []
+          }
+        ],
+        "issues": []
       }
     ],
     "summary": {
-      "total": 9,
-      "with_version": 9,
+      "total": 11,
+      "with_version": 11,
       "without_version": 0,
       "issues": 0
     }
@@ -406,13 +328,13 @@
   },
   "overall_summary": {
     "total_issues": 0,
-    "python_packages_total": 24,
-    "python_packages_importable": 24,
+    "python_packages_total": 12,
+    "python_packages_importable": 12,
     "python_packages_missing": 0,
     "python_version_mismatches": 0,
     "go_modules_valid": 2,
     "go_modules_invalid": 0,
-    "rust_deps_with_version": 9,
+    "rust_deps_with_version": 11,
     "rust_deps_no_version": 0,
     "zig_packages_checked": 1
   }
