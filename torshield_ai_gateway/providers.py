@@ -3098,6 +3098,10 @@ class CloudflareAIGatewayProvider(_BaseProvider):
                     logger.debug(
                         f"[CF-AI-GW] FORMAT-1 slot={i} HTTP {e.code} -> trying FORMAT-3"
                     )
+            except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as exc:
+                logger.debug(
+                    f"[CF-AI-GW] FORMAT-1 slot={i} transient network error: {exc}"
+                )
             except Exception as exc:
                 from monitoring.structured_logger import record_silent_failure
                 record_silent_failure('torshield_ai_gateway.providers:3045', exc)
@@ -3150,6 +3154,10 @@ class CloudflareAIGatewayProvider(_BaseProvider):
                         logger.debug(
                             f"[CF-AI-GW] FORMAT-3 slot={i} HTTP {e.code} -> trying FORMAT-2"
                         )
+                except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as exc:
+                    logger.debug(
+                        f"[CF-AI-GW] FORMAT-3 slot={i} transient network error: {exc}"
+                    )
                 except Exception as exc:
                     from monitoring.structured_logger import record_silent_failure
                     record_silent_failure('torshield_ai_gateway.providers:3095', exc)
@@ -3197,6 +3205,10 @@ class CloudflareAIGatewayProvider(_BaseProvider):
                         logger.debug(
                             f"[CF-AI-GW] FORMAT-2 slot={i} HTTP {e.code} -> next slot"
                         )
+                except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as exc:
+                    logger.debug(
+                        f"[CF-AI-GW] FORMAT-2 slot={i} transient network error: {exc}"
+                    )
                 except Exception as exc:
                     from monitoring.structured_logger import record_silent_failure
                     record_silent_failure('torshield_ai_gateway.providers:3140', exc)

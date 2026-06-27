@@ -329,6 +329,37 @@ class TestCFAIGatewayProvider(unittest.TestCase):
         url = _validate_url("https://gateway.ai.cloudflare.com/v1/abc123/gw/", "test")
         self.assertFalse(url.endswith("/"))
 
+    def test_multi_format_network_timeout_is_not_recorded_as_code_failure(self):
+        """Transient CF network timeouts should fail over without structured error noise."""
+        from torshield_ai_gateway.providers import CloudflareAIGatewayProvider
+
+        provider = object.__new__(CloudflareAIGatewayProvider)
+        env = {
+            "CF_ACCOUNT_ID_1": "a" * 32,
+            "CF_API_TOKEN_1": "t" * 40,
+            "CF_AI_GATEWAY_URL_1": "https://gateway.ai.cloudflare.com/v1/" + "a" * 32 + "/gw",
+        }
+        recorded = []
+
+        def fake_record_silent_failure(site, exc, **context):
+            recorded.append((site, exc, context))
+
+        with (
+            patch.dict(os.environ, env, clear=True),
+            patch("urllib.request.urlopen", side_effect=TimeoutError("timed out")),
+            patch("monitoring.structured_logger.record_silent_failure", fake_record_silent_failure),
+        ):
+            result = provider._cf_gateway_multi_format_attempt(
+                messages=[{"role": "user", "content": "Hello"}],
+                model_id="@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+                max_tokens=16,
+                temperature=0.2,
+                timeout=1,
+            )
+
+        self.assertIsNone(result)
+        self.assertEqual(recorded, [])
+
 
 class TestPortkeyProvider(unittest.TestCase):
     """Test Portkey provider with auth validation."""

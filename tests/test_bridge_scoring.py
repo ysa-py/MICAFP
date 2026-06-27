@@ -3,9 +3,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 from sources.bridge_scoring import recommended_priority, score_bridge
-UTC = timezone.utc
 
-NOW = datetime(2026, 6, 25, tzinfo=UTC)
+NOW = datetime(2026, 6, 25, tzinfo=timezone.utc)  # noqa: UP017 - CI still runs Python 3.10
 HIGH_DPI = {"counters": {"dpi_total": 4, "dpi_camouflaged": 3, "self_heal_total": 1}}
 
 
@@ -70,3 +69,19 @@ def test_recently_failed_bridges_are_penalized_but_not_deleted():
 
     assert score > 0
     assert any("recent probe failed; penalized but retained" == reason for reason in reasons)
+
+
+def test_missing_port_falls_back_to_raw_line_without_failure_log(capsys):
+    bridge = {
+        "raw": "snowflake 198.51.100.20:443 fingerprint=x",
+        "transport": "snowflake",
+        "port": None,
+        "last_seen": NOW.isoformat(),
+    }
+
+    score, reasons = score_bridge(bridge, {"counters": {}}, NOW)
+    captured = capsys.readouterr()
+
+    assert score >= 80
+    assert "Iran-preferred port (443)" in reasons
+    assert "int() argument" not in captured.err
