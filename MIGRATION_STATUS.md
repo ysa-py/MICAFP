@@ -29,7 +29,7 @@ Generated from `data/migration_phase0_inventory.json`. This table is intentional
 | `circuit_breaker/__init__.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `circuit_breaker/slot_circuit_breaker.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `circuit_breaker_11slot.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
-| `config.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
+| `config.py` | `src/config.rs` implemented for all module-level constants | Pass: `tests/parity/config_parity.rs` covers default env, overridden env with slot filtering, and invalid int/float env error paths | No | No feature loss detected for this file; original remains because unported Python modules still import it. |
 | `config/__init__.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `config/feature_flags.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `conftest.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
