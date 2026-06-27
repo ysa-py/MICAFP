@@ -8,7 +8,7 @@
 # Usage: bash scripts/remediation/verify.sh   (run from repo root)
 
 set -uo pipefail
-cd "$(dirname "$0")/../.."   # repo root
+cd "$(dirname "$0")/../.." || exit 1   # repo root
 
 PASS=0
 FAIL=0

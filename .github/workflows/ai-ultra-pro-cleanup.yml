@@ -1,3 +1,4 @@
+---
 # ╔═══════════════════════════════════════════════════════════════════════════╗
 # ║   AI ULTRA-PRO AUTONOMOUS CLEANUP ENGINE  v4.0                         ║
 # ║   File: .github/workflows/ai-ultra-pro-cleanup.yml                     ║
@@ -44,7 +45,7 @@
 
 name: 🧹 AI Ultra-Pro Autonomous Cleanup Engine v4.0
 
-on:
+'on':
   schedule:
     - cron: '0 */6 * * *'
   workflow_dispatch:

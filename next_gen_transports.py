@@ -33,10 +33,11 @@ import json
 import logging
 import re
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

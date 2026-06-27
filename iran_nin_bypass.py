@@ -29,9 +29,10 @@ import logging
 import os
 import socket
 import ssl
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

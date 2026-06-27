@@ -31,9 +31,10 @@ import subprocess
 import sys
 import textwrap
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 # ---------------------------------------------------------------------------
 # Constants

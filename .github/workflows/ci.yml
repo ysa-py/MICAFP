@@ -1,6 +1,7 @@
+---
 name: CI — Autonomous Orchestrator
 
-on:
+'on':
   push:
     branches: ["**"]
   pull_request:

@@ -1,3 +1,4 @@
+---
 # ══════════════════════════════════════════════════════════════════════════
 # ⚠ DORMANT — NOT THE ACTIVE CI SYSTEM (REMEDIATION 2026-06-21)
 # CircleCI (.circleci/config.yml) is the current, primary CI/CD platform
@@ -26,7 +27,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   NODE_NO_WARNINGS: '1'
 
-on:
+'on':
   workflow_run:
     workflows: ["*"]
     types: [completed]
@@ -81,10 +82,10 @@ jobs:
       - name: Categorize Failure
         id: categorize-failure
         env:
-          GH_PAT_AUTOFIX:        ${{ secrets.GH_PAT_AUTOFIX }}
-          GH_REPO_OWNER:         ${{ secrets.GH_REPO_OWNER }}
-          GH_REPO_NAME:          ${{ secrets.GH_REPO_NAME }}
-          PARENT_CONCLUSION:      ${{ github.event.workflow_run.conclusion || 'manual' }}
+          GH_PAT_AUTOFIX: ${{ secrets.GH_PAT_AUTOFIX }}
+          GH_REPO_OWNER: ${{ secrets.GH_REPO_OWNER }}
+          GH_REPO_NAME: ${{ secrets.GH_REPO_NAME }}
+          PARENT_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'manual' }}
         run: |
           echo "═══ Failure Categorization ═══"
           cat > /tmp/_categorize.py << 'ENDSCRIPT'
@@ -261,49 +262,49 @@ jobs:
       - name: Run AutoDebugEngine
         if: steps.categorize-failure.outputs.should_run_autodebug == 'true'
         env:
-          GH_PAT_AUTOFIX:        ${{ secrets.GH_PAT_AUTOFIX }}
-          GH_REPO_OWNER:         ${{ secrets.GH_REPO_OWNER }}
-          GH_REPO_NAME:          ${{ secrets.GH_REPO_NAME }}
-          CEREBRAS_API_KEY_1:    ${{ secrets.CEREBRAS_API_KEY_1 }}
-          CEREBRAS_API_KEY_2:    ${{ secrets.CEREBRAS_API_KEY_2 }}
-          CEREBRAS_API_KEY_3:    ${{ secrets.CEREBRAS_API_KEY_3 }}
-          PORTKEY_API_KEY_1:     ${{ secrets.PORTKEY_API_KEY_1 }}
-          PORTKEY_GATEWAY_URL:   ${{ secrets.PORTKEY_GATEWAY_URL }}
-          CF_ACCOUNT_ID_1:       ${{ secrets.CF_ACCOUNT_ID_1 }}
-          CF_API_TOKEN_1:        ${{ secrets.CF_API_TOKEN_1 }}
-          CF_AI_GATEWAY_URL_1:   ${{ secrets.CF_AI_GATEWAY_URL_1 }}
-          CF_ACCOUNT_ID_2:       ${{ secrets.CF_ACCOUNT_ID_2 }}
-          CF_API_TOKEN_2:        ${{ secrets.CF_API_TOKEN_2 }}
-          CF_AI_GATEWAY_URL_2:   ${{ secrets.CF_AI_GATEWAY_URL_2 }}
-          CF_ACCOUNT_ID_3:       ${{ secrets.CF_ACCOUNT_ID_3 }}
-          CF_API_TOKEN_3:        ${{ secrets.CF_API_TOKEN_3 }}
-          CF_AI_GATEWAY_URL_3:   ${{ secrets.CF_AI_GATEWAY_URL_3 }}
-          CF_ACCOUNT_ID_4:       ${{ secrets.CF_ACCOUNT_ID_4 }}
-          CF_API_TOKEN_4:        ${{ secrets.CF_API_TOKEN_4 }}
-          CF_AI_GATEWAY_URL_4:   ${{ secrets.CF_AI_GATEWAY_URL_4 }}
-          CF_ACCOUNT_ID_5:       ${{ secrets.CF_ACCOUNT_ID_5 }}
-          CF_API_TOKEN_5:        ${{ secrets.CF_API_TOKEN_5 }}
-          CF_AI_GATEWAY_URL_5:   ${{ secrets.CF_AI_GATEWAY_URL_5 }}
-          CF_ACCOUNT_ID_6:       ${{ secrets.CF_ACCOUNT_ID_6 }}
-          CF_API_TOKEN_6:        ${{ secrets.CF_API_TOKEN_6 }}
-          CF_AI_GATEWAY_URL_6:   ${{ secrets.CF_AI_GATEWAY_URL_6 }}
-          CF_ACCOUNT_ID_7:       ${{ secrets.CF_ACCOUNT_ID_7 }}
-          CF_API_TOKEN_7:        ${{ secrets.CF_API_TOKEN_7 }}
-          CF_AI_GATEWAY_URL_7:   ${{ secrets.CF_AI_GATEWAY_URL_7 }}
-          CF_ACCOUNT_ID_8:       ${{ secrets.CF_ACCOUNT_ID_8 }}
-          CF_API_TOKEN_8:        ${{ secrets.CF_API_TOKEN_8 }}
-          CF_AI_GATEWAY_URL_8:   ${{ secrets.CF_AI_GATEWAY_URL_8 }}
-          CF_ACCOUNT_ID_9:       ${{ secrets.CF_ACCOUNT_ID_9 }}
-          CF_API_TOKEN_9:        ${{ secrets.CF_API_TOKEN_9 }}
-          CF_AI_GATEWAY_URL_9:   ${{ secrets.CF_AI_GATEWAY_URL_9 }}
-          CF_ACCOUNT_ID_10:      ${{ secrets.CF_ACCOUNT_ID_10 }}
-          CF_API_TOKEN_10:       ${{ secrets.CF_API_TOKEN_10 }}
-          CF_AI_GATEWAY_URL_10:  ${{ secrets.CF_AI_GATEWAY_URL_10 }}
-          CF_ACCOUNT_ID_11:      ${{ secrets.CF_ACCOUNT_ID_11 }}
-          CF_API_TOKEN_11:       ${{ secrets.CF_API_TOKEN_11 }}
-          CF_AI_GATEWAY_URL_11:  ${{ secrets.CF_AI_GATEWAY_URL_11 }}
-          GITHUB_RUN_ID:         ${{ github.run_id }}
-          GITHUB_REF_NAME:       ${{ github.ref_name }}
+          GH_PAT_AUTOFIX: ${{ secrets.GH_PAT_AUTOFIX }}
+          GH_REPO_OWNER: ${{ secrets.GH_REPO_OWNER }}
+          GH_REPO_NAME: ${{ secrets.GH_REPO_NAME }}
+          CEREBRAS_API_KEY_1: ${{ secrets.CEREBRAS_API_KEY_1 }}
+          CEREBRAS_API_KEY_2: ${{ secrets.CEREBRAS_API_KEY_2 }}
+          CEREBRAS_API_KEY_3: ${{ secrets.CEREBRAS_API_KEY_3 }}
+          PORTKEY_API_KEY_1: ${{ secrets.PORTKEY_API_KEY_1 }}
+          PORTKEY_GATEWAY_URL: ${{ secrets.PORTKEY_GATEWAY_URL }}
+          CF_ACCOUNT_ID_1: ${{ secrets.CF_ACCOUNT_ID_1 }}
+          CF_API_TOKEN_1: ${{ secrets.CF_API_TOKEN_1 }}
+          CF_AI_GATEWAY_URL_1: ${{ secrets.CF_AI_GATEWAY_URL_1 }}
+          CF_ACCOUNT_ID_2: ${{ secrets.CF_ACCOUNT_ID_2 }}
+          CF_API_TOKEN_2: ${{ secrets.CF_API_TOKEN_2 }}
+          CF_AI_GATEWAY_URL_2: ${{ secrets.CF_AI_GATEWAY_URL_2 }}
+          CF_ACCOUNT_ID_3: ${{ secrets.CF_ACCOUNT_ID_3 }}
+          CF_API_TOKEN_3: ${{ secrets.CF_API_TOKEN_3 }}
+          CF_AI_GATEWAY_URL_3: ${{ secrets.CF_AI_GATEWAY_URL_3 }}
+          CF_ACCOUNT_ID_4: ${{ secrets.CF_ACCOUNT_ID_4 }}
+          CF_API_TOKEN_4: ${{ secrets.CF_API_TOKEN_4 }}
+          CF_AI_GATEWAY_URL_4: ${{ secrets.CF_AI_GATEWAY_URL_4 }}
+          CF_ACCOUNT_ID_5: ${{ secrets.CF_ACCOUNT_ID_5 }}
+          CF_API_TOKEN_5: ${{ secrets.CF_API_TOKEN_5 }}
+          CF_AI_GATEWAY_URL_5: ${{ secrets.CF_AI_GATEWAY_URL_5 }}
+          CF_ACCOUNT_ID_6: ${{ secrets.CF_ACCOUNT_ID_6 }}
+          CF_API_TOKEN_6: ${{ secrets.CF_API_TOKEN_6 }}
+          CF_AI_GATEWAY_URL_6: ${{ secrets.CF_AI_GATEWAY_URL_6 }}
+          CF_ACCOUNT_ID_7: ${{ secrets.CF_ACCOUNT_ID_7 }}
+          CF_API_TOKEN_7: ${{ secrets.CF_API_TOKEN_7 }}
+          CF_AI_GATEWAY_URL_7: ${{ secrets.CF_AI_GATEWAY_URL_7 }}
+          CF_ACCOUNT_ID_8: ${{ secrets.CF_ACCOUNT_ID_8 }}
+          CF_API_TOKEN_8: ${{ secrets.CF_API_TOKEN_8 }}
+          CF_AI_GATEWAY_URL_8: ${{ secrets.CF_AI_GATEWAY_URL_8 }}
+          CF_ACCOUNT_ID_9: ${{ secrets.CF_ACCOUNT_ID_9 }}
+          CF_API_TOKEN_9: ${{ secrets.CF_API_TOKEN_9 }}
+          CF_AI_GATEWAY_URL_9: ${{ secrets.CF_AI_GATEWAY_URL_9 }}
+          CF_ACCOUNT_ID_10: ${{ secrets.CF_ACCOUNT_ID_10 }}
+          CF_API_TOKEN_10: ${{ secrets.CF_API_TOKEN_10 }}
+          CF_AI_GATEWAY_URL_10: ${{ secrets.CF_AI_GATEWAY_URL_10 }}
+          CF_ACCOUNT_ID_11: ${{ secrets.CF_ACCOUNT_ID_11 }}
+          CF_API_TOKEN_11: ${{ secrets.CF_API_TOKEN_11 }}
+          CF_AI_GATEWAY_URL_11: ${{ secrets.CF_AI_GATEWAY_URL_11 }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
           python -m torshield_ai_gateway.auto_debug \
             "${{ github.event.workflow_run.name || github.workflow }}" \

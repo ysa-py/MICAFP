@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from core.iran_bridge_prioritizer import prioritize_bridges, score_bridge
+UTC = timezone.utc
 
 NOW = datetime(2026, 6, 24, tzinfo=UTC)
 

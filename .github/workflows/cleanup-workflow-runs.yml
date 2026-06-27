@@ -1,8 +1,9 @@
+---
 # Compatibility wrapper for manual workflow-run cleanup.
 # The reusable cleanup workflow is the source of truth.
 name: Cleanup Workflow Runs
 
-on:
+'on':
   workflow_dispatch:
     inputs:
       dry_run:

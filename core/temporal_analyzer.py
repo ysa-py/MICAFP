@@ -24,8 +24,9 @@ This module:
 import json
 import logging
 import os
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
+UTC = timezone.utc
 
 logger = logging.getLogger(__name__)
 

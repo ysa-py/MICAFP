@@ -21,8 +21,9 @@ Generates a JSON dashboard (data/dashboard.json) updated every pipeline run:
 import json
 import logging
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
+UTC = timezone.utc
 
 logger = logging.getLogger(__name__)
 
