@@ -43,3 +43,17 @@ invalid-JSON, top-level type mismatch, dict list-field normalization, and valid
 array pass-through branches. The Python file remains in place because the full
 repository migration is not complete and deletion is still gated on maintained
 parity evidence.
+
+
+## Phase 1 parity anchor: config.py
+
+`config.py` now has a Rust replacement in `src/config.rs` that mirrors the
+module's import-time environment parsing for all current module-level constants,
+including Cloudflare slot filtering, boolean toggles, Iran/NIN settings,
+telemetry/circuit-breaker settings, and invalid integer/float environment
+handling. The parity suite in `tests/parity/config_parity.rs` invokes the
+original Python module in a clean subprocess and compares default and overridden
+environments against the Rust snapshot. The Python file remains in place because
+other unported Python modules still import it; deleting it now would break the
+still-active Python pipeline. No `requirements.txt` line was removed because
+`config.py` uses only Python standard-library modules (`os`).
