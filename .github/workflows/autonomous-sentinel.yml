@@ -1,6 +1,7 @@
+---
 name: Autonomous Sentinel Validation
 
-on:
+'on':
   workflow_dispatch:
   push:
     branches: [work, main]

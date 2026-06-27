@@ -1,3 +1,4 @@
+---
 # ══════════════════════════════════════════════════════════════════════════
 # ⚠ DORMANT — NOT THE ACTIVE CI SYSTEM (REMEDIATION 2026-06-21)
 # CircleCI (.circleci/config.yml) is the current, primary CI/CD platform
@@ -11,7 +12,7 @@
 # ══════════════════════════════════════════════════════════════════════════
 name: Go Quality Gate
 
-on:
+'on':
   push:
     branches:
       - main
