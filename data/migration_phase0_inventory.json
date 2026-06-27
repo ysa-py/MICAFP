@@ -8435,7 +8435,7 @@
             "try": 0,
             "while": 0
           },
-          "docstring": "Layer 2 — Inter-arrival time (IAT) analysis.\nIran SIAM LSTM: classifies traffic rhythm patterns.\nobfs4 iat-mode=2 is the strongest countermeasure.",
+          "docstring": "Layer 2 — Inter-arrival time (IAT) analysis.\nIran SIAM LSTM: classifies traffic rhythm patterns.\nobfs4 iat-mode=1 is the strongest countermeasure.",
           "exception_handlers": [],
           "kind": "FunctionDef",
           "line": 163,
@@ -52898,7 +52898,7 @@
             "try": 0,
             "while": 0
           },
-          "docstring": "Score a single bridge for Iran reachability using rule-based analysis.\n\nArgs:\n    bridge_line: Tor bridge line (e.g., \"obfs4 1.2.3.4:443 cert=... iat-mode=2\")\n    censorship_level: Current Iran censorship level (1-5)\n\nReturns:\n    {score, transport_ok, dpi_bypass_rating, nin_survival,\n     isp_block_risk, recommendation, mutation_hint}",
+          "docstring": "Score a single bridge for Iran reachability using rule-based analysis.\n\nArgs:\n    bridge_line: Tor bridge line (e.g., \"obfs4 1.2.3.4:443 cert=... iat-mode=1\")\n    censorship_level: Current Iran censorship level (1-5)\n\nReturns:\n    {score, transport_ok, dpi_bypass_rating, nin_survival,\n     isp_block_risk, recommendation, mutation_hint}",
           "exception_handlers": [],
           "kind": "FunctionDef",
           "line": 426,
