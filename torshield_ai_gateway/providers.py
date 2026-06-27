@@ -1406,6 +1406,7 @@ class PortkeyProvider(_BaseProvider):
         backend_provider: str,
         backend_key: str,
         backend_model: str,
+        slot_index: int | None = None,
     ) -> dict[str, str] | None:
         """
         Build Portkey request headers for a given auth strategy.
@@ -1424,7 +1425,11 @@ class PortkeyProvider(_BaseProvider):
         }
 
         if strategy == "virtual_key":
-            vk = os.environ.get("PORTKEY_VIRTUAL_KEY", "").strip()
+            vk = ""
+            if slot_index is not None:
+                vk = os.environ.get(f"PORTKEY_VIRTUAL_KEY_{slot_index}", "").strip()
+            if not vk:
+                vk = os.environ.get("PORTKEY_VIRTUAL_KEY", "").strip()
             if not vk:
                 return None  # Strategy not applicable
             return {**base, "x-portkey-virtual-key": vk}
@@ -1540,7 +1545,26 @@ class PortkeyProvider(_BaseProvider):
     # the correct URL without probing.
 
     def __init__(self):
-        self.rotator = build_rotator_from_env("PORTKEY", n_accounts=3)
+        # Build Portkey slots locally instead of using the generic rotator
+        # helper: Portkey can be configured with PORTKEY_VIRTUAL_KEY_{i}
+        # without a PORTKEY_API_KEY_{i}, and virtual-key-only slots are valid
+        # routes when the Portkey dashboard owns the provider credentials.
+        slots = []
+        for i in range(1, 4):
+            api_key = os.environ.get(f"PORTKEY_API_KEY_{i}", "").strip()
+            virtual_key = os.environ.get(f"PORTKEY_VIRTUAL_KEY_{i}", "").strip()
+            effective_key = api_key or virtual_key
+            if effective_key:
+                slots.append(
+                    AccountSlot(
+                        index=i,
+                        account_id=os.environ.get(
+                            f"PORTKEY_ACCOUNT_ID_{i}", ""
+                        ).strip(),
+                        api_key=effective_key,
+                    )
+                )
+        self.rotator = AccountRotator("portkey", slots)
         raw_url = os.environ.get("PORTKEY_GATEWAY_URL", "https://api.portkey.ai/v1")
         if not raw_url.startswith("http"):
             raw_url = "https://api.portkey.ai/v1"
@@ -1754,11 +1778,20 @@ class PortkeyProvider(_BaseProvider):
         # ── FEATURE-1 v16: DPI Model Override ───────────────────────────
         model = _apply_dpi_model_override("portkey", model)
 
-        # ── BUG-K: HARD EXIT when no backend configured ─────────────────
-        if not self._backend_key:
+        has_virtual_key = any(
+            os.environ.get(f"PORTKEY_VIRTUAL_KEY_{i}", "").strip()
+            for i in range(1, 4)
+        ) or bool(os.environ.get("PORTKEY_VIRTUAL_KEY", "").strip())
+
+        # ── BUG-K: HARD EXIT when no route is configured ─────────────────
+        # A Portkey virtual key can encapsulate provider routing in the
+        # dashboard, so do not require a local backend key when a virtual key
+        # is present. If neither exists, skip gracefully instead of emitting a
+        # long cascade of guaranteed 400s.
+        if not self._backend_key and not has_virtual_key:
             logger.warning(
-                "[Portkey] No backend key — skipping. "
-                "Set CEREBRAS_API_KEY_1 in GitHub Secrets."
+                "[Portkey] No backend or virtual key — skipping. "
+                "Set CEREBRAS_API_KEY_1 or PORTKEY_VIRTUAL_KEY_1 in GitHub Secrets."
             )
             return ""
 
@@ -1778,11 +1811,18 @@ class PortkeyProvider(_BaseProvider):
             if model and not model.startswith("@cf/")
             else self._backend_model
         )
-        models_to_try = self._resolve_model_for_provider(
-            self._backend_provider,
-            requested_model,
-            discovered,
-        )
+        if self._backend_key:
+            models_to_try = self._resolve_model_for_provider(
+                self._backend_provider,
+                requested_model,
+                discovered,
+            )
+        else:
+            models_to_try = [
+                model
+                for model in [requested_model, self.DEFAULT_MODEL, *self.PORTKEY_MODELS]
+                if model and not model.startswith("@cf/") and not model.startswith("workers-ai/")
+            ][:3]
         logger.debug(
             f"[Portkey] Models to try for {self._backend_provider}: {models_to_try}"
         )
@@ -1832,6 +1872,7 @@ class PortkeyProvider(_BaseProvider):
                             self._backend_provider,
                             self._backend_key,
                             model_candidate,
+                            s.index,
                         )
                         if headers is None:
                             logger.debug(

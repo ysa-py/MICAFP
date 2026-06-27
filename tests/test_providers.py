@@ -383,6 +383,27 @@ class TestPortkeyProvider(unittest.TestCase):
             with self.assertRaises(ValueError):
                 PortkeyProvider()
 
+    @patch.dict(os.environ, {"PORTKEY_VIRTUAL_KEY_1": "pk-test-virtual-key-12345678"}, clear=True)
+    def test_portkey_virtual_key_only_initializes_slot(self):
+        """Test Portkey can initialize from a virtual-key-only slot."""
+        from torshield_ai_gateway.providers import PortkeyProvider
+        provider = PortkeyProvider()
+        self.assertEqual(provider.rotator.slots[0].api_key, "pk-test-virtual-key-12345678")
+
+    @patch.dict(os.environ, {"PORTKEY_VIRTUAL_KEY_2": "pk-slot-two-virtual-key-12345678"}, clear=True)
+    def test_portkey_auth_headers_use_slot_virtual_key(self):
+        """Test auth header builder reads the matching PORTKEY_VIRTUAL_KEY_{slot}."""
+        from torshield_ai_gateway.providers import PortkeyProvider
+        headers = PortkeyProvider._build_auth_headers(
+            "virtual_key",
+            "pk-workspace-key-12345678",
+            "",
+            "",
+            "meta/llama-3.1-70b-instruct",
+            slot_index=2,
+        )
+        self.assertEqual(headers["x-portkey-virtual-key"], "pk-slot-two-virtual-key-12345678")
+
 
 class TestModelFallbackChain(unittest.TestCase):
     """Test model fallback chain across providers."""
