@@ -101,7 +101,11 @@ jobs:
           fi
 
       - name: Run AI Re-Ranking
+        timeout-minutes: 8
         env:
+          AI_RERANK_PROVIDER: local
+          AI_RERANK_EXTERNAL_AI: 'false'
+          AI_RERANK_TIME_BUDGET: '20'
           CEREBRAS_API_KEY_1: ${{ secrets.CEREBRAS_API_KEY_1 }}
           CEREBRAS_API_KEY_2: ${{ secrets.CEREBRAS_API_KEY_2 }}
           CEREBRAS_API_KEY_3: ${{ secrets.CEREBRAS_API_KEY_3 }}
@@ -149,6 +153,8 @@ jobs:
             --output bridge/bridges_ai_iran_ranked.json \
             --iran-mode strict \
             --batch-size 10 \
+            --ai-provider "${AI_RERANK_PROVIDER:-local}" \
+            --ai-time-budget "${AI_RERANK_TIME_BUDGET:-20}" \
             --ai-top-n "${AI_RERANK_TOP_N:-20}" || true
           # Print summary if output exists
           python3 -c "

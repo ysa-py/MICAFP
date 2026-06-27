@@ -24,7 +24,9 @@ import json
 import logging
 import os
 import sys
+import time
 from pathlib import Path
+from typing import Literal
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("ai_reranker_v9")
@@ -74,7 +76,11 @@ def _smart_score(
     try:
         from core.smart_iran_scorer import SmartIranScorer
         scorer  = SmartIranScorer(censorship_level=level, use_ai=False)  # heuristic pass
-        results = scorer.score_all(records)
+        normalized_records = [
+            record if isinstance(record, dict) else {"bridge_line": record, "raw": record}
+            for record in records
+        ]
+        results = scorer.score_all(normalized_records)
         logger.info(
             f"[SmartScorer] {len(results)} scored | level={level} | "
             f"excellent={sum(1 for r in results if r.tier=='excellent')} "
@@ -94,6 +100,8 @@ def _ai_batch_refine(
     level:          int,
     batch_size:     int,
     top_n:          int = 100,
+    ai_provider:    Literal["auto", "local", "external"] = "auto",
+    max_seconds:    float = 20.0,
 ) -> dict:
     """
     Call IranIntelligenceLayer.batch_ai_score on top-100 bridges.
@@ -102,32 +110,64 @@ def _ai_batch_refine(
     if top_n <= 0:
         logger.info("[AIRefine] disabled (top_n <= 0); using heuristic scores only")
         return {}
+
+    # Pick bridge lines for top-N by heuristic score before choosing a provider.
+    if smart_results:
+        top_lines = [r.raw for r in smart_results[:top_n] if r.raw.strip()]
+    else:
+        top_lines = []
+        for b in bridge_records[:top_n]:
+            if isinstance(b, str):
+                top_lines.append(b)
+            else:
+                top_lines.append(b.get("raw", b.get("bridge_line", b.get("line", ""))))
+        top_lines = [line for line in top_lines if line.strip()]
+
+    if not top_lines:
+        logger.info("[AIRefine] no bridge lines selected; skipping")
+        return {}
+
+    # GitHub Actions re-rank runs must be deterministic and bounded.  The cloud
+    # gateway can spend many minutes cascading through external providers when
+    # accounts are 403/rate-limited or sockets time out, so auto mode uses the
+    # built-in LocalAIEngine in CI unless explicitly overridden.
+    external_enabled = os.getenv("AI_RERANK_EXTERNAL_AI", "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }
+    if ai_provider == "local" or (ai_provider == "auto" and not external_enabled):
+        from torshield_ai_gateway.local_ai_engine import LocalAIEngine
+
+        logger.info(
+            "[AIRefine] using LocalAIEngine batch scorer "
+            f"({len(top_lines)} bridges, provider={ai_provider})"
+        )
+        ai_results = LocalAIEngine().batch_ai_score(top_lines, censorship_level=level)
+        return {r["bridge_line"]: r for r in ai_results if "bridge_line" in r}
+
     try:
         from torshield_ai_gateway.iran_intelligence import IranIntelligenceLayer
         intel = IranIntelligenceLayer()
 
-        # Pick bridge lines for top-N by heuristic score
-        if smart_results:
-            top_lines = [r.raw for r in smart_results[:top_n] if r.raw.strip()]
-        else:
-            top_lines = []
-            for b in bridge_records[:top_n]:
-                if isinstance(b, str):
-                    top_lines.append(b)
-                else:
-                    top_lines.append(b.get("raw", b.get("bridge_line", b.get("line", ""))))
-            top_lines = [l for l in top_lines if l.strip()]
-
-        if not top_lines:
-            logger.info("[AIRefine] no bridge lines selected; skipping")
-            return {}
-        logger.info(f"[AIRefine] batch_ai_score: {len(top_lines)} bridges …")
+        started = time.monotonic()
+        logger.info(
+            f"[AIRefine] external batch_ai_score: {len(top_lines)} bridges "
+            f"(budget={max_seconds:.0f}s) …"
+        )
         ai_results = intel.batch_ai_score(top_lines, censorship_level=level, batch_size=batch_size)
+        elapsed = time.monotonic() - started
+        if elapsed > max_seconds:
+            logger.warning(
+                f"[AIRefine] external scorer exceeded budget ({elapsed:.1f}s); "
+                "future CI runs should keep AI_RERANK_EXTERNAL_AI disabled"
+            )
         return {r["bridge_line"]: r for r in ai_results if "bridge_line" in r}
 
     except Exception as exc:
-        logger.warning(f"[AIRefine] Unavailable: {exc}")
-        return {}
+        logger.warning(f"[AIRefine] external unavailable: {exc}; falling back to LocalAIEngine")
+        from torshield_ai_gateway.local_ai_engine import LocalAIEngine
+
+        ai_results = LocalAIEngine().batch_ai_score(top_lines, censorship_level=level)
+        return {r["bridge_line"]: r for r in ai_results if "bridge_line" in r}
 
 
 # ── Attach scores to original records ────────────────────────────────────
@@ -261,8 +301,13 @@ def main():
     parser.add_argument("--batch-size",   type=int, default=20)
     parser.add_argument("--ai-top-n",     type=int, default=int(os.getenv("AI_RERANK_TOP_N", "100")),
                         help="Number of top heuristic bridges to send to AI refinement; 0 disables AI calls")
+    parser.add_argument("--ai-provider",  default=os.getenv("AI_RERANK_PROVIDER", "auto"),
+                        choices=["auto", "local", "external"],
+                        help="AI refinement backend: auto/local/external. Auto is local unless AI_RERANK_EXTERNAL_AI=true")
+    parser.add_argument("--ai-time-budget", type=float, default=float(os.getenv("AI_RERANK_TIME_BUDGET", "20")),
+                        help="Soft seconds budget for external AI refinement before warning and preferring local mode")
     parser.add_argument("--no-ai-refine", action="store_true",
-                        help="Skip external AI refinement and export heuristic-only Iran scores")
+                        help="Skip AI refinement and export heuristic-only Iran scores")
     parser.add_argument("--use-probes",   action="store_true",
                         help="Run live censorship probes (slower, more accurate)")
     parser.add_argument("--level",        type=int, default=0,
@@ -299,7 +344,8 @@ def main():
     ai_top_n = 0 if args.no_ai_refine else max(args.ai_top_n, 0)
     ai_map = _ai_batch_refine(
         records, smart_results, level,
-        batch_size=args.batch_size, top_n=ai_top_n
+        batch_size=args.batch_size, top_n=ai_top_n,
+        ai_provider=args.ai_provider, max_seconds=args.ai_time_budget,
     )
 
     # ── 5. Attach scores ──────────────────────────────────────────────────
