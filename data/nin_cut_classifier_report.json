@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-27T15:48:28.528314+00:00",
-  "total_bridges": 631,
+  "generated_at": "2026-06-27T17:42:12.714742+00:00",
+  "total_bridges": 627,
   "green_count": 6,
   "yellow_count": 253,
-  "red_count": 372,
+  "red_count": 368,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -1172,14 +1172,6 @@
       "tier": "RED"
     },
     {
-      "raw": "82.127.83.55:2001 B51FD3150E208A600D00BCA5963B0EF5C867574F",
-      "transport": "vanilla",
-      "ip": "82.127.83.55",
-      "port": 2001,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
       "raw": "82.149.227.122:2112 F1A695C5F67D8751E2ACA8F5D10A9F08FDC1467C",
       "transport": "vanilla",
       "ip": "82.149.227.122",
@@ -1200,14 +1192,6 @@
       "transport": "vanilla",
       "ip": "82.65.58.41",
       "port": 9002,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "83.151.206.122:9001 9E8B19CA2B5D504668242DB2B1D20BAB5DC6744E",
-      "transport": "vanilla",
-      "ip": "83.151.206.122",
-      "port": 9001,
       "sni": "",
       "tier": "RED"
     },
@@ -1320,14 +1304,6 @@
       "transport": "vanilla",
       "ip": "89.236.127.72",
       "port": 9001,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "89.58.12.52:3445 48A2BD4E1A942A3F4A73B4F5EE8D078725903411",
-      "transport": "vanilla",
-      "ip": "89.58.12.52",
-      "port": 3445,
       "sni": "",
       "tier": "RED"
     },
@@ -3104,14 +3080,6 @@
       "transport": "obfs4",
       "ip": "81.97.134.30",
       "port": 587,
-      "sni": "",
-      "tier": "RED"
-    },
-    {
-      "raw": "obfs4 82.127.83.55:2000 B51FD3150E208A600D00BCA5963B0EF5C867574F cert=uNlJV9AyPd577S11iF6ewwZpu3K8c7YMEZdogqzQJCbeN1Zmj6xtTC+jioSWiluqvfIKag iat-mode=0",
-      "transport": "obfs4",
-      "ip": "82.127.83.55",
-      "port": 2000,
       "sni": "",
       "tier": "RED"
     },

@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-27T15:48:28.449467+00:00",
+  "generated_at": "2026-06-27T17:42:12.638689+00:00",
   "domains_checked": 6,
   "flagged_count": 0,
-  "clean_count": 1,
+  "clean_count": 0,
   "iran_ca_indicators_checked": [
     "irca",
     "tic.",
@@ -28,42 +28,7 @@
       "associated_bridges": [
         "meek_lite 192.0.2.16:80 0AC9589027B0B1F3B1D1D94C63CD9E8D05CD6D77 url=https://a0.awsstatic.com/ front=a0.awsstatic.com"
       ],
-      "checked_at": "2026-06-27T15:47:34.800695+00:00"
-    },
-    {
-      "domain": "snowflake-broker.torproject.net",
-      "risk_level": "medium",
-      "reasons": [
-        "no_ct_records_found"
-      ],
-      "certs_found": 0,
-      "associated_bridges": [
-        "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
-      ],
-      "checked_at": "2026-06-27T15:47:50.353354+00:00"
-    },
-    {
-      "domain": "1098762253.rsc.cdn77.org",
-      "risk_level": "medium",
-      "reasons": [
-        "no_ct_records_found"
-      ],
-      "certs_found": 0,
-      "associated_bridges": [
-        "snowflake 192.0.2.4:80 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn",
-        "snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn"
-      ],
-      "checked_at": "2026-06-27T15:47:56.430357+00:00"
-    },
-    {
-      "domain": "iwantabigblackdickinmyass.nayumi.dev",
-      "risk_level": "clean",
-      "reasons": [],
-      "certs_found": 4,
-      "associated_bridges": [
-        "webtunnel [2001:db8:b27a:137a:8132:b198:4f24:729]:443 23B7212D4D407C676FAC13582E2785A78A4E6FF5 url=https://iwantabigblackdickinmyass.nayumi.dev/gaypornissogood ver=0.0.4"
-      ],
-      "checked_at": "2026-06-27T15:47:57.125056+00:00"
+      "checked_at": "2026-06-27T17:41:46.215162+00:00"
     },
     {
       "domain": "snowflake-broker.torproject.net.global.prod.fastly.net",
@@ -75,7 +40,7 @@
       "associated_bridges": [
         "snowflake 192.0.2.3:1 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://snowflake-broker.torproject.net.global.prod.fastly.net/ fronts=ftls.googlevideo.com ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
       ],
-      "checked_at": "2026-06-27T15:48:12.661821+00:00"
+      "checked_at": "2026-06-27T17:41:54.187204+00:00"
     },
     {
       "domain": "meek.azureedge.net",
@@ -87,7 +52,44 @@
       "associated_bridges": [
         "meek_lite 192.0.2.18:80 BE776A53492E1E044A26F17306E1BC46A55A1625 url=https://meek.azureedge.net/ front=ajax.aspnetcdn.com"
       ],
-      "checked_at": "2026-06-27T15:48:28.199256+00:00"
+      "checked_at": "2026-06-27T17:42:09.893944+00:00"
+    },
+    {
+      "domain": "iwantabigblackdickinmyass.nayumi.dev",
+      "risk_level": "medium",
+      "reasons": [
+        "no_ct_records_found"
+      ],
+      "certs_found": 0,
+      "associated_bridges": [
+        "webtunnel [2001:db8:b27a:137a:8132:b198:4f24:729]:443 23B7212D4D407C676FAC13582E2785A78A4E6FF5 url=https://iwantabigblackdickinmyass.nayumi.dev/gaypornissogood ver=0.0.4"
+      ],
+      "checked_at": "2026-06-27T17:42:10.732869+00:00"
+    },
+    {
+      "domain": "snowflake-broker.torproject.net",
+      "risk_level": "medium",
+      "reasons": [
+        "no_ct_records_found"
+      ],
+      "certs_found": 0,
+      "associated_bridges": [
+        "snowflake 192.0.2.4:1 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://snowflake-broker.torproject.net/ fronts=snowflake-broker.torproject.net.global.prod.fastly.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478 utls-imitate=hellorandomizedalpn"
+      ],
+      "checked_at": "2026-06-27T17:42:11.561501+00:00"
+    },
+    {
+      "domain": "1098762253.rsc.cdn77.org",
+      "risk_level": "medium",
+      "reasons": [
+        "no_ct_records_found"
+      ],
+      "certs_found": 0,
+      "associated_bridges": [
+        "snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerprint=2B280B23E1107BB62ABFC40DDCC8824814F80A72 url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn",
+        "snowflake 192.0.2.4:80 8838024498816A039FCBBAB14E6F40A0843051FA fingerprint=8838024498816A039FCBBAB14E6F40A0843051FA url=https://1098762253.rsc.cdn77.org/ fronts=www.cdn77.com,www.phpmyadmin.net ice=stun:stun.l.google.com:19302,stun:stun.antisip.com:3478,stun:stun.bluesip.net:3478,stun:stun.dus.net:3478,stun:stun.epygi.com:3478 utls-imitate=hellorandomizedalpn"
+      ],
+      "checked_at": "2026-06-27T17:42:12.388488+00:00"
     }
   ]
 }
