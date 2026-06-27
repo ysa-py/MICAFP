@@ -26,7 +26,19 @@ class AutoDebugEngine:
         self.owner = os.environ.get("GH_REPO_OWNER", "").strip()
         self.repo  = os.environ.get("GH_REPO_NAME", "").strip()
         self.base  = f"https://api.github.com/repos/{self.owner}/{self.repo}" if self.owner and self.repo else ""
-        self.intel = IranIntelligenceLayer()
+        # Lazily initialize the network-backed intelligence layer.  The common
+        # GitHub Actions remediation path is deterministic (yamllint/actionlint,
+        # dependency, timeout, or secret-category failures) and should not spend
+        # minutes probing every AI provider before it can emit a useful result.
+        # This also prevents transient provider 403/429/timeout cascades from
+        # masking the original CI failure that AutoDebug is supposed to repair.
+        self._intel: IranIntelligenceLayer | None = None
+
+    @property
+    def intel(self) -> IranIntelligenceLayer:
+        if self._intel is None:
+            self._intel = IranIntelligenceLayer()
+        return self._intel
 
     @property
     def github_configured(self) -> bool:
@@ -82,6 +94,46 @@ class AutoDebugEngine:
         except urllib.error.HTTPError as e:
             return f"[AutoDebug] Could not fetch logs: HTTP {e.code}"
 
+    def deterministic_analysis(self, workflow_name: str, logs: str) -> dict | None:
+        """Return a no-network diagnosis for high-confidence CI failure classes."""
+        lower = logs.lower()
+        if "yamllint" in lower and "[indentation]" in lower:
+            return {
+                "root_cause": (
+                    "yamllint indentation rule failure: sequence entries were "
+                    "emitted in indentless YAML style after workflow consolidation."
+                ),
+                "fix_type": "manual",
+                "patch": "",
+                "confidence": 0.99,
+                "additive_only": True,
+                "local_remediation": (
+                    "Reformat .github/**/*.yml with non-indentless YAML sequences "
+                    "or Prettier, then rerun `yamllint .github/`."
+                ),
+            }
+        if "finish_reason=length" in lower and "torshield_ok" in lower:
+            return {
+                "root_cause": (
+                    "Provider health probe exhausted max_tokens before emitting "
+                    "TORSHIELD_OK; increase the health-check token budget or use "
+                    "a stricter one-token probe prompt."
+                ),
+                "fix_type": "env_fix",
+                "patch": "HEALTH_CHECK_MAX_TOKENS=16",
+                "confidence": 0.90,
+                "additive_only": True,
+            }
+        if any(s in lower for s in ("read operation timed out", "etimedout", "deadline exceeded")):
+            return {
+                "root_cause": "transient provider/network timeout during diagnostic probing",
+                "fix_type": "env_fix",
+                "patch": "AUTO_DEBUG_NETWORK_BUDGET_SECONDS=45",
+                "confidence": 0.86,
+                "additive_only": True,
+            }
+        return None
+
     def apply_patch_to_repo(
         self, file_path: str, new_content: str, commit_message: str
     ) -> bool:
@@ -129,7 +181,11 @@ class AutoDebugEngine:
     def run(self, workflow_name: str, run_id: str) -> None:
         logger.info(f"[AutoDebug] Analysing: {workflow_name} run #{run_id}")
         logs     = self.fetch_failed_run_logs(run_id)
-        analysis = self.intel.analyze_workflow_failure(workflow_name, logs)
+        analysis = self.deterministic_analysis(workflow_name, logs)
+        if analysis is None:
+            analysis = self.intel.analyze_workflow_failure(workflow_name, logs)
+        else:
+            logger.info("[AutoDebug] Deterministic local diagnosis selected; network AI probing skipped")
 
         logger.info(f"[AutoDebug] Root cause: {analysis.get('root_cause','unknown')}")
         logger.info(f"[AutoDebug] Fix type:   {analysis.get('fix_type','unknown')}")

@@ -1,92 +1,42 @@
----
-# ╔═══════════════════════════════════════════════════════════════════════════╗
-# ║   AI ULTRA-PRO AUTONOMOUS CLEANUP ENGINE  v4.0                         ║
-# ║   File: .github/workflows/ai-ultra-pro-cleanup.yml                     ║
-# ╠═══════════════════════════════════════════════════════════════════════════╣
-# ║  FEATURES                                                              ║
-# ║  ✅ Global Sweep     — purges old completed runs for ALL workflows      ║
-# ║  ✅ Zero-Error       — warns and summarizes instead of failing callers   ║
-# ║  ✅ Smart Pagination — handles hundreds/thousands of runs via paginate  ║
-# ║  ✅ Self-Protection  — the current run is never deleted                 ║
-# ║  ✅ Active-Run Guard — active/queued/pending runs are never touched      ║
-# ║  ✅ Rate-Limit Check — quota pre-check plus adaptive throttle/backoff    ║
-# ║  ✅ Retry Engine     — retry transient API failures before skipping      ║
-# ║  ✅ Dry-Run Mode     — manual tests can preview before deleting          ║
-# ║  ✅ Configurable N   — keep latest 2+ runs per workflow (min 2)       ║
-# ║  ✅ Safe Summary     — escapes workflow names for markdown tables        ║
-# ║  ✅ No Third-Party   — only secrets.GITHUB_TOKEN + github-script@v8     ║
-# ║  ✅ Concurrency Lock — prevents cleanup jobs from racing                 ║
-# ╠═══════════════════════════════════════════════════════════════════════════╣
-# ║  CLEANUP POLICY                                                        ║
-# ║                                                                         ║
-# ║  This workflow uses one policy: scheduled production cleanup is live by  ║
-# ║  default, while manual testing is dry-run by default.                   ║
-# ║                                                                         ║
-# ║  • Manual workflow_dispatch runs default to dry-run so operators can     ║
-# ║    preview deletions safely; pass dry_run: false to delete.             ║
-# ║  • Scheduled production cleanup defaults to live deletion and can delete ║
-# ║    old completed workflow runs.                                         ║
-# ║  • Reusable workflow_call invocations default to live deletion; pass     ║
-# ║    dry_run: true to preview instead.                                    ║
-# ║  • Explicit caller/manual dry_run inputs always win over defaults.       ║
-# ║  • The current run and active/queued/pending runs remain protected.      ║
-# ║  • At least the latest 2 runs per workflow always remain protected.     ║
-# ║                                                                         ║
-# ║  Reusable workflow example:                                             ║
-# ║    cleanup:                                                             ║
-# ║      if: always()                                                       ║
-# ║      needs: [your-main-job]                                             ║
-# ║      uses: ./.github/workflows/ai-ultra-pro-cleanup.yml                 ║
-# ║      secrets: inherit                                                   ║
-# ║      with:                                                              ║
-# ║        keep_last_n: '2'                                                 ║
-# ║        dry_run: true  # preview; omit or set false for live cleanup      ║
-# ╚═══════════════════════════════════════════════════════════════════════════╝
-
 name: 🧹 AI Ultra-Pro Autonomous Cleanup Engine v4.0
-
-'on':
+"on":
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: 0 */6 * * *
   workflow_dispatch:
     inputs:
       keep_last_n:
-        description: 'Number of recent runs to keep per workflow (minimum 2)'
+        description: Number of recent runs to keep per workflow (minimum 2)
         required: false
-        default: '2'
+        default: "2"
         type: string
       dry_run:
-        description: 'Dry-run: preview deletions without performing them'
+        description: "Dry-run: preview deletions without performing them"
         required: false
         default: true
         type: boolean
   workflow_call:
     inputs:
       keep_last_n:
-        description: 'Number of recent runs to keep per workflow (minimum 2)'
+        description: Number of recent runs to keep per workflow (minimum 2)
         required: false
-        default: '2'
+        default: "2"
         type: string
       dry_run:
-        description: 'Dry-run: preview deletions without performing them'
+        description: "Dry-run: preview deletions without performing them"
         required: false
         default: false
         type: boolean
-
 permissions:
   actions: write
   contents: read
-
 concurrency:
   group: ai-ultra-pro-cleanup
   cancel-in-progress: false
-
 jobs:
   cleanup:
     name: 🧹 Global Cleanup — All Workflows
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - name: 🧠 AI Ultra-Pro Global Cleanup — Zero-Error Autonomous Engine v4.0
         if: always()
@@ -270,3 +220,4 @@ jobs:
               ? `🔵 Dry-run complete. ${gDeleted} run(s) would be removed across ${workflows.length} workflow(s).`
               : `🎉 Cleanup complete! Deleted: ${gDeleted} | Kept: ${gKept} | Across ${workflows.length} workflow(s).`);
             if (gFailed > 0) core.warning(`⚠️ ${gFailed} deletion(s) could not complete — pipeline continues normally.`);
+    if: false

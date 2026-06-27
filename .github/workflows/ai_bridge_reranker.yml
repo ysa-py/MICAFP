@@ -1,76 +1,44 @@
----
-# ══════════════════════════════════════════════════════════════════════════
-# ⚠ DORMANT — NOT THE ACTIVE CI SYSTEM (REMEDIATION 2026-06-21)
-# CircleCI (.circleci/config.yml) is the current, primary CI/CD platform
-# for this project. This GitHub Actions workflow is kept as an intentional
-# fallback for if/when GitHub Actions becomes usable again on this account
-# — it is NOT currently gating anything. A green/red badge here does not
-# reflect current pipeline health. See .circleci/README.md for the active
-# setup, and docs/SECRETS_MANIFEST.md for the full cross-platform secret
-# list (this workflow's required secrets are not configured on the current
-# account and it WILL fail immediately if triggered).
-# ══════════════════════════════════════════════════════════════════════════
-# TorShield-IR AI Bridge Re-Ranker v9.0
-# FIXED v9.1:
-#   - workflow_run trigger corrected to match main workflow name
-#     ("TorShield-IR Bridge Intelligence", not Stage-07 which never existed)
-#   - Added pip install -r requirements.txt (was missing, causing ModuleNotFoundError)
-#   - Fixed artifact download: name = "bridge-intelligence-report" (matches main workflow)
-#   - Fixed default input path: bridge/iran_results.json (was output/bridges_ranked.json)
 name: AI Bridge Re-Ranker (Iran)
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-  NODE_NO_WARNINGS: '1'
-  PYTHONPATH: ${{ github.workspace }}
-
-'on':
+"on":
   workflow_run:
-    workflows: ["TorShield-IR Bridge Intelligence"]
-    types: [completed]
+    workflows:
+      - TorShield-IR Bridge Intelligence
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       bridge_file:
-        description: 'Path to bridge JSON file'
+        description: Path to bridge JSON file
         required: false
-        default: 'bridge/iran_results.json'
-
+        default: bridge/iran_results.json
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  NODE_NO_WARNINGS: "1"
+  PYTHONPATH: ${{ github.workspace }}
 permissions:
   actions: write
   contents: read
-
 jobs:
   ai-rerank:
-    if: >
-      github.event.workflow_run.conclusion == 'success' ||
-      github.event_name == 'workflow_dispatch'
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
       - name: Bootstrap environment defaults
         run: |
           set -euo pipefail
           bash scripts/github_actions_env_bootstrap.sh
-
       - name: Setup Python 3.12
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: 'pip'
-
-      # FIX: was missing entirely — caused ModuleNotFoundError on every run
+          cache: pip
       - name: Install Python dependencies
         run: |
           set -euo pipefail
           pip install -r requirements.txt
-
-      # Download the bridge intelligence report from the main workflow run.
-      # Uses the correct artifact name "bridge-intelligence-report" which is
-      # what torshield-ir.yml actually uploads (was using "output/" before).
       - name: Download Bridge Artifacts
         if: ${{ github.event_name != 'workflow_dispatch' }}
         env:
@@ -88,8 +56,6 @@ jobs:
             exit 0
           fi
           cp -R /tmp/bridge-artifacts/. bridge/
-
-      # Ensure bridge directory and fallback files exist
       - name: Ensure bridge dir and fallback files
         run: |
           set -euo pipefail
@@ -99,7 +65,6 @@ jobs:
             echo '{"bridges":[],"summary":{"total_tested":0}}' > bridge/iran_results.json
             echo "WARNING: bridge/iran_results.json not found — created empty placeholder"
           fi
-
       - name: Run AI Re-Ranking
         env:
           CEREBRAS_API_KEY_1: ${{ secrets.CEREBRAS_API_KEY_1 }}
@@ -160,7 +125,6 @@ jobs:
               total = len(bs)
               print(f'AI-ranked: {total} bridges')
           " || true
-
       - name: Upload AI-Ranked Bridges
         uses: actions/upload-artifact@v6
         with:
@@ -168,13 +132,13 @@ jobs:
           path: bridge/bridges_ai_iran_ranked.json
           retention-days: 30
           if-no-files-found: ignore
-
   cleanup:
     name: AI Ultra-Pro Cleanup
-    if: always()
-    needs: [ai-rerank]
+    if: false
+    needs:
+      - ai-rerank
     uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
     secrets: inherit
     with:
-      keep_last_n: '2'
+      keep_last_n: "2"
       dry_run: false
