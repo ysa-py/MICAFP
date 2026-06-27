@@ -5,17 +5,9 @@ edition = "2021"
 rust-version = "1.78"
 publish = false
 
-[workspace]
-resolver = "2"
-members = [".", "bridge-probe"]
-
-[workspace.package]
-edition = "2021"
-rust-version = "1.78"
-
-[workspace.metadata.migration]
+[package.metadata.migration]
 # Exact crate pins for the Python-to-Rust dependency coordination plan.
-# They are metadata until each module is parity-ported; this avoids fetching
+# They remain metadata until each module is parity-ported; this avoids fetching
 # crates for unimplemented modules while still recording the approved version.
 reqwest = "=0.12.22"
 tokio = "=1.45.1"
@@ -57,10 +49,3 @@ iran_bridge = []
 bridge = []
 dpi = []
 nin = []
-
-[profile.release]
-opt-level = 3
-strip = true
-lto = true
-codegen-units = 1
-panic = "abort"

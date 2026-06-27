@@ -15,7 +15,12 @@ path = pathlib.Path(sys.argv[1])
 fallback = json.loads(sys.argv[2])
 print(json.dumps(load_generated_json(path, fallback), sort_keys=True, separators=(",", ":")))
 "#;
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .and_then(Path::parent)
+        .expect("migration crate stays under rust/torshield-ir-ultra");
     let output = Command::new("python")
+        .current_dir(repo_root)
         .arg("-c")
         .arg(script)
         .arg(path)

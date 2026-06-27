@@ -13,7 +13,7 @@ pytest-marker to Cargo-feature mapping required for later parity tests.
 
 ## Pytest marker parity mapping
 
-The root `Cargo.toml` defines Cargo feature flags matching the pytest markers
+The migration crate `rust/torshield-ir-ultra/Cargo.toml` defines Cargo feature flags matching the pytest markers
 currently declared in `pyproject.toml`:
 
 | pytest marker | Cargo feature |
@@ -37,6 +37,6 @@ golden inputs, including error paths.
 
 | Python file | Rust replacement | Parity coverage | Deleted? | Notes |
 | --- | --- | --- | --- | --- |
-| `generated_json_loader.py` | `src/generated_json_loader.rs` | `tests/generated_json_loader_parity.rs` covers missing/unreadable file, empty file, invalid JSON, top-level type mismatch, dict list-field normalization, and valid array pass-through by invoking the Python original and Rust replacement on the same inputs. | No | The Python file remains because unported Python modules still import it; deleting it now would break the still-active Python pipeline even though the Rust replacement has parity coverage. |
+| `generated_json_loader.py` | `rust/torshield-ir-ultra/src/generated_json_loader.rs` | `rust/torshield-ir-ultra/tests/generated_json_loader_parity.rs` covers missing/unreadable file, empty file, invalid JSON, top-level type mismatch, dict list-field normalization, and valid array pass-through by invoking the Python original and Rust replacement on the same inputs. | No | The Python file remains because unported Python modules still import it; deleting it now would break the still-active Python pipeline even though the Rust replacement has parity coverage. |
 
 No `requirements.txt` line was removed for `generated_json_loader.py` because it uses only Python standard-library modules (`json`, `pathlib`, `typing`).
