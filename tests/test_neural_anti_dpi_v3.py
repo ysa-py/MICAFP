@@ -497,7 +497,7 @@ class TestECHFallbackRouter(unittest.TestCase):
         router = EFR(prefer_pq=True)
 
         bridge_info = {
-            "bridge_line": "obfs4 1.2.3.4:443 cert=test iat-mode=1",
+            "bridge_line": "obfs4 1.2.3.4:443 cert=test iat-mode=2",
             "transport": "obfs4",
             "cdn_fronted": True,
             "snowflake": False,

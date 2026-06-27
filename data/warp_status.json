@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-27T19:32:23.381230+00:00",
+  "generated_at": "2026-06-27T21:16:00.314255+00:00",
   "warp_available": true,
   "udp_reachable": false,
   "tcp_fallback_ok": true,
-  "latency_ms": 2.4,
+  "latency_ms": 1.8,
   "best_endpoint": "162.159.192.1:443",
   "nin_survivable": true,
   "recommendation": "WARP REACHABLE ✓\nRecommended strategy for Iran: enable Cloudflare WARP first, then\nconnect Tor Browser. This hides Tor bridge traffic inside WARP's\nWireGuard/MASQUE envelope — DPI sees only Cloudflare traffic.\nBest endpoint: 162.159.192.1:443 (latency 2 ms)",

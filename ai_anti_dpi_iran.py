@@ -165,7 +165,7 @@ _SNI_EVASION = {
 # Traffic shaping techniques
 _TRAFFIC_SHAPING = {
     "iat_mode_2": {
-        "description": "obfs4 iat-mode=1: randomize inter-arrival times",
+        "description": "obfs4 iat-mode=2: randomize inter-arrival times",
         "defeats": ["statistical_analysis", "entropy_analysis", "timing_correlation"],
         "overhead": "5-15% bandwidth increase",
         "iran_effectiveness": 0.85,
@@ -400,7 +400,7 @@ class IranAntiDPI:
             risk = "critical"
             risk_score = 0.95
             evasion_methods = [
-                "Switch to obfs4 with iat-mode=1",
+                "Switch to obfs4 with iat-mode=2",
                 "Use WebTunnel for CDN-fronting",
                 "Use Snowflake for short-lived connections",
             ]
@@ -432,7 +432,7 @@ class IranAntiDPI:
                 risk_score = 0.60
                 evasion_methods = [
                     "Move to port 443 for better DPI resistance",
-                    "Current iat-mode=1 is good",
+                    "Current iat-mode=2 is good",
                     "Consider CDN-fronted WebTunnel as backup",
                 ]
                 alternatives = ["webtunnel", "snowflake"]
@@ -445,7 +445,7 @@ class IranAntiDPI:
                 risk = "high"
                 risk_score = 0.70
                 evasion_methods = [
-                    "Set iat-mode=1 to randomize timing",
+                    "Set iat-mode=2 to randomize timing",
                     "Move to port 443 if possible",
                     "Consider WebTunnel for better DPI resistance",
                 ]
@@ -453,7 +453,7 @@ class IranAntiDPI:
                 recommended_config = {
                     "iat-mode": 2,
                     "port": 443,
-                    "reason": "iat-mode=1 + port 443 essential for Iran DPI",
+                    "reason": "iat-mode=2 + port 443 essential for Iran DPI",
                 }
 
         elif transport == "webtunnel":
