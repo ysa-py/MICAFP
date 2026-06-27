@@ -32,3 +32,11 @@ currently declared in `pyproject.toml`:
 No `.py` file has been deleted. Future deletions must be gated on a parity test
 that invokes the Python original and Rust replacement on the same branch-covering
 golden inputs, including error paths.
+
+## Phase 1 module status
+
+| Python file | Rust replacement | Parity coverage | Deleted? | Notes |
+| --- | --- | --- | --- | --- |
+| `generated_json_loader.py` | `src/generated_json_loader.rs` | `tests/generated_json_loader_parity.rs` covers missing/unreadable file, empty file, invalid JSON, top-level type mismatch, dict list-field normalization, and valid array pass-through by invoking the Python original and Rust replacement on the same inputs. | No | The Python file remains because unported Python modules still import it; deleting it now would break the still-active Python pipeline even though the Rust replacement has parity coverage. |
+
+No `requirements.txt` line was removed for `generated_json_loader.py` because it uses only Python standard-library modules (`json`, `pathlib`, `typing`).

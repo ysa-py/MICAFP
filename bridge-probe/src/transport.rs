@@ -158,9 +158,7 @@ pub fn extract_sni(line: &str) -> Option<String> {
     // VLESS-Reality: sni=example.com
     if let Some(pos) = line.find("sni=") {
         let rest = &line[pos + 4..];
-        let end = rest
-            .find(|c: char| c == '&' || c == ' ' || c == '\n')
-            .unwrap_or(rest.len());
+        let end = rest.find(['&', ' ', '\n']).unwrap_or(rest.len());
         let sni = rest[..end].trim().to_string();
         if !sni.is_empty() {
             return Some(sni);
