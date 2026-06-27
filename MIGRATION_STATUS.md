@@ -89,7 +89,7 @@ Generated from `data/migration_phase0_inventory.json`. This table is intentional
 | `registry/model_registry.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `reports/__init__.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `reports/report_generator.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
-| `results_writer.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
+| `results_writer.py` | `src/results_writer.rs` implemented for `write_result_files` bridge classification and sorted output generation | Pass: `tests/parity/results_writer_parity.rs` covers Tier 1 vs Tier 2 fallback, blocked/global buckets, duplicate/blank filtering, unknown transports, malformed input error paths, Python truthiness for TCP reachability, and empty input | No | No feature loss detected for `write_result_files`; README and Telegram side-effect functions remain Python-only until separately parity-verified. |
 | `scraper.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `scripts/__init__.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |
 | `scripts/ai_bridge_reranker.py` | Not started | Not run / no Rust replacement yet | No | Not ported; Python remains source of truth. |

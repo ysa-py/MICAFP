@@ -1,0 +1,165 @@
+use std::{
+    collections::BTreeMap,
+    fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
+
+use serde_json::{json, Value};
+use torshield_ir_ultra::results_writer::write_result_files;
+
+const OUTPUT_FILES: &[&str] = &[
+    "iran_likely_working_obfs4.txt",
+    "iran_likely_working_webtunnel.txt",
+    "iran_likely_working_vanilla.txt",
+    "iran_likely_working_snowflake.txt",
+    "iran_likely_working_meek_lite.txt",
+    "iran_likely_working_all.txt",
+    "iran_blocked.txt",
+    "tested_global_obfs4.txt",
+    "tested_global_webtunnel.txt",
+    "tested_global_vanilla.txt",
+];
+
+fn case_dir(name: &str) -> PathBuf {
+    let dir = std::env::temp_dir().join(format!(
+        "torshield_results_writer_parity_{}_{}",
+        name,
+        std::process::id()
+    ));
+    if dir.exists() {
+        fs::remove_dir_all(&dir).expect("clean stale parity tempdir");
+    }
+    fs::create_dir_all(&dir).expect("create parity tempdir");
+    dir
+}
+
+fn python_write(
+    repo_root: &Path,
+    bridge_dir: &Path,
+    bridges: &Value,
+) -> Result<BTreeMap<String, usize>, String> {
+    let script = r#"
+import json
+import os
+import pathlib
+import sys
+os.environ["BRIDGE_DIR"] = sys.argv[1]
+import results_writer
+results_writer.BRIDGE_DIR = pathlib.Path(sys.argv[1])
+bridges = json.loads(sys.argv[2])
+stats = results_writer.write_result_files(bridges)
+print(json.dumps(stats, sort_keys=True, separators=(",", ":")))
+"#;
+    let output = Command::new("python")
+        .current_dir(repo_root)
+        .arg("-c")
+        .arg(script)
+        .arg(bridge_dir)
+        .arg(serde_json::to_string(bridges).expect("bridges JSON serializes"))
+        .output()
+        .expect("python parity helper must execute");
+    if !output.status.success() {
+        return Err(String::from_utf8_lossy(&output.stderr).to_string());
+    }
+    Ok(serde_json::from_slice(&output.stdout).expect("python helper must emit JSON stats"))
+}
+
+fn snapshot(dir: &Path) -> BTreeMap<String, String> {
+    OUTPUT_FILES
+        .iter()
+        .filter_map(|name| {
+            let path = dir.join(name);
+            path.exists().then(|| {
+                (
+                    (*name).to_string(),
+                    fs::read_to_string(path).expect("read output"),
+                )
+            })
+        })
+        .collect()
+}
+
+fn assert_parity(name: &str, bridges: Value) {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir(&format!("{name}_py"));
+    let rust_dir = case_dir(&format!("{name}_rust"));
+
+    let py_stats = python_write(repo_root, &py_dir, &bridges).expect("python writer succeeds");
+    let rust_stats = write_result_files(
+        &rust_dir,
+        bridges.as_array().expect("parity bridges input is a list"),
+    )
+    .expect("rust writer succeeds");
+
+    assert_eq!(rust_stats, py_stats);
+    assert_eq!(snapshot(&rust_dir), snapshot(&py_dir));
+}
+
+#[test]
+fn parity_mixed_tiers_blocked_global_and_deduplication() {
+    assert_parity(
+        "mixed",
+        json!([
+            {"line":" obfs4 b ","transport":"obfs4","iran_status":"iran_likely_working","tcp_reachable":false},
+            {"line":"obfs4 a","transport":"obfs4","iran_status":"iran_likely_working","tcp_reachable":true},
+            {"line":"obfs4 a","transport":"obfs4","iran_status":"iran_likely_working","tcp_reachable":true},
+            {"line":"ignored tier2 because tier1 exists","transport":"obfs4","iran_status":"iran_unknown","tcp_reachable":true},
+            {"line":"wt fallback without tcp","transport":"webtunnel","iran_status":"iran_unknown","tcp_reachable":false},
+            {"line":"snowflake fallback without tcp","transport":"snowflake","iran_status":"iran_unknown","tcp_reachable":false},
+            {"line":"vanilla fallback","transport":"vanilla","iran_status":"iran_unknown","tcp_reachable":true},
+            {"line":"vanilla fallback truthy","transport":"vanilla","iran_status":"iran_unknown","tcp_reachable":"yes"},
+            {"line":"blocked one","transport":"vanilla","iran_status":"iran_likely_blocked","tcp_reachable":true},
+            {"line":"blocked two","transport":"vanilla","iran_status":"iran_frequently_blocked","tcp_reachable":false},
+            {"line":"","transport":"obfs4","iran_status":"iran_likely_working","tcp_reachable":true},
+            {"line":"unknown transport","transport":"unknown","iran_status":"iran_likely_working","tcp_reachable":true}
+        ]),
+    );
+}
+
+#[test]
+fn parity_empty_input_still_writes_mandatory_empty_files() {
+    assert_parity("empty", json!([]));
+}
+
+#[test]
+fn parity_malformed_bridge_record_errors_like_python() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir("malformed_record_py");
+    let rust_dir = case_dir("malformed_record_rust");
+    let bridges = json!(["not a dict"]);
+
+    let py_err =
+        python_write(repo_root, &py_dir, &bridges).expect_err("python rejects non-dict bridge");
+    let rust_err = write_result_files(
+        &rust_dir,
+        bridges.as_array().expect("parity bridges input is a list"),
+    )
+    .expect_err("rust rejects non-dict bridge");
+
+    assert!(py_err.contains("object has no attribute 'get'"));
+    assert!(rust_err
+        .to_string()
+        .contains("object has no attribute 'get'"));
+}
+
+#[test]
+fn parity_non_string_line_errors_like_python() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir("non_string_line_py");
+    let rust_dir = case_dir("non_string_line_rust");
+    let bridges = json!([{ "line": 42, "transport": "obfs4" }]);
+
+    let py_err =
+        python_write(repo_root, &py_dir, &bridges).expect_err("python rejects non-string line");
+    let rust_err = write_result_files(
+        &rust_dir,
+        bridges.as_array().expect("parity bridges input is a list"),
+    )
+    .expect_err("rust rejects non-string line");
+
+    assert!(py_err.contains("object has no attribute 'strip'"));
+    assert!(rust_err
+        .to_string()
+        .contains("object has no attribute 'strip'"));
+}

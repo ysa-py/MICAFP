@@ -57,3 +57,9 @@ environments against the Rust snapshot. The Python file remains in place because
 other unported Python modules still import it; deleting it now would break the
 still-active Python pipeline. No `requirements.txt` line was removed because
 `config.py` uses only Python standard-library modules (`os`).
+
+## Phase 1 parity anchor: results_writer.py
+
+- Ported `write_result_files` to `src/results_writer.rs` with branch-covering parity and malformed-input error-path tests in `tests/parity/results_writer_parity.rs`.
+- Python file is intentionally retained because `load_iran_results`, `update_readme`, `_build_zip_bytes`, `telegram_upload`, and `main` have not yet been parity-verified in Rust.
+- No requirements entries were removed: `requests` is still required by unported Telegram upload behavior.

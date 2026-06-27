@@ -7,6 +7,7 @@
 
 pub mod config;
 pub mod generated_json_loader;
+pub mod results_writer;
 
 /// Cargo features mirroring pytest markers used for selective test execution.
 pub const PYTEST_MARKER_FEATURES: &[&str] = &[
