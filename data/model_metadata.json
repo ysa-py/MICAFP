@@ -1,9 +1,9 @@
 {
-  "trained_at": "2026-06-26T23:17:54.402293+00:00",
-  "version": 23,
-  "samples": 443,
+  "trained_at": "2026-06-27T12:42:25.847357+00:00",
+  "version": 24,
+  "samples": 451,
   "blocked": 0,
-  "working": 443,
+  "working": 451,
   "roc_auc_cv": NaN,
   "feature_importances": {
     "transport_enc": 0.0,

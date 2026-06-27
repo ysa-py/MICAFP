@@ -1,11 +1,11 @@
 {
-  "updated_at": "2026-06-26T23:18:41.927649+00:00",
+  "updated_at": "2026-06-27T12:43:16.399828+00:00",
   "weights": {
     "vanilla": 0.0,
-    "webtunnel": 0.0036,
+    "webtunnel": 0.0054,
     "obfs4": 0.0,
-    "snowflake": 0.6642,
-    "": 0.3321
+    "snowflake": 0.9946,
+    "": 0.0
   },
   "scores": {
     "snowflake": 30,
@@ -31,8 +31,8 @@
     "obfs4": {
       "working": 0,
       "blocked": 0,
-      "unknown": 1598,
-      "total": 1598
+      "unknown": 1604,
+      "total": 1604
     },
     "snowflake": {
       "working": 8,
@@ -43,8 +43,8 @@
     "": {
       "working": 0,
       "blocked": 0,
-      "unknown": 2,
-      "total": 2
+      "unknown": 4,
+      "total": 4
     }
   }
 }

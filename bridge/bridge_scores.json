@@ -1788,7 +1788,7 @@
     "transport": "vanilla"
   },
   "Bridge 185.194.93.135:9001 F8C2F613EC974A042603490EE7F64DD8D1663377": {
-    "score": 36.0,
+    "score": 32.0,
     "transport": "vanilla"
   },
   "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A": {
@@ -2208,6 +2208,10 @@
     "transport": "obfs4"
   },
   "obfs4 162.218.224.132:20695 5592D9B167ADBA7F41A953413082120E5261F6D3 cert=rTRghmZgvJxkAYWC+usA0AWfYbkuxo6mmg8b3FzymS70xavBJvAsy5v/qtShs8P/Q0Imfg iat-mode=0": {
+    "score": 65.0,
+    "transport": "obfs4"
+  },
+  "obfs4 163.47.56.141:8888 5C29D874BB85E0E7DDAABB90A1808A27883A3213 cert=+OK+rqvKYF0ugqA2GFkTIXl/2pCkfK9TlsGEA8g3jGmSZPrrwIqb3ItsMkoWZ2ry9R9qNQ iat-mode=0": {
     "score": 65.0,
     "transport": "obfs4"
   },
@@ -2780,7 +2784,7 @@
     "transport": "obfs4"
   },
   "obfs4 24.69.110.186:60002 6FF5C5C1AE210431C5E182B73D8EB858CEA65B33 cert=QZz2IyrYLs+6uIjYW0Nv1D9xAgeHo+Qa1OKOFwj55Dna2lWRh75Mafluxx4p1Z6AY2oUIA iat-mode=0": {
-    "score": 62.0,
+    "score": 58.0,
     "transport": "obfs4"
   },
   "obfs4 31.171.241.238:8414 811115E721E9B530A3BA41D3FCE6B71D64E4DC5A cert=Sye+7gmUheN9ohPm8TV1pyNiuMwr4NMAKJXC3p6Du8m56VyorhG6S7u2NgklFS91rwpKBA iat-mode=0": {
@@ -3119,6 +3123,10 @@
     "score": 65.0,
     "transport": "obfs4"
   },
+  "obfs4 69.248.22.143:4040 F30BC0BF1C7FAE8E03E2C6C8A4A253567AA3F101 cert=ah2ALRB5FgksHnlAeqLsc8Pa33jLtk//xLi5oVNNMPCePmMujp6RXUlNMR7zpjAsSKirEw iat-mode=0": {
+    "score": 65.0,
+    "transport": "obfs4"
+  },
   "obfs4 69.9.134.8:1704 EA6EE8A8DFBD3AEE9215C810B6D6A6F2BFCCE956 cert=ezCaZx8RtffKikDkRwb3wMs7SF+8WGVH/Ir5jEVyoPWjHx4i1oN/LWVUGlNd3oQCc/8fXQ iat-mode=0": {
     "score": 65.0,
     "transport": "obfs4"
@@ -3156,6 +3164,10 @@
     "transport": "obfs4"
   },
   "obfs4 72.10.162.51:12693 8F219F64DC11351F00C3A50B64990EE50E784F74 cert=/I3NYd0UcxUh83Xmsj2j8GNOeNBHmJ8jspO0/3ijqKxAlIBedJ9/AC80fXkY6IyEwXYzQQ iat-mode=1": {
+    "score": 65.0,
+    "transport": "obfs4"
+  },
+  "obfs4 72.56.118.69:25986 D63A58CD74E68A6A540133886804EA3EE7A5F6E7 cert=5lpX3sCykWEyBUhiM4Tzs48etFgWFh7MfYbkCWD+zG32piCBgG1sICbV7EYRKeUBwXZaPA iat-mode=0": {
     "score": 65.0,
     "transport": "obfs4"
   },
@@ -3520,7 +3532,7 @@
     "transport": "obfs4"
   },
   "obfs4 85.121.176.36:8080 0681477084718491DFDA7782E7CAEE5604EBA118 cert=EjyO5o19sT5BMvAJBWtPpjDhTDSx+5kiw2sC50xvxSIjd+GdCuRJkPLDMJlAh5ujPM6DfQ iat-mode=1": {
-    "score": 67.0,
+    "score": 63.0,
     "transport": "obfs4"
   },
   "obfs4 85.121.5.22:9130 9AD05E353AD70C6BA556A5A2E63DFAC6F25E111B cert=lYEsvMr1EKhqhsSPAUm3Gl0Tkwp3ivi74gkNtyGXxUxGwiOBMnNfNOn12+q9akYklPmvYw iat-mode=0": {
@@ -5500,6 +5512,10 @@
     "transport": "webtunnel"
   },
   "webtunnel [2001:db8:976:3d4a:a211:b114:a8e2:5b2d]:443 4F4571C3E0FD8D23C0C0AF76D63F7A5B08199A86 url=https://talnett.com/RLzWM1yDLRjlDiNxzdBQr8DR ver=0.0.4": {
+    "score": 84.0,
+    "transport": "webtunnel"
+  },
+  "webtunnel [2001:db8:9830:b7ec:bb37:f12:ec5f:aace]:443 653AB31AC3FBEEE0B224833F2C2F6EEB2FC67FAB url= ver=0.0.4": {
     "score": 84.0,
     "transport": "webtunnel"
   },

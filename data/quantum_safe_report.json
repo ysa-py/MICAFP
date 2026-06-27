@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-26T23:18:42.421112+00:00",
-  "total_bridges": 1439,
+  "generated_at": "2026-06-27T12:43:16.875841+00:00",
+  "total_bridges": 1443,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -4985,6 +4985,15 @@
       "notes": []
     },
     {
+      "bridge_line": "obfs4 163.47.56.141:8888 5C29D874BB85E0E7DDAABB90A1808A27883A3213 cert=+OK+rqvKYF0ugqA2GFkTIXl/2pCkfK9TlsGEA8g3jGmSZPrrwIqb3ItsMkoWZ2ry9R9qNQ iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "obfs4 164.68.104.178:9100 47B8A0A8023D982A070D886D7853BB2F1473387F cert=rpL4q5gRB7PqUIHV+758Yi4V+caHPjU/Upb5E+PAt7yF8Yjil5rLMKEBOZRSzPs3wuOtBQ iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -7028,6 +7037,15 @@
       "notes": []
     },
     {
+      "bridge_line": "obfs4 69.248.22.143:4040 F30BC0BF1C7FAE8E03E2C6C8A4A253567AA3F101 cert=ah2ALRB5FgksHnlAeqLsc8Pa33jLtk//xLi5oVNNMPCePmMujp6RXUlNMR7zpjAsSKirEw iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "obfs4 69.9.134.8:1704 EA6EE8A8DFBD3AEE9215C810B6D6A6F2BFCCE956 cert=ezCaZx8RtffKikDkRwb3wMs7SF+8WGVH/Ir5jEVyoPWjHx4i1oN/LWVUGlNd3oQCc/8fXQ iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -7110,6 +7128,15 @@
     },
     {
       "bridge_line": "obfs4 72.10.162.51:12693 8F219F64DC11351F00C3A50B64990EE50E784F74 cert=/I3NYd0UcxUh83Xmsj2j8GNOeNBHmJ8jspO0/3ijqKxAlIBedJ9/AC80fXkY6IyEwXYzQQ iat-mode=1",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "obfs4 72.56.118.69:25986 D63A58CD74E68A6A540133886804EA3EE7A5F6E7 cert=5lpX3sCykWEyBUhiM4Tzs48etFgWFh7MfYbkCWD+zG32piCBgG1sICbV7EYRKeUBwXZaPA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -12384,6 +12411,15 @@
     },
     {
       "bridge_line": "webtunnel [2001:db8:976:3d4a:a211:b114:a8e2:5b2d]:443 4F4571C3E0FD8D23C0C0AF76D63F7A5B08199A86 url=https://talnett.com/RLzWM1yDLRjlDiNxzdBQr8DR ver=0.0.4",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "webtunnel [2001:db8:9830:b7ec:bb37:f12:ec5f:aace]:443 653AB31AC3FBEEE0B224833F2C2F6EEB2FC67FAB url= ver=0.0.4",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",

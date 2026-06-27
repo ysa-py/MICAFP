@@ -1871,6 +1871,14 @@
       "flags": []
     },
     {
+      "bridge_line": "webtunnel [2001:db8:9830:b7ec:bb37:f12:ec5f:aace]:443 653AB31AC3FBEEE0B224833F2C2F6EEB2FC67FAB url= ver=0.0.4",
+      "transport": "webtunnel",
+      "port": null,
+      "anti_ai_dpi_score": 0.88,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "webtunnel [2001:db8:a038:9dd3:4658:ee34:a26b:b883]:443 F5EDC819C1275B6718333648A84698A5CDF2026C url=https://naiveproxy.lab:8444/Sup3rS3cr3tPath ver=0.0.4",
       "transport": "webtunnel",
       "port": 8444,
@@ -4143,6 +4151,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 163.47.56.141:8888 5C29D874BB85E0E7DDAABB90A1808A27883A3213 cert=+OK+rqvKYF0ugqA2GFkTIXl/2pCkfK9TlsGEA8g3jGmSZPrrwIqb3ItsMkoWZ2ry9R9qNQ iat-mode=0",
+      "transport": "obfs4",
+      "port": 8888,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 164.68.104.178:9100 47B8A0A8023D982A070D886D7853BB2F1473387F cert=rpL4q5gRB7PqUIHV+758Yi4V+caHPjU/Upb5E+PAt7yF8Yjil5rLMKEBOZRSzPs3wuOtBQ iat-mode=0",
       "transport": "obfs4",
       "port": 9100,
@@ -5263,6 +5279,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 69.248.22.143:4040 F30BC0BF1C7FAE8E03E2C6C8A4A253567AA3F101 cert=ah2ALRB5FgksHnlAeqLsc8Pa33jLtk//xLi5oVNNMPCePmMujp6RXUlNMR7zpjAsSKirEw iat-mode=0",
+      "transport": "obfs4",
+      "port": 4040,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 69.9.134.8:1704 EA6EE8A8DFBD3AEE9215C810B6D6A6F2BFCCE956 cert=ezCaZx8RtffKikDkRwb3wMs7SF+8WGVH/Ir5jEVyoPWjHx4i1oN/LWVUGlNd3oQCc/8fXQ iat-mode=0",
       "transport": "obfs4",
       "port": 1704,
@@ -5298,6 +5322,14 @@
       "bridge_line": "obfs4 71.54.168.76:29003 47E05016F24C7C3947ED3AB80AF224363118302F cert=ColKK1RnQXuaCGyiTZ6AhsKGGaPkQOYrNZ/l/AgZiwsc66AwR3+41yJnVXZJ0YnBIP12CA iat-mode=0",
       "transport": "obfs4",
       "port": 29003,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 72.56.118.69:25986 D63A58CD74E68A6A540133886804EA3EE7A5F6E7 cert=5lpX3sCykWEyBUhiM4Tzs48etFgWFh7MfYbkCWD+zG32piCBgG1sICbV7EYRKeUBwXZaPA iat-mode=0",
+      "transport": "obfs4",
+      "port": 25986,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
