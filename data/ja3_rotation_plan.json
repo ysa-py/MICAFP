@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T21:57:03.045848+00:00",
+  "generated_at": "2026-06-27T03:32:03.138900+00:00",
   "baseline_hashes_checked": 0,
   "blocked_hashes_found": 0,
   "rotation_needed": false,
@@ -7,7 +7,7 @@
   "blocked_details": [],
   "universal_recommendations": [
     "Enable TLS padding extension (RFC 7685) on all pluggable transport clients.",
-    "Use iat-mode=1 for obfs4 to randomise inter-arrival timing.",
+    "Use iat-mode=2 for obfs4 to randomise inter-arrival timing.",
     "Rotate JA3 baseline every 72 hours regardless of blocking status.",
     "Prefer WebTunnel over obfs4 -- WebTunnel JA3 is identical to browser HTTPS.",
     "Enable ECH if bridge supports it -- hides SNI from SIAM DPI completely."
