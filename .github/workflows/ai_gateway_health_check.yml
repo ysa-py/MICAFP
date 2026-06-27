@@ -152,7 +152,7 @@ jobs:
             MISSING=$((MISSING + 1))
           fi
 
-          # Check Cloudflare — need account ID + API token + optional gateway URL
+          # Check Cloudflare — account ID + API token required; gateway optional
           CF_COUNT=0
           for i in 1 2 3 4 5 6 7 8 9 10 11; do
             eval "ACCT=\$CF_ACCOUNT_ID_${i}"
@@ -166,7 +166,8 @@ jobs:
               fi
               echo "  ✓ CF slot ${i}: account+token set, gateway=${HAS_GW}"
             elif [ -n "$ACCT" ] || [ -n "$TOKEN" ]; then
-              echo "  ⚠ CF slot ${i}: PARTIAL (account=${#ACCT}, token=${#TOKEN})"
+              echo "  ⚠ CF slot ${i}: PARTIAL (account=${#ACCT}, "
+              echo "     token=${#TOKEN})"
               PARTIAL=$((PARTIAL + 1))
             fi
           done
@@ -181,10 +182,12 @@ jobs:
           echo "  Partial configurations: ${PARTIAL}"
           if [ "$MISSING" -ge 4 ]; then
             echo "  ✗ CRITICAL: ALL provider groups are missing secrets!"
-            echo "  → Check GitHub Repository Settings → Secrets and variables → Actions"
+            echo "  → Check GitHub Repository Settings → Secrets"
+            echo "    and variables → Actions"
             exit 1
           fi
-          echo "  ✓ At least some providers are configured — proceeding with health check"
+          echo "  ✓ At least some providers are configured"
+          echo "    proceeding with health check"
 
       - name: Show Dynamic Model Rankings
         env:
@@ -218,7 +221,9 @@ jobs:
           import sys, os
           sys.path.insert(0, ".")
           try:
-              from torshield_ai_gateway.dynamic_model_brain import DynamicModelBrain
+              from torshield_ai_gateway.dynamic_model_brain import (
+                  DynamicModelBrain,
+              )
               brain = DynamicModelBrain()
               brain.refresh()  # Fix-17.0: sync, no asyncio needed
               print("=== LIVE Dynamic Model Rankings ===")
@@ -231,7 +236,9 @@ jobs:
                             f"params={m.param_b}B  ctx={m.context_k}k")
               # Show anti-DPI assessment
               try:
-                  from torshield_ai_gateway.dynamic_brain_anti_dpi import run_dpi_assessment
+                  from torshield_ai_gateway.dynamic_brain_anti_dpi import (
+                      run_dpi_assessment,
+                  )
                   assessment = run_dpi_assessment()
                   print(f"\n=== Iran DPI Assessment ===")
                   print(f"  Threat Level: {assessment.threat_level.value}")
@@ -262,7 +269,7 @@ jobs:
       # CRITICAL: NO `|| true` — exit code must propagate!
       # Exit codes:
       #   0 = At least one PRIMARY provider responded correctly
-      #   1 = All primary providers failed (LocalAIEngine may work but is degraded)
+      #   1 = All primary providers failed; LocalAIEngine may be degraded
       #   2 = Required environment variables are missing
       # ════════════════════════════════════════════════════════════════════════
       - name: Run Gateway Health Check
@@ -316,7 +323,8 @@ jobs:
             --output data/gateway_health_report.json \
             --task ${{ github.event.inputs.task || 'general' }} \
             --max-retries ${{ github.event.inputs.max_retries || '2' }} \
-            --providers cerebras cloudflare_ai_gateway cloudflare_workers_ai portkey
+            --providers cerebras cloudflare_ai_gateway \
+              cloudflare_workers_ai portkey
           # DO NOT add || true here! Exit code must propagate.
 
       - name: Display Health Report Summary
@@ -334,7 +342,9 @@ jobs:
               report = json.load(open("data/gateway_health_report.json"))
               summary = report.get("summary", {})
               print(f'Version: {report.get("version", "unknown")}')
-              print(f'Primary OK: {summary.get("primary_ok", 0)}/{summary.get("total", 0)}')
+              primary_ok = summary.get("primary_ok", 0)
+              total = summary.get("total", 0)
+              print(f'Primary OK: {primary_ok}/{total}')
               print(f'Degraded: {summary.get("degraded", 0)}')
               print(f'Errors: {summary.get("error", 0)}')
               print(f'Healthy: {summary.get("healthy", False)}')
@@ -342,8 +352,17 @@ jobs:
               print(f'Failure reason: {summary.get("failure_reason", "none")}')
               print()
               for r in report.get("results", []):
-                  si = "OK" if r["status"] == "ok" else "DG" if "degraded" in r["status"] else "ER"
-                  print(f'  [{si}] {r["provider"]}: {r["status"]} ({r.get("latency_ms",0)}ms)')
+                  if r["status"] == "ok":
+                      si = "OK"
+                  elif "degraded" in r["status"]:
+                      si = "DG"
+                  else:
+                      si = "ER"
+                  latency = r.get("latency_ms", 0)
+                  print(
+                      f'  [{si}] {r["provider"]}: {r["status"]} '
+                      f'({latency}ms)'
+                  )
               env_val = report.get("env_validation", {})
               if env_val.get("warnings"):
                   print()
@@ -379,7 +398,9 @@ jobs:
           sys.path.insert(0, ".")
           try:
               from monitoring.structured_logging import (
-                  ProviderHealthMetrics, FailureAnalytics, HealthReportGenerator,
+                  ProviderHealthMetrics,
+                  FailureAnalytics,
+                  HealthReportGenerator,
               )
               metrics = ProviderHealthMetrics()
               analytics = FailureAnalytics()
@@ -396,7 +417,11 @@ jobs:
                           metrics.record_request(
                               provider_name=provider, success=is_success,
                               latency_ms=latency,
-                              error=result.get("error") if not is_success else None,
+                              error=(
+                                  result.get("error")
+                                  if not is_success
+                                  else None
+                              ),
                           )
                           if not is_success:
                               analytics.record_failure(
@@ -406,7 +431,10 @@ jobs:
                               )
                   except Exception as e:
                       print(f"Warning: Could not parse health report: {e}")
-              generator = HealthReportGenerator(metrics=metrics, analytics=analytics)
+              generator = HealthReportGenerator(
+                  metrics=metrics,
+                  analytics=analytics,
+              )
               report = generator.generate()
               report_path = generator.save("data/observability_report.json")
               print(f"Observability Report: {report['overall_status'].upper()}")
@@ -415,16 +443,29 @@ jobs:
               if step_summary:
                   with open(step_summary, "a") as f:
                       f.write("## Observability Report\n\n")
-                      f.write(f"**Overall Status:** `{report['overall_status'].upper()}`\n\n")
+                      overall_status = report["overall_status"].upper()
+                      f.write(
+                          f"**Overall Status:** `{overall_status}`\n\n"
+                      )
                       f.write(f"**Timestamp:** {report['timestamp']}\n\n")
                       f.write("### Provider Health\n\n")
-                      f.write("| Provider | Requests | Success Rate | Avg Latency |\n")
-                      f.write("|----------|----------|--------------|-------------|\n")
-                      for name, stats in report.get("provider_stats", {}).items():
+                      f.write(
+                          "| Provider | Requests | Success Rate | "
+                          "Avg Latency |\n"
+                      )
+                      f.write(
+                          "|----------|----------|--------------|"
+                          "-------------|\n"
+                      )
+                      provider_stats = report.get("provider_stats", {})
+                      for name, stats in provider_stats.items():
                           reqs = stats.get("request_count", 0)
                           rate = stats.get("success_rate", 0)
                           lat = stats.get("avg_latency_ms", 0)
-                          f.write(f"| {name} | {reqs} | {rate:.1%} | {lat:.0f}ms |\n")
+                          f.write(
+                              f"| {name} | {reqs} | {rate:.1%} | "
+                              f"{lat:.0f}ms |\n"
+                          )
           except Exception as e:
               print(f"Observability report generation failed: {e}")
           ENDSCRIPT
