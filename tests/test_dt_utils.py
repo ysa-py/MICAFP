@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from core.dt_utils import coerce_utc_dt, parse_dt
+UTC = timezone.utc
 
 
 def test_parse_dt_preserves_aware_offsets_for_backward_compatibility() -> None:

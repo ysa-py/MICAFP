@@ -36,12 +36,13 @@ import json
 import logging
 import sys
 import time
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
+UTC = timezone.utc
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Logging — CircleCI-friendly: timestamps in UTC, single-line.

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T18:19:39.664397+00:00",
+  "generated_at": "2026-06-27T03:31:42.480095+00:00",
   "provider_count": 1,
   "consensus_score": 0.98,
   "selected_strategies": [
@@ -17,7 +17,7 @@
         "obfs4_iat_boost",
         "ja3_randomize"
       ],
-      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate protocol mutation to evade SIAM's ML classifiers and maintain resilience during NIN cuts.",
+      "reasoning": "obfs4 is AI-detectable and fails under NIN, while Snowflake and WebTunnel remain resilient but benefit from proactive obfuscation mutations to preempt future DPI enhancements.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]

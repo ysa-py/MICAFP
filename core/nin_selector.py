@@ -36,11 +36,12 @@ Output files:
 import json
 import logging
 import re
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from generated_json_loader import load_generated_json
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

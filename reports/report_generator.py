@@ -20,8 +20,9 @@ DESIGN PRINCIPLES:
 import json
 import logging
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
+UTC = timezone.utc
 
 logger = logging.getLogger("torshield.reports")
 

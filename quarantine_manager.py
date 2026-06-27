@@ -31,9 +31,10 @@ Public interface:
 import json
 import logging
 import math
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

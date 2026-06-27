@@ -27,7 +27,7 @@ import socket
 import ssl
 import time
 import zipfile
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -36,10 +36,12 @@ import requests
 from bs4 import BeautifulSoup
 
 from sources.history_utils import (
+
     cleanup_history,
     normalize_history_timestamps,
     parse_history_dt,
 )
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 

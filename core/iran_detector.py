@@ -118,8 +118,9 @@ def recommend_strategy(nin_active: bool) -> str:
 # ════════════════════════════════════════════════════════════════════════════
 import json as _json
 import os as _os
-from datetime import UTC
+from datetime import timezone
 from datetime import datetime as _dt
+UTC = timezone.utc
 
 
 class NINDetector:
