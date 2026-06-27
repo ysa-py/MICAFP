@@ -62,15 +62,27 @@ def _transport(record: dict[str, Any]) -> str:
     return "unknown"
 
 
-def _port(record: dict[str, Any]) -> int:
+def _coerce_port(value: Any) -> int:
+    """Return a valid TCP/UDP port number, or ``0`` when unavailable.
+
+    Bridge history can contain partially-normalized records where ``port`` is
+    present but set to ``None`` or an empty string.  Those values are expected
+    for legacy/imported records and should not be recorded as scorer failures;
+    callers can still recover the port from the raw bridge line below.
+    """
+    if value in (None, ""):
+        return 0
     try:
-        value = int(record.get("port"))
-        if 0 < value <= 65535:
-            return value
-    except (TypeError, ValueError) as _remediation_exc:
-        from monitoring.structured_logger import record_silent_failure
-        record_silent_failure('sources.bridge_scoring:70', _remediation_exc)
-        pass
+        port = int(value)
+    except (TypeError, ValueError):
+        return 0
+    return port if 0 < port <= 65535 else 0
+
+
+def _port(record: dict[str, Any]) -> int:
+    value = _coerce_port(record.get("port"))
+    if value:
+        return value
     match = _ENDPOINT_RE.search(_raw_line(record))
     if not match:
         return 0
