@@ -32,31 +32,3 @@ currently declared in `pyproject.toml`:
 No `.py` file has been deleted. Future deletions must be gated on a parity test
 that invokes the Python original and Rust replacement on the same branch-covering
 golden inputs, including error paths.
-
-## Phase 1 parity anchor: generated_json_loader.py
-
-`generated_json_loader.py::load_generated_json` now has a Rust replacement in
-`src/generated_json_loader.rs` and a root-workspace parity suite in
-`tests/parity/generated_json_loader_parity.rs`. The parity suite invokes the
-original Python function at test time and compares missing-file, empty-file,
-invalid-JSON, top-level type mismatch, dict list-field normalization, and valid
-array pass-through branches. The Python file remains in place because the full
-repository migration is not complete and deletion is still gated on maintained
-parity evidence.
-
-### Behavior contract for `generated_json_loader.py::load_generated_json`
-
-Source contract extracted from the Phase 0 AST inventory and the Python body:
-
-| Branch / input condition | Required behavior in Rust parity port |
-| --- | --- |
-| `path.read_text(encoding="utf-8")` raises `OSError` or `UnicodeError` | Return the caller-provided fallback unchanged. |
-| File text is empty or whitespace-only after `strip()` | Return the caller-provided fallback unchanged. |
-| `json.loads(raw)` raises `json.JSONDecodeError` | Return the caller-provided fallback unchanged. |
-| Parsed top-level value is not the same runtime type as `fallback` | Return the caller-provided fallback unchanged. |
-| Parsed value is a dict and either parsed data or fallback contains `bridges` / `results` | Ensure each present/common field is a list; replace non-list values with an empty list. |
-| Parsed value is valid and type-compatible otherwise | Return parsed data with no additional mutation. |
-
-The Rust implementation intentionally adds `GeneratedJsonLoadStatus` only for
-observability in parity tests; the public `load_generated_json` return value
-remains the Python-compatible JSON value.
