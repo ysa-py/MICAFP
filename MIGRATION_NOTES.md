@@ -64,3 +64,18 @@ still-active Python pipeline. No `requirements.txt` line was removed because
 - Ported `write_result_files` to `src/results_writer.rs` with branch-covering parity tests in `tests/parity/results_writer_parity.rs`.
 - Python file is intentionally retained because `load_iran_results`, `update_readme`, `_build_zip_bytes`, `telegram_upload`, and `main` have not yet been parity-verified in Rust.
 - No requirements entries were removed: `requests` is still required by unported Telegram upload behavior.
+
+## Phase 1 next step: results_writer.py::load_iran_results
+
+Behavior contract for `load_iran_results`:
+- Reads `IRAN_RESULTS_PATH`, which is derived from `BRIDGE_DIR / "iran_results.json"` at module import time.
+- If the file is missing, logs an error and terminates the Python process with `SystemExit(1)`.
+- If the path exists but cannot be read as UTF-8 text (for example, it is a directory), the original read exception propagates.
+- If the file is readable but contains malformed JSON, the original `json.JSONDecodeError` propagates.
+- If the JSON is syntactically valid, the parsed value is returned without schema or top-level type validation; dictionaries, arrays, and other JSON values are accepted by this function.
+
+Rust parity status:
+- Added `load_iran_results` to `src/results_writer.rs`, returning `Result<serde_json::Value, ResultsWriterError>` instead of exiting or raising exceptions.
+- Added typed error variants for missing input, read failures, and parse failures.
+- Added parity coverage in `tests/parity/results_writer_parity.rs` for a valid object, syntactically valid but schema-invalid array data, missing file, malformed JSON, and a directory read error.
+- `results_writer.py` is retained because `_write_sorted_file`, `_assert_integrity`, `update_readme`, `_build_zip_bytes`, `telegram_upload`, and `main` still require explicit parity evidence before deletion.

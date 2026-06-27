@@ -6,7 +6,7 @@ use std::{
 };
 
 use serde_json::{json, Value};
-use torshield_ir_ultra::results_writer::write_result_files;
+use torshield_ir_ultra::results_writer::{load_iran_results, write_result_files, ResultsWriterError};
 
 const OUTPUT_FILES: &[&str] = &[
     "iran_likely_working_obfs4.txt",
@@ -92,6 +92,110 @@ fn assert_parity(name: &str, bridges: Value) {
 
     assert_eq!(rust_stats, py_stats);
     assert_eq!(snapshot(&rust_dir), snapshot(&py_dir));
+}
+
+fn python_load(repo_root: &Path, bridge_dir: &Path) -> (bool, String, String) {
+    let script = r#"
+import json
+import os
+import pathlib
+import sys
+os.environ["BRIDGE_DIR"] = sys.argv[1]
+import results_writer
+results_writer.BRIDGE_DIR = pathlib.Path(sys.argv[1])
+results_writer.IRAN_RESULTS_PATH = pathlib.Path(sys.argv[1]) / "iran_results.json"
+try:
+    data = results_writer.load_iran_results()
+    print(json.dumps(data, sort_keys=True, separators=(",", ":")))
+except SystemExit as exc:
+    print(f"SystemExit:{exc.code}", file=sys.stderr)
+    raise
+"#;
+    let output = Command::new("python")
+        .current_dir(repo_root)
+        .arg("-c")
+        .arg(script)
+        .arg(bridge_dir)
+        .output()
+        .expect("python load parity helper must execute");
+    (
+        output.status.success(),
+        String::from_utf8_lossy(&output.stdout).trim().to_string(),
+        String::from_utf8_lossy(&output.stderr).to_string(),
+    )
+}
+
+fn assert_load_success_parity(name: &str, file_text: &str) {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir(&format!("load_{name}_py"));
+    let rust_dir = case_dir(&format!("load_{name}_rust"));
+    fs::write(py_dir.join("iran_results.json"), file_text).expect("write python input");
+    fs::write(rust_dir.join("iran_results.json"), file_text).expect("write rust input");
+
+    let (py_ok, py_stdout, py_stderr) = python_load(repo_root, &py_dir);
+    assert!(py_ok, "python helper failed: {py_stderr}");
+    let py_value: Value = serde_json::from_str(&py_stdout).expect("python helper emitted JSON");
+    let rust_value = load_iran_results(&rust_dir.join("iran_results.json")).expect("rust load succeeds");
+    assert_eq!(rust_value, py_value);
+}
+
+#[test]
+fn parity_load_iran_results_happy_path_object() {
+    assert_load_success_parity(
+        "object",
+        r#"{"summary":{"total":2},"bridges":[{"line":"obfs4 a"},{"line":"wt b"}]}"#,
+    );
+}
+
+#[test]
+fn parity_load_iran_results_accepts_invalid_schema_data() {
+    assert_load_success_parity("invalid_schema", r#"["python", "does", "not", "validate", 7]"#);
+}
+
+#[test]
+fn parity_load_iran_results_missing_file_exits_vs_typed_error() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir("load_missing_py");
+    let rust_dir = case_dir("load_missing_rust");
+
+    let (py_ok, _py_stdout, py_stderr) = python_load(repo_root, &py_dir);
+    assert!(!py_ok);
+    assert!(py_stderr.contains("SystemExit:1"), "stderr was: {py_stderr}");
+
+    let err = load_iran_results(&rust_dir.join("iran_results.json")).expect_err("missing is typed");
+    assert!(matches!(err, ResultsWriterError::MissingIranResults { .. }));
+}
+
+#[test]
+fn parity_load_iran_results_malformed_json_errors() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir("load_malformed_py");
+    let rust_dir = case_dir("load_malformed_rust");
+    fs::write(py_dir.join("iran_results.json"), "{not valid json").expect("write python input");
+    fs::write(rust_dir.join("iran_results.json"), "{not valid json").expect("write rust input");
+
+    let (py_ok, _py_stdout, py_stderr) = python_load(repo_root, &py_dir);
+    assert!(!py_ok);
+    assert!(py_stderr.contains("JSONDecodeError"), "stderr was: {py_stderr}");
+
+    let err = load_iran_results(&rust_dir.join("iran_results.json")).expect_err("parse is typed");
+    assert!(matches!(err, ResultsWriterError::ParseIranResults { .. }));
+}
+
+#[test]
+fn parity_load_iran_results_directory_read_error() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let py_dir = case_dir("load_directory_py");
+    let rust_dir = case_dir("load_directory_rust");
+    fs::create_dir(py_dir.join("iran_results.json")).expect("create python directory path");
+    fs::create_dir(rust_dir.join("iran_results.json")).expect("create rust directory path");
+
+    let (py_ok, _py_stdout, py_stderr) = python_load(repo_root, &py_dir);
+    assert!(!py_ok);
+    assert!(py_stderr.contains("IsADirectoryError"), "stderr was: {py_stderr}");
+
+    let err = load_iran_results(&rust_dir.join("iran_results.json")).expect_err("read is typed");
+    assert!(matches!(err, ResultsWriterError::ReadIranResults { .. }));
 }
 
 #[test]
