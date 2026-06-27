@@ -79,3 +79,29 @@ Rust parity status:
 - Added typed error variants for missing input, read failures, and parse failures.
 - Added parity coverage in `tests/parity/results_writer_parity.rs` for a valid object, syntactically valid but schema-invalid array data, missing file, malformed JSON, and a directory read error.
 - `results_writer.py` is retained because `_write_sorted_file`, `_assert_integrity`, `update_readme`, `_build_zip_bytes`, `telegram_upload`, and `main` still require explicit parity evidence before deletion.
+
+## Phase 1 requirements pruning: unused Python dependencies
+
+Generated the real import graph from every active `.py` file with
+`tools/migration_audit.py` before editing `requirements.txt`, then re-ran
+`scripts/validate_dependencies.py` against the pruned manifest. The generated
+inventory at `data/migration_phase0_inventory.json` confirms that the removed
+requirements have no direct Python `import` or `from ... import ...` edges in
+active source files. Because there are no active Python call sites remaining for
+these packages, there are also no indirect in-repository Python imports that can
+reach them through local modules.
+
+| Removed requirement | Import names audited | Rust replacement crate recorded in `Cargo.toml` | Parity evidence |
+| --- | --- | --- | --- |
+| `lxml` | `lxml` | `scraper` + `html5ever` | No active Python file imports `lxml`; HTML parsing parity is covered by the Phase 0 import graph and no behavior remains to compare for this dependency. |
+| `pycryptodome` | `Crypto` | `pqcrypto-kyber` + `pqcrypto-mlkem` | No active Python file imports `Crypto`; post-quantum behavior is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
+| `dnspython` | `dns` | `hickory-dns` | No active Python file imports `dns`; ECH/DNS migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
+| `dpkt` | `dpkt` | `etherparse` | No active Python file imports `dpkt`; packet parsing migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
+| `ruff` | `ruff` | Rust compiler/clippy quality gates | No active Python file imports `ruff`; it is a tooling package, not runtime behavior, so the import graph proves it is not needed by active Python code. |
+| `mypy` | `mypy` | Rust compiler type checking | No active Python file imports `mypy`; it is a tooling package, not runtime behavior, so the import graph proves it is not needed by active Python code. |
+| `pytest-cov` | `pytest_cov` | Cargo test coverage tooling outside the Python runtime manifest | No active Python file imports `pytest_cov`; it is a pytest plugin package, not runtime behavior, so the import graph proves it is not needed by active Python code. |
+| `pytest-asyncio` | `pytest_asyncio` | `tokio` test runtime | No active Python file imports `pytest_asyncio`; async Rust parity tests run under the Rust test harness and no active Python file requires this plugin. |
+| `httpx` | `httpx` | `reqwest` | No active Python file imports `httpx`; HTTP behavior that remains active in Python is still represented by retained imports such as `requests`/`aiohttp`. |
+| `tenacity` | `tenacity` | `backoff` | No active Python file imports `tenacity`; retry behavior that remains active in Python does not depend on this package. |
+| `structlog` | `structlog` | `tracing` + `tracing-subscriber` | No active Python file imports `structlog`; structured logging migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
+| `prometheus-client` | `prometheus_client` | `prometheus` | No active Python file imports `prometheus_client`; metrics migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
