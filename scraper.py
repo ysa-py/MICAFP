@@ -40,7 +40,7 @@ import re
 import socket
 import time
 import zipfile
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +50,7 @@ from requests.adapters import HTTPAdapter, Retry
 
 from adaptive_selector import AdaptiveBridgeSelector
 from core.dt_utils import parse_dt
+UTC = timezone.utc
 
 # ─────────────────────────────────────────────────────────────────────────────
 # GitHub bridge source — graceful fallback if module unavailable (Bug 6 fix)

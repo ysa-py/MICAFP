@@ -34,9 +34,10 @@ import os
 import random
 import time
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.ai.iran_quantum_shield")
 

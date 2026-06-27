@@ -79,9 +79,10 @@ import os
 import random
 import time
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.anti_dpi_v2")
 

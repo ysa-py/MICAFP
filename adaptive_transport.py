@@ -27,11 +27,12 @@ Weighting formula:
 import json
 import logging
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from generated_json_loader import load_generated_json
+UTC = timezone.utc
 
 logging.basicConfig(
     level=logging.INFO,
