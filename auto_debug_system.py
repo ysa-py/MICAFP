@@ -39,9 +39,10 @@ import ast
 import json
 import logging
 import time
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.auto_debug")
 
@@ -380,7 +381,7 @@ class AutoDebugSystem:
             # Test local fallback
             try:
                 local = LocalAIEngine()
-                test_result = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=1")
+                test_result = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=2")
                 if test_result.get("score", 0) > 0:
                     self._results.append({
                         "category": "ai_gateway",
@@ -677,7 +678,7 @@ class AutoDebugSystem:
         try:
             from torshield_ai_gateway.local_ai_engine import LocalAIEngine
             local = LocalAIEngine()
-            test = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=1")
+            test = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=2")
             if test.get("score", 0) > 0:
                 return {
                     "type": "ai_fallback_activation",

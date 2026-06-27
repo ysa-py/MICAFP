@@ -18,6 +18,7 @@ All fixes are ADDITIVE — no existing functionality removed.
 
 USAGE:
   from recovery.self_healing_engine_v2 import SelfHealingEngineV2
+
   engine = SelfHealingEngineV2()
   diag = engine.run_full_diagnosis()
 """
@@ -28,8 +29,9 @@ import logging
 import os
 import time
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
+UTC = timezone.utc
 
 # Additive: import V1 (never replace)
 try:

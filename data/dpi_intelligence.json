@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-26T19:59:51.036097+00:00",
-  "total_bridges_analyzed": 2878,
+  "generated_at": "2026-06-27T03:09:55.369703+00:00",
+  "total_bridges_analyzed": 2880,
   "transport_profiles": {
     "snowflake": {
       "tier": "maximum",
@@ -106,7 +106,7 @@
       "tested": 904,
       "working": 0,
       "blocked": 0,
-      "dpi_risk_flags": 60,
+      "dpi_risk_flags": 68,
       "avg_dpi_score": 0.0,
       "observed_block_rate": 0.0
     },
@@ -114,8 +114,8 @@
       "tested": 1598,
       "working": 0,
       "blocked": 0,
-      "dpi_risk_flags": 2,
-      "avg_dpi_score": 0.7179,
+      "dpi_risk_flags": 58,
+      "avg_dpi_score": 0.7137,
       "observed_block_rate": 0.0
     },
     "snowflake": {
@@ -135,7 +135,7 @@
       "observed_block_rate": 0.0
     },
     "": {
-      "tested": 2,
+      "tested": 4,
       "working": 0,
       "blocked": 0,
       "dpi_risk_flags": 0,

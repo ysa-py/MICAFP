@@ -49,9 +49,10 @@ import os
 import sys
 import traceback
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 # ── BUG-2/v14: Module-level logger for observability suppression ──────────
 _obs_logger = logging.getLogger("torshield.observability")

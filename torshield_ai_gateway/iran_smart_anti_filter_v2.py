@@ -65,9 +65,10 @@ import logging
 import os
 import random
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.anti_filter_v2")
 
@@ -348,7 +349,7 @@ _ISP_STRATEGIES: dict[str, dict[str, Any]] = {
         "notes": (
             "MCI deploys the most aggressive DPI stack in Iran. Uses SNI inspection, "
             "JA3/JA4 fingerprinting, and SIAM ML classifier. WebTunnel with Arvan Cloud "
-            "CDN fronting is the most reliable bypass. Avoid obfs4 without iat-mode=1. "
+            "CDN fronting is the most reliable bypass. Avoid obfs4 without iat-mode=2. "
             "Spread connections across time windows — avoid burst patterns."
         ),
     },
@@ -383,7 +384,7 @@ _ISP_STRATEGIES: dict[str, dict[str, Any]] = {
         "peak_avoidance_hours": [21, 22],
         "notes": (
             "Rightel has lighter filtering compared to MCI and IRANCELL. obfs4 with "
-            "iat-mode=1 on port 443 is usually sufficient. SNI padding helps avoid "
+            "iat-mode=2 on port 443 is usually sufficient. SNI padding helps avoid "
             "the simpler length-based checks. Connections can typically be made "
             "immediately without complex timing strategies."
         ),
@@ -939,7 +940,7 @@ class IranSmartAntiFilterV2:
         elif hour >= 20:
             return (
                 "PREDICTION: increase — peak blocking hours active. "
-                "Use WebTunnel/Snowflake only. Avoid obfs4 without iat-mode=1.",
+                "Use WebTunnel/Snowflake only. Avoid obfs4 without iat-mode=2.",
                 0.70,
             )
         else:
@@ -1318,7 +1319,7 @@ class IranSmartAntiFilterV2:
             "snowflake 192.0.2.2:443 fingerprint=... url=https://broker.torproject.org",
             "webtunnel 192.0.2.3:443 url=https://cdn.arvancloud.com/... ver=0.0.1",
             "meek_lite 192.0.2.4:443 url=https://azureedge.net/ front=azureedge.net",
-            "obfs4 192.0.2.5:443 cert=... iat-mode=1",
+            "obfs4 192.0.2.5:443 cert=... iat-mode=2",
         ]
         return templates
 
@@ -1680,7 +1681,7 @@ class IranSmartAntiFilterV2:
         transport = parts[0]
         if transport in ("obfs4", "webtunnel", "snowflake", "meek_lite",
                          "meek-azure", "vless", "shadowsocks"):
-            if transport == "obfs4" and "iat-mode=1" in bridge_line:
+            if transport == "obfs4" and "iat-mode=2" in bridge_line:
                 return "obfs4_iat2"
             if transport == "obfs4":
                 port = IranSmartAntiFilterV2._extract_port(bridge_line)

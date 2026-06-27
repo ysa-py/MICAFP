@@ -13,7 +13,7 @@ G. Deployment Guide
 H. Final Production-Ready Package Summary
 """
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from reportlab.lib import colors
@@ -22,6 +22,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.platypus import (
+
     HRFlowable,
     PageBreak,
     Paragraph,
@@ -30,6 +31,7 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
+UTC = timezone.utc
 
 # ── Palette ────────────────────────────────────────────────────────────────
 ACCENT       = colors.HexColor('#318ead')

@@ -24,9 +24,10 @@ import os
 import re
 import secrets
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 logging.basicConfig(

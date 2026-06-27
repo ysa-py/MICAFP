@@ -79,9 +79,10 @@ import os
 import random
 import time
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.anti_dpi_v2")
 
@@ -199,7 +200,7 @@ except ImportError:
 
     _TRAFFIC_SHAPING = {
         "iat_mode_2": {
-            "description": "obfs4 iat-mode=1: randomize inter-arrival times",
+            "description": "obfs4 iat-mode=2: randomize inter-arrival times",
             "defeats": ["statistical_analysis", "entropy_analysis", "timing_correlation"],
             "overhead": "5-15% bandwidth increase",
             "iran_effectiveness": 0.85,
@@ -1278,7 +1279,7 @@ class IranAntiDPIV2:
         features["port_nonstandard"] = 1.0 if port not in (80, 443, 8443, 9001, 9002, 9030) else 0.0
 
         # IAT mode feature
-        features["iat_mode_2"] = 1.0 if "iat-mode=1" in bridge_line else 0.0
+        features["iat_mode_2"] = 1.0 if "iat-mode=2" in bridge_line else 0.0
 
         # CDN feature
         bridge_lower = bridge_line.lower()
@@ -1393,7 +1394,7 @@ class IranAntiDPIV2:
         if transport == "vanilla":
             suggestions.append("CRITICAL: Switch to obfs4, WebTunnel, or Snowflake immediately")
         elif transport == "obfs4" and features.get("iat_mode_2", 0) == 0:
-            suggestions.append("Enable iat-mode=1 for obfs4 to randomize packet timing")
+            suggestions.append("Enable iat-mode=2 for obfs4 to randomize packet timing")
         elif transport == "obfs4" and port != 443:
             suggestions.append("Move obfs4 to port 443 for better DPI resistance")
 

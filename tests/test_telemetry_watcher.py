@@ -1,6 +1,7 @@
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 
 from telemetry_watcher import DPIEvent, SelfHealEvent, SlotEvent, TelemetryWatcher
+UTC = timezone.utc
 
 
 def test_24h_summary_accepts_naive_and_aware_event_timestamps():

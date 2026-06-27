@@ -25,9 +25,10 @@ GitHub Actions stage: Stage 8r
 import json
 import logging
 import statistics
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 logging.basicConfig(
     level=logging.INFO,

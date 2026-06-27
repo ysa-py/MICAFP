@@ -19,8 +19,9 @@ no kernel module loading, no raw socket operations.  Exit 0 always.
 
 import logging
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
+UTC = timezone.utc
 
 log = logging.getLogger(__name__)
 logging.basicConfig(

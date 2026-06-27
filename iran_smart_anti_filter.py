@@ -43,9 +43,10 @@ import logging
 import random
 import time
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+UTC = timezone.utc
 
 log = logging.getLogger("torshield.anti_filter")
 
@@ -522,8 +523,8 @@ class IranSmartAntiFilter:
         transport = parts[0]
         if transport in ("obfs4", "webtunnel", "snowflake", "meek_lite",
                          "meek-azure", "vless", "shadowsocks"):
-            # Check for iat-mode=1
-            if transport == "obfs4" and "iat-mode=1" in bridge_line:
+            # Check for iat-mode=2
+            if transport == "obfs4" and "iat-mode=2" in bridge_line:
                 return "obfs4_iat2"
             # Check for port 443
             if transport == "obfs4":

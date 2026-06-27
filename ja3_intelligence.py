@@ -23,7 +23,7 @@ Usage:
 
 
 from dataclasses import dataclass
-from datetime import UTC
+from datetime import timezone
 
 
 @dataclass
@@ -336,7 +336,7 @@ def rotate_ja3_fingerprints() -> int:
         "blocked_details":         blocked_found,
         "universal_recommendations": [
             "Enable TLS padding extension (RFC 7685) on all pluggable transport clients.",
-            "Use iat-mode=1 for obfs4 to randomise inter-arrival timing.",
+            "Use iat-mode=2 for obfs4 to randomise inter-arrival timing.",
             "Rotate JA3 baseline every 72 hours regardless of blocking status.",
             "Prefer WebTunnel over obfs4 -- WebTunnel JA3 is identical to browser HTTPS.",
             "Enable ECH if bridge supports it -- hides SNI from SIAM DPI completely.",
@@ -386,7 +386,7 @@ def rotate_ja3_fingerprints() -> int:
         "## Universal Recommendations",
         "",
         "1. Enable TLS padding (RFC 7685) on all PT clients.",
-        "2. Use `iat-mode=1` for obfs4 timing randomisation.",
+        "2. Use `iat-mode=2` for obfs4 timing randomisation.",
         "3. Rotate JA3 baseline every 72 hours.",
         "4. Prefer WebTunnel — its JA3 is identical to browser HTTPS.",
         "5. Enable ECH where available — completely hides SNI from SIAM.",
@@ -404,6 +404,7 @@ def rotate_ja3_fingerprints() -> int:
 # ── --rotate CLI entry point ──────────────────────────────────────────────────
 import argparse as _argparse
 import random
+UTC = timezone.utc
 
 
 def _ja3_cli_main() -> None:

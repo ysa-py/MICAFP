@@ -376,5 +376,59 @@
       "vanilla": 4,
       "unknown": 6
     }
+  },
+  {
+    "ts": "2026-06-26T21:34:13.055284+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.003629764065335753,
+      "obfs4": 0.0,
+      "snowflake": 0.6642468239564429,
+      "": 0.33212341197822143
+    },
+    "scores": {
+      "snowflake": 30,
+      "webtunnel": 20,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
+  },
+  {
+    "ts": "2026-06-26T23:18:41.927649+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.003629764065335753,
+      "obfs4": 0.0,
+      "snowflake": 0.6642468239564429,
+      "": 0.33212341197822143
+    },
+    "scores": {
+      "snowflake": 30,
+      "webtunnel": 20,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
+  },
+  {
+    "ts": "2026-06-27T03:09:55.292688+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.005434782608695652,
+      "obfs4": 0.0,
+      "snowflake": 0.9945652173913043,
+      "": 0.0
+    },
+    "scores": {
+      "snowflake": 30,
+      "webtunnel": 20,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
   }
 ]
