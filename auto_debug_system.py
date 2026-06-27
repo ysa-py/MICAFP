@@ -381,7 +381,7 @@ class AutoDebugSystem:
             # Test local fallback
             try:
                 local = LocalAIEngine()
-                test_result = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=2")
+                test_result = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=1")
                 if test_result.get("score", 0) > 0:
                     self._results.append({
                         "category": "ai_gateway",
@@ -678,7 +678,7 @@ class AutoDebugSystem:
         try:
             from torshield_ai_gateway.local_ai_engine import LocalAIEngine
             local = LocalAIEngine()
-            test = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=2")
+            test = local.score_bridge("obfs4 1.2.3.4:443 cert=test iat-mode=1")
             if test.get("score", 0) > 0:
                 return {
                     "type": "ai_fallback_activation",
