@@ -1,62 +1,73 @@
-# 🌐 Tor Bridges Ultra Collector
+# 🛡️ TorShield-IR — Tor Bridge Intelligence for Iran
 
-> Auto-collected, tested, and Iran-scored Tor bridges.<br>
-> GitHub Actions runs every hour — fresh bridges always available.<br>
-> **Last update:** `2026-06-27 19:31 UTC`
+> Polyglot (Python · Go · Rust) bridge collector with 8-layer Iran DPI analysis.<br>
+> OONI-verified · ASN-filtered · Composite-scored · Auto-updated hourly.<br>
+> **Last update:** `2026-06-27 19:52 UTC`
 
-## ⚠️ Notes for Iran Users
+---
 
-- **Internet cut (شبکه ملی):** Use `export/iran_cut_pack.txt` — contains Snowflake and WebTunnel bridges that survive NIN.
-- **Normal censorship:** Use `export/iran_pack.txt` — top-ranked obfs4/WebTunnel bridges for Iran's DPI.
-- **Port 443 bridges** are prioritised — Iran almost never blocks HTTPS.
-- **IPv4 is more stable** than IPv6 inside Iran.
+## 🚨 Quick Start for Iran
 
-## ✅ Tested & Active (Recommended)
+**If international internet is cut (شبکه ملی فعال):**
+```
+Use: bridge/iran_likely_working_snowflake.txt
+     bridge/iran_likely_working_webtunnel.txt
+```
 
-| Transport | IPv4 Tested | Count |
-| :--- | :--- | :--- |
-| **obfs4** | [obfs4_tested.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/obfs4_tested.txt) | **0** |
-| **WebTunnel** | [webtunnel_tested.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/webtunnel_tested.txt) | **0** |
-| **Snowflake** | [snowflake_tested.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/snowflake_tested.txt) | **0** |
-| **Vanilla** | [vanilla_tested.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/vanilla_tested.txt) | **0** |
-| **meek-lite** | [meek_lite_tested.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/meek_lite_tested.txt) | **0** |
+**Normal censorship (فیلترینگ معمول):**
+```
+Use: bridge/iran_likely_working_all.txt   ← OONI-verified / TCP-tested working
+     bridge/iran_likely_working_obfs4.txt ← obfs4 on port 443
+```
 
-## 🕐 Fresh Bridges (Last 72h)
+---
 
-| Transport | IPv4 | Count | IPv6 | Count |
-| :--- | :--- | :--- | :--- | :--- |
-| **obfs4** | [obfs4_72h.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/obfs4_72h.txt) | **6** | [obfs4_72h_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/obfs4_72h_ipv6.txt) | **0** |
-| **WebTunnel** | [webtunnel_72h.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/webtunnel_72h.txt) | **0** | [webtunnel_72h_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/webtunnel_72h_ipv6.txt) | **1** |
-| **Vanilla** | [vanilla_72h.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/vanilla_72h.txt) | **3** | [vanilla_72h_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/vanilla_72h_ipv6.txt) | **0** |
+## ✅ OONI-Verified / TCP-Tested Working Bridges (Iran)
 
-## 📦 Full Archive
+| File | Bridges |
+| :--- | :---: |
+| [iran_likely_working_all.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_all.txt) | `448` |
+| [iran_likely_working_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_obfs4.txt) | `255` |
+| [iran_likely_working_webtunnel.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_webtunnel.txt) | `1` |
+| [iran_likely_working_snowflake.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/iran_likely_working_snowflake.txt) | `4` |
 
-| Transport | IPv4 | Count | IPv6 | Count |
-| :--- | :--- | :--- | :--- | :--- |
-| **obfs4** | [obfs4.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/obfs4.txt) | **524** | [obfs4_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/obfs4_ipv6.txt) | **278** |
-| **WebTunnel** | [webtunnel.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/webtunnel.txt) | **179** | [webtunnel_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/webtunnel_ipv6.txt) | **2** |
-| **Snowflake** | [snowflake.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/snowflake.txt) | **4** | — | — |
-| **Vanilla** | [vanilla.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/vanilla.txt) | **452** | [vanilla_ipv6.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/vanilla_ipv6.txt) | **0** |
-| **meek-lite** | [meek_lite.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/bridge/meek_lite.txt) | **2** | — | — |
+> Note: Files include OONI-confirmed bridges (Tier 1) and TCP-reachable
+> bridges with no OONI data (Tier 2 fallback). WebTunnel bridges are nearly
+> always Tier 2 because OONI measures by IP but WebTunnel uses HTTPS domains.
 
-## 🇮🇷 Iran Optimised Packs
+## 🌐 Globally Tested (TCP-reachable, Iran status varies)
 
-| Pack | Description |
+| File | Bridges |
+| :--- | :---: |
+| [tested_global_obfs4.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_obfs4.txt) | `255` |
+| [tested_global_webtunnel.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_webtunnel.txt) | `1` |
+| [tested_global_vanilla.txt](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/bridge/tested_global_vanilla.txt) | `188` |
+
+---
+
+## 📊 Pipeline Summary
+
+| Metric | Value |
 | :--- | :--- |
-| [iran_pack.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/export/iran_pack.txt) | Top 100 bridges ranked by Iran effectiveness score |
-| [iran_cut_pack.txt](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/export/iran_cut_pack.txt) | Bridges for internet cut / شبکه ملی scenarios |
-| [bridges_api.json](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/refs/heads/main/export/bridges_api.json) | Machine-readable JSON API |
+| Total tested | `1443` |
+| Globally reachable | `448` |
+| Iran likely working | `5` |
+| Iran likely blocked | `0` |
+| Iran ASN-blocked | `0` |
 
-## 📡 Transport Guide for Iran
+---
 
-| Transport | Anti-DPI | Works during cut | Speed | Recommended |
-| :--- | :--- | :--- | :--- | :--- |
-| Snowflake | ⭐⭐⭐⭐⭐ | ✅ | Medium | **Yes** |
-| WebTunnel | ⭐⭐⭐⭐⭐ | ✅ (CDN) | Fast | **Yes** |
-| obfs4 | ⭐⭐⭐⭐ | ❌ | Fast | **Yes** |
-| meek-lite | ⭐⭐⭐⭐ | ✅ (Azure) | Slow | Fallback |
-| Vanilla | ⭐ | ❌ | Fast | No |
+## 🔬 8-Layer Classification
 
-## Disclaimer
+1. **TCP reachability** — from GitHub Actions runner
+2. **ASN filter** — exclude Iranian ISP ASNs (honeypot/false-positive guard)
+3. **TLS fingerprint risk** — JA3 hash vs. known Iran DPI blocklist
+4. **Port risk** — flag ports 9001/9030/9050
+5. **OONI recent** — 7-day anomaly history from Iranian probes
+6. **OONI temporal** — 90-day recurrence rate (> 2/month → `frequently_blocked`)
+7. **CDN front validation** — WebTunnel front-domain ASN check
+8. **RIPE Atlas** — optional one-off TCP measurement from IR probes
 
-For educational and archival purposes. Use bridges responsibly.
+---
+
+*Report: [docs/iran-bridge-status.md](https://raw.githubusercontent.com/ysa-py/MICAFP/refs/heads/main/docs/iran-bridge-status.md)*
