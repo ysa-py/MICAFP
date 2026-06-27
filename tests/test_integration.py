@@ -510,7 +510,7 @@ class TestIranModulesIntegration(unittest.TestCase):
         defense = IranAutoDefense()
         threats = defense.detect_threats()
         bridges = [
-            "obfs4 1.2.3.4:443 cert=test iat-mode=2",
+            "obfs4 1.2.3.4:443 cert=test iat-mode=1",
             "webtunnel 5.6.7.8:443 url=https://example.com",
         ]
         scores = defense.analyze_bridges(bridges, threats)

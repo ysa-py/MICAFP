@@ -1,26 +1,32 @@
+---
+# Compatibility wrapper for manual workflow-run cleanup.
+# The reusable cleanup workflow is the source of truth.
 name: Cleanup Workflow Runs
-on:
+
+'on':
   workflow_dispatch:
     inputs:
       dry_run:
-        description: Preview deletions without deleting workflow runs. Set to false only after reviewing dry-run output.
+        description: 'Preview deletions without deleting workflow runs. Set to false only after reviewing dry-run output.'
         required: false
-        default: true
+        default: 'true'
         type: choice
         options:
-        - true
-        - false
+          - 'true'
+          - 'false'
       keep_last_n:
-        description: Number of newest workflow runs to keep per workflow.
+        description: 'Number of newest workflow runs to keep per workflow.'
         required: false
         default: '2'
         type: string
+
 permissions:
   actions: write
   contents: read
+
 jobs:
   cleanup:
-    if: false
+    if: always()
     uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
     secrets: inherit
     with:

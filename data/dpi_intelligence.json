@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-27T03:09:55.369703+00:00",
-  "total_bridges_analyzed": 2880,
+  "generated_at": "2026-06-26T23:18:42.003017+00:00",
+  "total_bridges_analyzed": 2878,
   "transport_profiles": {
     "snowflake": {
       "tier": "maximum",
@@ -135,7 +135,7 @@
       "observed_block_rate": 0.0
     },
     "": {
-      "tested": 4,
+      "tested": 2,
       "working": 0,
       "blocked": 0,
       "dpi_risk_flags": 0,
