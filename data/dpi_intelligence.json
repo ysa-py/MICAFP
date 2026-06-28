@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-28T03:52:30.824211+00:00",
-  "total_bridges_analyzed": 2896,
+  "generated_at": "2026-06-28T08:03:39.120926+00:00",
+  "total_bridges_analyzed": 2904,
   "transport_profiles": {
     "snowflake": {
       "tier": "maximum",
@@ -106,12 +106,12 @@
       "tested": 908,
       "working": 0,
       "blocked": 0,
-      "dpi_risk_flags": 58,
+      "dpi_risk_flags": 60,
       "avg_dpi_score": 0.0,
       "observed_block_rate": 0.0
     },
     "obfs4": {
-      "tested": 1610,
+      "tested": 1618,
       "working": 0,
       "blocked": 0,
       "dpi_risk_flags": 2,

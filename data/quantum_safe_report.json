@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-28T03:52:31.243499+00:00",
-  "total_bridges": 1448,
+  "generated_at": "2026-06-28T08:03:39.521330+00:00",
+  "total_bridges": 1452,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -7127,6 +7127,15 @@
       "notes": []
     },
     {
+      "bridge_line": "obfs4 71.212.145.164:2555 9FB06D6117620EB060A29FE93E3CE889197A6EF7 cert=PDRVZCA3a3Vss8lMr3slhNMC4Hd7Af6uqQ8yf/ME9+NK+/o+obQv+CgekbuORmoSxU/uHA iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "obfs4 71.54.168.76:29003 47E05016F24C7C3947ED3AB80AF224363118302F cert=ColKK1RnQXuaCGyiTZ6AhsKGGaPkQOYrNZ/l/AgZiwsc66AwR3+41yJnVXZJ0YnBIP12CA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -8289,6 +8298,15 @@
     },
     {
       "bridge_line": "obfs4 88.163.148.25:30030 4E6201AB5CE3C498E50F0A6CED7F7B7D0E656D34 cert=2UiKrAPvJ3BMfadLSHLmEmtUKpNsYDVE+VB5ikSfWv4MFjiekHRfMrEm+ix+VtVamL6yFw iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "obfs4 88.72.203.54:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -9899,6 +9917,15 @@
       "notes": []
     },
     {
+      "bridge_line": "obfs4 [2a00:10:6540:6501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
       "bridge_line": "obfs4 [2a00:10:6b0e:8901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -9909,6 +9936,15 @@
     },
     {
       "bridge_line": "obfs4 [2a00:10:6b13:e501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "obfs4 [2a00:10:6b23:901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",

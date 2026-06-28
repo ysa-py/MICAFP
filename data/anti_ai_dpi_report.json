@@ -1887,7 +1887,40 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 185.231.100.9:8080 E6F41C41485C503D3E8A2D4C9B096B390F9425B7 cert=wUTy69IHqzh4Xpd6X/L6YG1NDTgWOq/AVNGPXseBy/16WmlmdNinXi2VNyBUlcN9tbrtcA iat-mode=1",
+      "bridge_line": "obfs4 198.50.223.25:80 24134F585E68DA65FEB33AA9ACB2A5040122FF39 cert=KxuTc2uMFheqkiTmRyViCf/d9THVX50CLhfbZS3bIuFOyV31hkH8BXSo5x/WrrX5lE/3Sw iat-mode=2",
+      "transport": "obfs4",
+      "port": 80,
+      "anti_ai_dpi_score": 0.85,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "safe_port",
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 202.61.247.61:443 4A6AD27946A7DCA8D9A8B34F3A3BD1932174D0B5 cert=Gim+3J90KJwlb5e7HTwZm6QlqKl+Ij/0T9vPGxr1rJLDQFTdqcGwNseGfGNNu8IUooOADw iat-mode=2",
+      "transport": "obfs4",
+      "port": 443,
+      "anti_ai_dpi_score": 0.85,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "safe_port",
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 45.95.232.5:443 3CE205F7D7DE61E6E1787024EEDC03DCCFCA3C6A cert=1vxTSEr+6QCPpop3y0uEpY/V1ad4fB8ANayCPmh8DcPn4pt5kYNFctUjCA5A+GPmST1LNA iat-mode=2",
+      "transport": "obfs4",
+      "port": 443,
+      "anti_ai_dpi_score": 0.85,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "safe_port",
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 66.228.48.146:8080 ACE4CD0CCD8DDC93475D3BDDD8DC431AE7C1617A cert=HYDqiMmbewI3cEOWsAVs+VafKgatNDZdDjbu6jC7HxIm2cvfeh3Tw4Bq65eio71C/v3NBQ iat-mode=2",
       "transport": "obfs4",
       "port": 8080,
       "anti_ai_dpi_score": 0.85,
@@ -1898,20 +1931,31 @@
       ]
     },
     {
-      "bridge_line": "obfs4 85.121.176.36:8080 0681477084718491DFDA7782E7CAEE5604EBA118 cert=EjyO5o19sT5BMvAJBWtPpjDhTDSx+5kiw2sC50xvxSIjd+GdCuRJkPLDMJlAh5ujPM6DfQ iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.10:56389 6B84EEA5CE85F8CA28102B0134851F0928921EC2 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 8080,
-      "anti_ai_dpi_score": 0.85,
+      "port": 56389,
+      "anti_ai_dpi_score": 0.83,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
-        "safe_port",
+        "ephemeral_port",
         "obfs4_iat_timing_randomised"
       ]
     },
     {
-      "bridge_line": "obfs4 178.196.137.6:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.42:57570 74D63774E5AFB5B8C76CBCFCE41755EC7221EAC9 cert=UDckWw1b5rITsqTs5S/EkNMGuXeb25hR3D7bAJWMxKU/Yfg96WIz/z41qTxe50t4JVImeg iat-mode=2",
       "transport": "obfs4",
-      "port": 995,
+      "port": 57570,
+      "anti_ai_dpi_score": 0.83,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "ephemeral_port",
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 158.69.55.8:2024 22F0CA73A0E39C7A4198454C2AEC99E311237F5F cert=MTQVuueo3gKDZljyb5xvr6Cq4BisSHew/HKarStz4yfiUVL0Zr0/wGt0V6pj7Mwfk5kWXg iat-mode=2",
+      "transport": "obfs4",
+      "port": 2024,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1919,9 +1963,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 185.177.207.199:12199 CE9FB471CD33ADFD45D1851E3FB3B6E8B8C8F0CD cert=b0194UWG2T7IX0Y6hBUbxA30LjyxFixxZuZv/C2vtvzSC9tarpB0OO+JIuTRbhzGqXfHbg iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.103:12346 627D34BFF60081758EEFFB985E8F052326C0F816 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 12199,
+      "port": 12346,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1929,9 +1973,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 185.177.207.216:11216 E71628480D83354D3AC73BC4F1B1684F1E7BC57B cert=YJm9yg+8IrX+RSUdXcLDc1gCM6IikHhOSuEGLIB/Gc2w5ANMrXU1PVcRKPz816uphwn4Zw iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.124:12346 E9CBB4C165BDE93FB6315B83938A466E7B1548AC cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 11216,
+      "port": 12346,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1939,9 +1983,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 23.95.62.122:8040 CBBE8FC02F311F2656C405896F38A7E63490F4CC cert=Whto8g08oWYv5VIukHsWcI8PoIGhDeampPmaN2mlGM3fZAVhhppwvKajeGCAvDQX4rqGNQ iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.125:12346 A59D0D4C75A4CBD163E4C8FFE595D540741A02FB cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 8040,
+      "port": 12346,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1949,9 +1993,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 45.83.182.93:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.13:22662 928C1E4289A01F34C8FB423FC32C0E77EE0F8736 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 8009,
+      "port": 22662,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1959,9 +2003,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 72.10.162.51:12693 8F219F64DC11351F00C3A50B64990EE50E784F74 cert=/I3NYd0UcxUh83Xmsj2j8GNOeNBHmJ8jspO0/3ijqKxAlIBedJ9/AC80fXkY6IyEwXYzQQ iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.199:11199 E15FB70EF1A4C46AB3901475FF2CD239813531D4 cert=PCmyK9zEuUc6cyNmliGoYSFHoK4zIAnAlKp9m6vV6tSmL1kVwI/58vW55rqE3z1uAJMuPw iat-mode=2",
       "transport": "obfs4",
-      "port": 12693,
+      "port": 11199,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1969,9 +2013,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 82.64.115.17:990 B08238781C2CD80DBD95AEABEB6F6C75F2E2CEB6 cert=1udeMlFNs3sJ20zwpPE6nShZqqwDb3F1ET4KzfSfD+fktkue9zNx9H3t+yLCPAsg+6UTUA iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.43:1480 6613F66DC1AE0B50281CB8364654B85FB1253A36 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 990,
+      "port": 1480,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1979,9 +2023,9 @@
       ]
     },
     {
-      "bridge_line": "obfs4 85.0.134.232:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.55:24280 F7CB1A75ACBFC452C816DC81010B1BF6584BE105 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
-      "port": 995,
+      "port": 24280,
       "anti_ai_dpi_score": 0.8,
       "iran_ml_dpi_risk": "VERY_LOW",
       "flags": [
@@ -1989,7 +2033,67 @@
       ]
     },
     {
-      "bridge_line": "obfs4 [2a02:1210:4017:b500:5769:cf23:d0:d621]:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "bridge_line": "obfs4 185.177.207.62:40393 B5E311F6C417EB0C3FB3A3774EDBA5AB1C493A39 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": 40393,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 185.177.207.63:6340 5D56E9DFDA3000F3CB464DEC05E6341706980611 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": 6340,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 185.177.207.83:12346 A8AC8AFD802172ED4D21B350D643F11B1850E272 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": 12346,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 185.177.207.91:12346 BD28B81DDF1BC8658F3D3550A6076FB5C4EF7E65 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": 12346,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 89.10.81.64:7624 7468882481663A1AAE6067D5C6FC3A8CFAC82129 cert=Bsfe/59QH2vNZtj1MXurtPbPGENyL0i6bzfi9mXqceTJKF9wzf5K9x7xx2SdH70R0sd5Mg iat-mode=2",
+      "transport": "obfs4",
+      "port": 7624,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 91.227.77.152:465 42C5E354B0B9028667CFAB9705298F8C3623A4FB cert=JKS4que9Waw8PyJ0YRmx3QrSxv/YauS7HfxzmR51rCJ/M9jCKscJu7SOuz//dmzGJiMXdw iat-mode=2",
+      "transport": "obfs4",
+      "port": 465,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2001:470:1f08:1a3::2]:8080 ACB856D88DEC339471C68D4B195FCEC76F7E7072 cert=02LtI0kOdVdPm7V7P+wBjCX7i/vKwKuh4pNxLl7F/EHxFFuLdhob4XXs9KR1WZfSq19eew iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.8,
@@ -1999,7 +2103,7 @@
       ]
     },
     {
-      "bridge_line": "obfs4 [2a0a:4587:2012::199]:12199 CE9FB471CD33ADFD45D1851E3FB3B6E8B8C8F0CD cert=b0194UWG2T7IX0Y6hBUbxA30LjyxFixxZuZv/C2vtvzSC9tarpB0OO+JIuTRbhzGqXfHbg iat-mode=1",
+      "bridge_line": "obfs4 [2607:5300:203:7ac5:198:50:223:25]:80 24134F585E68DA65FEB33AA9ACB2A5040122FF39 cert=KxuTc2uMFheqkiTmRyViCf/d9THVX50CLhfbZS3bIuFOyV31hkH8BXSo5x/WrrX5lE/3Sw iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.8,
@@ -2009,7 +2113,7 @@
       ]
     },
     {
-      "bridge_line": "obfs4 [2a0a:4587:2012::216]:11216 E71628480D83354D3AC73BC4F1B1684F1E7BC57B cert=YJm9yg+8IrX+RSUdXcLDc1gCM6IikHhOSuEGLIB/Gc2w5ANMrXU1PVcRKPz816uphwn4Zw iat-mode=1",
+      "bridge_line": "obfs4 [2a03:4000:53:105::1337]:443 4A6AD27946A7DCA8D9A8B34F3A3BD1932174D0B5 cert=Gim+3J90KJwlb5e7HTwZm6QlqKl+Ij/0T9vPGxr1rJLDQFTdqcGwNseGfGNNu8IUooOADw iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.8,
@@ -2019,7 +2123,7 @@
       ]
     },
     {
-      "bridge_line": "obfs4 [2a0c:5700:3133:650:b235:3bff:fea0:8668]:8080 E6F41C41485C503D3E8A2D4C9B096B390F9425B7 cert=wUTy69IHqzh4Xpd6X/L6YG1NDTgWOq/AVNGPXseBy/16WmlmdNinXi2VNyBUlcN9tbrtcA iat-mode=1",
+      "bridge_line": "obfs4 [2a0a:4587:2011::103]:12346 627D34BFF60081758EEFFB985E8F052326C0F816 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.8,
@@ -2029,7 +2133,167 @@
       ]
     },
     {
-      "bridge_line": "obfs4 [2a10:1fc0:1:0:216:3cff:fe75:eaed]:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=1",
+      "bridge_line": "obfs4 [2a0a:4587:2011::108]:12346 90F67B8B09B66CF21E3FE73135F90FEAA4637B9B cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::120]:12346 92C51B81F7FE2ADB39CFD2A36BF423C317268A4B cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::122]:12346 3B91E7B162D05807ABB9173804CCD403C01FF9E8 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::124]:12346 E9CBB4C165BDE93FB6315B83938A466E7B1548AC cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::125]:12346 A59D0D4C75A4CBD163E4C8FFE595D540741A02FB cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::13]:22662 928C1E4289A01F34C8FB423FC32C0E77EE0F8736 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::32]:41209 32EF45EC5ECD3027B6DEE20E2B7D576AD35A8A8E cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::42]:57570 74D63774E5AFB5B8C76CBCFCE41755EC7221EAC9 cert=UDckWw1b5rITsqTs5S/EkNMGuXeb25hR3D7bAJWMxKU/Yfg96WIz/z41qTxe50t4JVImeg iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::43]:1480 6613F66DC1AE0B50281CB8364654B85FB1253A36 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::55]:24280 F7CB1A75ACBFC452C816DC81010B1BF6584BE105 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::57]:13630 A3D55AA6178E80AE486B6DAEAFBA5AB79B29B399 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::62]:40393 B5E311F6C417EB0C3FB3A3774EDBA5AB1C493A39 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::63]:6340 5D56E9DFDA3000F3CB464DEC05E6341706980611 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::7]:51289 82912F8138CFE1DFAC13CF48ED75315ADE65E011 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::83]:12346 A8AC8AFD802172ED4D21B350D643F11B1850E272 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2011::91]:12346 BD28B81DDF1BC8658F3D3550A6076FB5C4EF7E65 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.8,
+      "iran_ml_dpi_risk": "VERY_LOW",
+      "flags": [
+        "obfs4_iat_timing_randomised"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2012::199]:11199 E15FB70EF1A4C46AB3901475FF2CD239813531D4 cert=PCmyK9zEuUc6cyNmliGoYSFHoK4zIAnAlKp9m6vV6tSmL1kVwI/58vW55rqE3z1uAJMuPw iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.8,
@@ -2469,6 +2733,16 @@
       ]
     },
     {
+      "bridge_line": "obfs4 185.231.100.9:8080 E6F41C41485C503D3E8A2D4C9B096B390F9425B7 cert=wUTy69IHqzh4Xpd6X/L6YG1NDTgWOq/AVNGPXseBy/16WmlmdNinXi2VNyBUlcN9tbrtcA iat-mode=1",
+      "transport": "obfs4",
+      "port": 8080,
+      "anti_ai_dpi_score": 0.77,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "safe_port"
+      ]
+    },
+    {
       "bridge_line": "obfs4 185.85.87.222:443 24479DC0282DECD4EE9EDD6017B25EDDD217AAF1 cert=A4npStLmm2JEMPOAvtn8U0BJ5VGdDA2S+7pd4/aIutCi/t5HaKEvEfqkpj6cvF2kKm8VGQ iat-mode=0",
       "transport": "obfs4",
       "port": 443,
@@ -2569,16 +2843,6 @@
       ]
     },
     {
-      "bridge_line": "obfs4 198.50.223.25:80 24134F585E68DA65FEB33AA9ACB2A5040122FF39 cert=KxuTc2uMFheqkiTmRyViCf/d9THVX50CLhfbZS3bIuFOyV31hkH8BXSo5x/WrrX5lE/3Sw iat-mode=2",
-      "transport": "obfs4",
-      "port": 80,
-      "anti_ai_dpi_score": 0.77,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "safe_port"
-      ]
-    },
-    {
       "bridge_line": "obfs4 198.98.53.149:443 886CA31F71272FC8B3808C601FA3ABB8A2905DB4 cert=D+zypuFdMpP8riBUbInxIguzqClR0JKkP1DbkKz5es1+OP2Fao8jiXyM+B/+DYA2ZFy6UA iat-mode=0",
       "transport": "obfs4",
       "port": 443,
@@ -2602,16 +2866,6 @@
       "bridge_line": "obfs4 201.156.43.156:8080 15CFA99414EF6674C9B3C3C21956D6856275BF38 cert=OHaMXHhYzCdQb5ZPcIEiIFXSsm9G52SYQOolVotjrhF0vsF438Z1G2SpqP31xtWHxtOFEA iat-mode=0",
       "transport": "obfs4",
       "port": 8080,
-      "anti_ai_dpi_score": 0.77,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "safe_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 202.61.247.61:443 4A6AD27946A7DCA8D9A8B34F3A3BD1932174D0B5 cert=Gim+3J90KJwlb5e7HTwZm6QlqKl+Ij/0T9vPGxr1rJLDQFTdqcGwNseGfGNNu8IUooOADw iat-mode=2",
-      "transport": "obfs4",
-      "port": 443,
       "anti_ai_dpi_score": 0.77,
       "iran_ml_dpi_risk": "LOW",
       "flags": [
@@ -2752,16 +3006,6 @@
       "bridge_line": "obfs4 45.76.61.118:8443 F930A6272C72C1FA7E0B2A50A27FBBAAC5D75C97 cert=FRWwkSrJ4i0S2Qn4vRWE2tWLkTmIsORruLj59P4OBD6IIiWCQaw3IgNmlOMHIQmvC0g+PA iat-mode=0",
       "transport": "obfs4",
       "port": 8443,
-      "anti_ai_dpi_score": 0.77,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "safe_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 45.95.232.5:443 3CE205F7D7DE61E6E1787024EEDC03DCCFCA3C6A cert=1vxTSEr+6QCPpop3y0uEpY/V1ad4fB8ANayCPmh8DcPn4pt5kYNFctUjCA5A+GPmST1LNA iat-mode=2",
-      "transport": "obfs4",
-      "port": 443,
       "anti_ai_dpi_score": 0.77,
       "iran_ml_dpi_risk": "LOW",
       "flags": [
@@ -2950,16 +3194,6 @@
     },
     {
       "bridge_line": "obfs4 65.108.209.125:8080 96D8B85462218884AA561992B446ED201E33BCB7 cert=xndHHt72M61PCM+3G8vrhXd5tG0iJv2K7Dt79bQHmlbI4rVwQdU39PjSscmNq1j3AakOOQ iat-mode=0",
-      "transport": "obfs4",
-      "port": 8080,
-      "anti_ai_dpi_score": 0.77,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "safe_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 66.228.48.146:8080 ACE4CD0CCD8DDC93475D3BDDD8DC431AE7C1617A cert=HYDqiMmbewI3cEOWsAVs+VafKgatNDZdDjbu6jC7HxIm2cvfeh3Tw4Bq65eio71C/v3NBQ iat-mode=2",
       "transport": "obfs4",
       "port": 8080,
       "anti_ai_dpi_score": 0.77,
@@ -3209,6 +3443,16 @@
       ]
     },
     {
+      "bridge_line": "obfs4 85.121.176.36:8080 0681477084718491DFDA7782E7CAEE5604EBA118 cert=EjyO5o19sT5BMvAJBWtPpjDhTDSx+5kiw2sC50xvxSIjd+GdCuRJkPLDMJlAh5ujPM6DfQ iat-mode=1",
+      "transport": "obfs4",
+      "port": 8080,
+      "anti_ai_dpi_score": 0.77,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "safe_port"
+      ]
+    },
+    {
       "bridge_line": "obfs4 85.93.10.164:443 C5F150E8FFEAF0298CF2E4B8F7501A5C9B059C00 cert=HpvfZZ1gyBwY3zHvIzF3kARYVZdMaCaDKTT2sD5KCk+foafG2CM8lP3OVCeJ4MaDfCArGg iat-mode=0",
       "transport": "obfs4",
       "port": 443,
@@ -3242,6 +3486,16 @@
       "bridge_line": "obfs4 87.195.159.238:8443 97A77E789F724E9E008BEEED993CC0B6DB2D085F cert=T/WxxliJll2OdV5HxO1kVk1ifaGu5QubDcFsnCWdfq5gpWtikdahyGHPw2wbiX/GgTLaKA iat-mode=0",
       "transport": "obfs4",
       "port": 8443,
+      "anti_ai_dpi_score": 0.77,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": [
+        "safe_port"
+      ]
+    },
+    {
+      "bridge_line": "obfs4 88.72.203.54:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "transport": "obfs4",
+      "port": 8080,
       "anti_ai_dpi_score": 0.77,
       "iran_ml_dpi_risk": "LOW",
       "flags": [
@@ -3442,26 +3696,6 @@
       "bridge_line": "obfs4 185.161.210.189:59400 96FE8631C0047C67E0C1572C7EB5A7B3F84C5FE8 cert=WTu4xE4x47rxtq+Yf9TSXgh62zIJ2mT6Zh+BCNpyX7RSQYCk8SCSGvlifJZHl9hP/w+YAQ iat-mode=0",
       "transport": "obfs4",
       "port": 59400,
-      "anti_ai_dpi_score": 0.75,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "ephemeral_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.10:56389 6B84EEA5CE85F8CA28102B0134851F0928921EC2 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 56389,
-      "anti_ai_dpi_score": 0.75,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": [
-        "ephemeral_port"
-      ]
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.42:57570 74D63774E5AFB5B8C76CBCFCE41755EC7221EAC9 cert=UDckWw1b5rITsqTs5S/EkNMGuXeb25hR3D7bAJWMxKU/Yfg96WIz/z41qTxe50t4JVImeg iat-mode=2",
-      "transport": "obfs4",
-      "port": 57570,
       "anti_ai_dpi_score": 0.75,
       "iran_ml_dpi_risk": "LOW",
       "flags": [
@@ -4087,14 +4321,6 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 158.69.55.8:2024 22F0CA73A0E39C7A4198454C2AEC99E311237F5F cert=MTQVuueo3gKDZljyb5xvr6Cq4BisSHew/HKarStz4yfiUVL0Zr0/wGt0V6pj7Mwfk5kWXg iat-mode=2",
-      "transport": "obfs4",
-      "port": 2024,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
       "bridge_line": "obfs4 158.69.55.8:25002 E91C15AA725D309066E8F0A3709D27BDBEE34B40 cert=Gnw0rnQgdSv9NaeF8n01NG2Gf21tCcGBBX8mLqHGHEpanCYywg65uwF4/5iI1Lu24yBcGw iat-mode=0",
       "transport": "obfs4",
       "port": 25002,
@@ -4231,6 +4457,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 178.196.137.6:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "transport": "obfs4",
+      "port": 995,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 178.236.245.209:9100 A5DDBD72FD8B63EC0F2455AF8C97EE88E52E7E6B cert=/OuQ+vKEUjIqJ9rHME3ML3dwvzXSCWLw094Ic+v2wRciEoWw72POdr0eLX6D5dm7vMVnBA iat-mode=0",
       "transport": "obfs4",
       "port": 9100,
@@ -4287,41 +4521,17 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 185.177.207.103:12346 627D34BFF60081758EEFFB985E8F052326C0F816 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "bridge_line": "obfs4 185.177.207.199:12199 CE9FB471CD33ADFD45D1851E3FB3B6E8B8C8F0CD cert=b0194UWG2T7IX0Y6hBUbxA30LjyxFixxZuZv/C2vtvzSC9tarpB0OO+JIuTRbhzGqXfHbg iat-mode=1",
       "transport": "obfs4",
-      "port": 12346,
+      "port": 12199,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
     },
     {
-      "bridge_line": "obfs4 185.177.207.124:12346 E9CBB4C165BDE93FB6315B83938A466E7B1548AC cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
+      "bridge_line": "obfs4 185.177.207.216:11216 E71628480D83354D3AC73BC4F1B1684F1E7BC57B cert=YJm9yg+8IrX+RSUdXcLDc1gCM6IikHhOSuEGLIB/Gc2w5ANMrXU1PVcRKPz816uphwn4Zw iat-mode=1",
       "transport": "obfs4",
-      "port": 12346,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.125:12346 A59D0D4C75A4CBD163E4C8FFE595D540741A02FB cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 12346,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.13:22662 928C1E4289A01F34C8FB423FC32C0E77EE0F8736 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 22662,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.199:11199 E15FB70EF1A4C46AB3901475FF2CD239813531D4 cert=PCmyK9zEuUc6cyNmliGoYSFHoK4zIAnAlKp9m6vV6tSmL1kVwI/58vW55rqE3z1uAJMuPw iat-mode=2",
-      "transport": "obfs4",
-      "port": 11199,
+      "port": 11216,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
@@ -4354,54 +4564,6 @@
       "bridge_line": "obfs4 185.177.207.251:11251 BDE1BBC62DB8EBAE17EEF369A7271512C8B29D0F cert=uG0DsVlVpmb11kIU6HoKsOphEkdpWYfoAnxUh0Z9AGL7kDVxgLTquKS5VUWaS/tijZykJA iat-mode=0",
       "transport": "obfs4",
       "port": 11251,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.43:1480 6613F66DC1AE0B50281CB8364654B85FB1253A36 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 1480,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.55:24280 F7CB1A75ACBFC452C816DC81010B1BF6584BE105 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 24280,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.62:40393 B5E311F6C417EB0C3FB3A3774EDBA5AB1C493A39 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 40393,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.63:6340 5D56E9DFDA3000F3CB464DEC05E6341706980611 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 6340,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.83:12346 A8AC8AFD802172ED4D21B350D643F11B1850E272 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 12346,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 185.177.207.91:12346 BD28B81DDF1BC8658F3D3550A6076FB5C4EF7E65 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": 12346,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
@@ -4847,6 +5009,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 23.95.62.122:8040 CBBE8FC02F311F2656C405896F38A7E63490F4CC cert=Whto8g08oWYv5VIukHsWcI8PoIGhDeampPmaN2mlGM3fZAVhhppwvKajeGCAvDQX4rqGNQ iat-mode=1",
+      "transport": "obfs4",
+      "port": 8040,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 31.171.241.238:8414 811115E721E9B530A3BA41D3FCE6B71D64E4DC5A cert=Sye+7gmUheN9ohPm8TV1pyNiuMwr4NMAKJXC3p6Du8m56VyorhG6S7u2NgklFS91rwpKBA iat-mode=0",
       "transport": "obfs4",
       "port": 8414,
@@ -5008,6 +5178,14 @@
     },
     {
       "bridge_line": "obfs4 45.83.182.93:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=0",
+      "transport": "obfs4",
+      "port": 8009,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 45.83.182.93:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=1",
       "transport": "obfs4",
       "port": 8009,
       "anti_ai_dpi_score": 0.72,
@@ -5319,9 +5497,25 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 71.212.145.164:2555 9FB06D6117620EB060A29FE93E3CE889197A6EF7 cert=PDRVZCA3a3Vss8lMr3slhNMC4Hd7Af6uqQ8yf/ME9+NK+/o+obQv+CgekbuORmoSxU/uHA iat-mode=0",
+      "transport": "obfs4",
+      "port": 2555,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 71.54.168.76:29003 47E05016F24C7C3947ED3AB80AF224363118302F cert=ColKK1RnQXuaCGyiTZ6AhsKGGaPkQOYrNZ/l/AgZiwsc66AwR3+41yJnVXZJ0YnBIP12CA iat-mode=0",
       "transport": "obfs4",
       "port": 29003,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 72.10.162.51:12693 8F219F64DC11351F00C3A50B64990EE50E784F74 cert=/I3NYd0UcxUh83Xmsj2j8GNOeNBHmJ8jspO0/3ijqKxAlIBedJ9/AC80fXkY6IyEwXYzQQ iat-mode=1",
+      "transport": "obfs4",
+      "port": 12693,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
@@ -5671,6 +5865,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 82.64.115.17:990 B08238781C2CD80DBD95AEABEB6F6C75F2E2CEB6 cert=1udeMlFNs3sJ20zwpPE6nShZqqwDb3F1ET4KzfSfD+fktkue9zNx9H3t+yLCPAsg+6UTUA iat-mode=1",
+      "transport": "obfs4",
+      "port": 990,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 82.64.115.17:993 C1FFD364E11928D9C84ECF76987693CF58355749 cert=Nwv7E2pul9jzCa+4ltAjL4sdAnI5Fu/XVoVv6IkYnCQn976NHEgK2+WwBY7+zVPUhL8fAQ iat-mode=0",
       "transport": "obfs4",
       "port": 993,
@@ -5842,6 +6044,14 @@
       "bridge_line": "obfs4 84.52.216.169:8090 07BD9CFA8FFADD4F6E98551AA386B9303A70EA18 cert=t6oKNj+gADLb94dw9IKPul5CtLMplJKTecVSKIEJcNG4i70sMqRt7c+JDsUXmt3q8Qm/Iw iat-mode=0",
       "transport": "obfs4",
       "port": 8090,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 85.0.134.232:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "transport": "obfs4",
+      "port": 995,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
@@ -6095,14 +6305,6 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 89.10.81.64:7624 7468882481663A1AAE6067D5C6FC3A8CFAC82129 cert=Bsfe/59QH2vNZtj1MXurtPbPGENyL0i6bzfi9mXqceTJKF9wzf5K9x7xx2SdH70R0sd5Mg iat-mode=2",
-      "transport": "obfs4",
-      "port": 7624,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
       "bridge_line": "obfs4 89.116.48.119:32278 EB1331E3372F12A1B42D2A8ECAF7064251C56B66 cert=pfjOWyOhh7bEcZUtKekBFbBPKSnhWjS4yyFG+/n0Foq3Bq6m8gsLecMHBf9K01a/wLiNAQ iat-mode=0",
       "transport": "obfs4",
       "port": 32278,
@@ -6290,14 +6492,6 @@
       "bridge_line": "obfs4 91.219.236.46:22022 AC407EADEF780E2FBF847DF9BA65BFB9E08245E4 cert=5YLchIGbKzblUM7WdqwY1RFo19HqPdZrBLvSwBuvmAN5k5yIXHJ5GS22oWXTUsW9lUTCZg iat-mode=0",
       "transport": "obfs4",
       "port": 22022,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 91.227.77.152:465 42C5E354B0B9028667CFAB9705298F8C3623A4FB cert=JKS4que9Waw8PyJ0YRmx3QrSxv/YauS7HfxzmR51rCJ/M9jCKscJu7SOuz//dmzGJiMXdw iat-mode=2",
-      "transport": "obfs4",
-      "port": 465,
       "anti_ai_dpi_score": 0.72,
       "iran_ml_dpi_risk": "LOW",
       "flags": []
@@ -6632,14 +6826,6 @@
     },
     {
       "bridge_line": "obfs4 [2001:41d0:801:1000::21c]:45153 71B727DCBCBFF6E6FB8E5B115E3FFA29EE2042FE cert=mNF4kkuPKnc7HicT59q+FGIGVZ9xtFfJjsT8JpDkE5GWTQ3s+jP+eH25+JSBoGtkNNLEZw iat-mode=0",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2001:470:1f08:1a3::2]:8080 ACB856D88DEC339471C68D4B195FCEC76F7E7072 cert=02LtI0kOdVdPm7V7P+wBjCX7i/vKwKuh4pNxLl7F/EHxFFuLdhob4XXs9KR1WZfSq19eew iat-mode=2",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,
@@ -7319,14 +7505,6 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 [2607:5300:203:7ac5:198:50:223:25]:80 24134F585E68DA65FEB33AA9ACB2A5040122FF39 cert=KxuTc2uMFheqkiTmRyViCf/d9THVX50CLhfbZS3bIuFOyV31hkH8BXSo5x/WrrX5lE/3Sw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
       "bridge_line": "obfs4 [2607:5300:205:200::3299]:42024 95186700BC86C8032E4E707448861FBE39564FB2 cert=3iwAuwn0Mklo74X8UD728VkBOFwytf94n0/AKuxD7pTeRVdoorl18MiouwEEYDwavck0Ng iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -7399,6 +7577,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 [2a00:10:6540:6501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 [2a00:10:6b0e:8901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -7408,6 +7594,14 @@
     },
     {
       "bridge_line": "obfs4 [2a00:10:6b13:e501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 [2a00:10:6b23:901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,
@@ -7967,6 +8161,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 [2a02:1210:4017:b500:5769:cf23:d0:d621]:995 E4BFB6D0104B39023047F0DBEC6968D342C663B7 cert=7XQJE7iuQybP8HkddKOz7Xj8XACzbwEXS1dITzCJeVA9khBS0C22vTZYtLjVv6AhEeinGg iat-mode=1",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 [2a02:168:673b::1]:9143 B479C6CD6E9794DE50E07BFA3178890EAE4BF6C7 cert=07J+GnxmvNIdIilvdKF6h4kDNjxlqPJQy3WcqSovj0azqocsnLjwjR33A7kt1VWod9tdHQ iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -8143,14 +8345,6 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 [2a03:4000:53:105::1337]:443 4A6AD27946A7DCA8D9A8B34F3A3BD1932174D0B5 cert=Gim+3J90KJwlb5e7HTwZm6QlqKl+Ij/0T9vPGxr1rJLDQFTdqcGwNseGfGNNu8IUooOADw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
       "bridge_line": "obfs4 [2a03:4000:55:15a:c89e:bcff:fe21:e5e2]:2739 6F059771EFD2EE8649C2CCEF41407AEBD82B1E4B cert=caVSQBW9+duFx52XC51Sgoc6GvPlCfdSdYWvMYdlR5TQDYzCOEtGy+qE/s7QHsyrX2tFCQ iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -8255,142 +8449,6 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 [2a0a:4587:2011::103]:12346 627D34BFF60081758EEFFB985E8F052326C0F816 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::108]:12346 90F67B8B09B66CF21E3FE73135F90FEAA4637B9B cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::120]:12346 92C51B81F7FE2ADB39CFD2A36BF423C317268A4B cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::122]:12346 3B91E7B162D05807ABB9173804CCD403C01FF9E8 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::124]:12346 E9CBB4C165BDE93FB6315B83938A466E7B1548AC cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::125]:12346 A59D0D4C75A4CBD163E4C8FFE595D540741A02FB cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::13]:22662 928C1E4289A01F34C8FB423FC32C0E77EE0F8736 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::32]:41209 32EF45EC5ECD3027B6DEE20E2B7D576AD35A8A8E cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::42]:57570 74D63774E5AFB5B8C76CBCFCE41755EC7221EAC9 cert=UDckWw1b5rITsqTs5S/EkNMGuXeb25hR3D7bAJWMxKU/Yfg96WIz/z41qTxe50t4JVImeg iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::43]:1480 6613F66DC1AE0B50281CB8364654B85FB1253A36 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::55]:24280 F7CB1A75ACBFC452C816DC81010B1BF6584BE105 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::57]:13630 A3D55AA6178E80AE486B6DAEAFBA5AB79B29B399 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::62]:40393 B5E311F6C417EB0C3FB3A3774EDBA5AB1C493A39 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::63]:6340 5D56E9DFDA3000F3CB464DEC05E6341706980611 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::7]:51289 82912F8138CFE1DFAC13CF48ED75315ADE65E011 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::83]:12346 A8AC8AFD802172ED4D21B350D643F11B1850E272 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
-      "bridge_line": "obfs4 [2a0a:4587:2011::91]:12346 BD28B81DDF1BC8658F3D3550A6076FB5C4EF7E65 cert=p9L6+25s8bnfkye1ZxFeAE4mAGY7DH4Gaj7dxngIIzP9BtqrHHwZXdjMK0RVIQ34C7aqZw iat-mode=2",
-      "transport": "obfs4",
-      "port": null,
-      "anti_ai_dpi_score": 0.72,
-      "iran_ml_dpi_risk": "LOW",
-      "flags": []
-    },
-    {
       "bridge_line": "obfs4 [2a0a:4587:2012:1::233]:11233 B8DFC8F455000A5C6C740175A6604642CB50A83D cert=cYWJY9X7MunIDSWpdhKEW/cRCX6rtZbVp2YqLf+4Vht3epd66bKBetJ7gnN6QjfqO6LPEg iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -8415,7 +8473,15 @@
       "flags": []
     },
     {
-      "bridge_line": "obfs4 [2a0a:4587:2012::199]:11199 E15FB70EF1A4C46AB3901475FF2CD239813531D4 cert=PCmyK9zEuUc6cyNmliGoYSFHoK4zIAnAlKp9m6vV6tSmL1kVwI/58vW55rqE3z1uAJMuPw iat-mode=2",
+      "bridge_line": "obfs4 [2a0a:4587:2012::199]:12199 CE9FB471CD33ADFD45D1851E3FB3B6E8B8C8F0CD cert=b0194UWG2T7IX0Y6hBUbxA30LjyxFixxZuZv/C2vtvzSC9tarpB0OO+JIuTRbhzGqXfHbg iat-mode=1",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 [2a0a:4587:2012::216]:11216 E71628480D83354D3AC73BC4F1B1684F1E7BC57B cert=YJm9yg+8IrX+RSUdXcLDc1gCM6IikHhOSuEGLIB/Gc2w5ANMrXU1PVcRKPz816uphwn4Zw iat-mode=1",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,
@@ -8479,6 +8545,14 @@
       "flags": []
     },
     {
+      "bridge_line": "obfs4 [2a0c:5700:3133:650:b235:3bff:fea0:8668]:8080 E6F41C41485C503D3E8A2D4C9B096B390F9425B7 cert=wUTy69IHqzh4Xpd6X/L6YG1NDTgWOq/AVNGPXseBy/16WmlmdNinXi2VNyBUlcN9tbrtcA iat-mode=1",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
       "bridge_line": "obfs4 [2a0c:ea42:2a6:0:c8b5:de4d:ca:1cab]:3052 AD26290480151BAA4A8F695C11BD7B141284B691 cert=iohB8SdMNEkqxItwuRi78F/AFczuTUPC7C+2cfh81PN/yhWE/NQci7RW8VLMZwLPfK1dYg iat-mode=0",
       "transport": "obfs4",
       "port": null,
@@ -8512,6 +8586,14 @@
     },
     {
       "bridge_line": "obfs4 [2a10:1fc0:1:0:216:3cff:fe75:eaed]:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=0",
+      "transport": "obfs4",
+      "port": null,
+      "anti_ai_dpi_score": 0.72,
+      "iran_ml_dpi_risk": "LOW",
+      "flags": []
+    },
+    {
+      "bridge_line": "obfs4 [2a10:1fc0:1:0:216:3cff:fe75:eaed]:8009 073386E7DF7406AA248CDC978ED6FE25C1048645 cert=ElM84TKLLcNU8v0TvUbhyQwRVLGDfvHMUy0aHilfO4wQh2V+FJy/aJuDcdU9xJ4XC/jXAA iat-mode=1",
       "transport": "obfs4",
       "port": null,
       "anti_ai_dpi_score": 0.72,

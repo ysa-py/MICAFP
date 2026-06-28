@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T03:52:30.748943+00:00",
+  "generated_at": "2026-06-28T08:03:39.049776+00:00",
   "analysis_window_days": 7,
   "recommended_order": [
     "snowflake",
@@ -34,7 +34,7 @@
     {
       "transport": "obfs4",
       "success_rate": 0.0,
-      "total_tested": 1610,
+      "total_tested": 1618,
       "working": 0,
       "blocked": 0,
       "weight": 0.0,

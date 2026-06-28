@@ -1,9 +1,8 @@
 {
-  "generated_at": "2026-06-28T04:10:53.724201+00:00",
+  "generated_at": "2026-06-28T08:22:13.995708+00:00",
   "provider_count": 1,
-  "consensus_score": 0.98,
+  "consensus_score": 0.92,
   "selected_strategies": [
-    "ja3_randomize",
     "obfs4_iat_boost",
     "port_rotation"
   ],
@@ -11,13 +10,12 @@
   "individual_responses": [
     {
       "mutation_needed": true,
-      "confidence": 0.98,
+      "confidence": 0.92,
       "recommended_strategies": [
-        "port_rotation",
         "obfs4_iat_boost",
-        "ja3_randomize"
+        "port_rotation"
       ],
-      "reasoning": "obfs4's AI detectability and high block rate necessitate timing and fingerprint mutations to evade SIAM's ML classifiers.",
+      "reasoning": "obfs4's AI detectability and NIN incompatibility necessitate timing randomization and port diversification to evade ML classifiers and DPI.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]
