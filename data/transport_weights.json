@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-28T15:02:04.651474+00:00",
+  "updated_at": "2026-06-27T21:15:59.716363+00:00",
   "weights": {
     "vanilla": 0.0,
     "webtunnel": 0.0054,
@@ -19,8 +19,8 @@
     "vanilla": {
       "working": 0,
       "blocked": 0,
-      "unknown": 912,
-      "total": 912
+      "unknown": 904,
+      "total": 904
     },
     "webtunnel": {
       "working": 2,
@@ -31,8 +31,8 @@
     "obfs4": {
       "working": 0,
       "blocked": 0,
-      "unknown": 1618,
-      "total": 1618
+      "unknown": 1604,
+      "total": 1604
     },
     "snowflake": {
       "working": 8,

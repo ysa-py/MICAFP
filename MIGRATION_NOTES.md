@@ -105,3 +105,332 @@ reach them through local modules.
 | `tenacity` | `tenacity` | `backoff` | No active Python file imports `tenacity`; retry behavior that remains active in Python does not depend on this package. |
 | `structlog` | `structlog` | `tracing` + `tracing-subscriber` | No active Python file imports `structlog`; structured logging migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
 | `prometheus-client` | `prometheus_client` | `prometheus` | No active Python file imports `prometheus_client`; metrics migration is represented by the Rust migration crate plan and has no remaining Python package-backed behavior in active files. |
+
+## Phase 1 parity anchor: circuit_breaker/slot_circuit_breaker.py
+
+`circuit_breaker/slot_circuit_breaker.py` now has a Rust replacement in
+`src/slot_circuit_breaker.rs` that mirrors the per-slot circuit breaker state
+machine (CLOSED → OPEN → HALF_OPEN) including slot credential validation,
+cooldown transitions, health-score ranking, and the full `get_status()` dict
+shape. The parity suite in `tests/slot_circuit_breaker_parity.rs` and
+`tests/parity/slot_circuit_breaker_parity.rs` invokes the original Python
+`SlotCircuitBreaker` via `std::process::Command` on 8 fixed scenarios (fresh,
+below-threshold, at-threshold, cooldown→half_open, half_open+success,
+half_open+failure, multi-slot isolation, full get_status dict) and asserts
+identical JSON output. 19 additional pure-Rust tests cover the internal state
+machine, EMA latency updates, failure-by-type tracking, env-override parsing,
+typed-error paths, and alias methods.
+
+The Python file is retained because the wider circuit-breaker integration
+surface (`circuit_breaker_11slot.py`, `providers.py` wrapping, monitoring
+structured-logger hooks) has not yet been parity-verified in Rust.
+
+### Behavioral differences flagged for review
+
+1. **`half_open_probes_sent` is never incremented (Python bug replicated).**
+   The Python `allow_request` checks `half_open_probes_sent <
+   half_open_max_probes` in the HALF_OPEN branch, but no code path in the
+   Python original ever increments `half_open_probes_sent`. As a result,
+   HALF_OPEN always allows requests (the probe budget is effectively
+   unlimited). The Rust port replicates this exactly so that `allow_request`,
+   `get_available_slots`, `get_slot_for_rotation`, and `get_status` produce
+   byte-identical output. This is a known bug in the Python original; a future
+   fix should increment `half_open_probes_sent` in `allow_request` when
+   returning `true` from the HALF_OPEN branch.
+
+2. **Structured-logger integration is a no-op in Rust.** The Python original
+   imports `monitoring.structured_logger.get_structured_logger` at construction
+   and calls `log_diagnostics` on each failure. That module is not part of the
+   Rust migration scope, so the Rust port emits no diagnostics. State-machine
+   behavior is unaffected — the structured logger is a pure side effect with
+   no influence on `state`, `failure_count`, or transition decisions.
+
+3. **Singleton failure mode differs (safer in Rust).** The Python
+   `get_slot_circuit_breaker()` raises `ValueError` if
+   `CIRCUIT_BREAKER_FAILURE_THRESHOLD`, `CIRCUIT_BREAKER_COOLDOWN_SECS`, or
+   `CIRCUIT_BREAKER_HALF_OPEN_MAX_PROBES` contains a non-numeric value. The
+   Rust `get_slot_circuit_breaker()` returns an `Arc<Mutex<SlotCircuitBreaker>>`
+   initialized with default thresholds (3 / 60.0 / 1) and logs the parse error
+   to stderr, matching the "ZERO CRASH" docstring principle. Strict env-parse
+   errors are still surfaced via `SlotCircuitBreaker::new` ->
+   `Result<_, SlotCircuitBreakerError>` for callers that prefer to fail loud.
+
+4. **`round()` uses round-half-away-from-zero, not banker's rounding.**
+   Python's built-in `round(x, n)` uses round-half-to-even (banker's
+   rounding); Rust's `f64::round()` (used in the internal `round_to` helper)
+   uses round-half-away-from-zero. The two differ only for values that fall
+   on an exact 0.5 boundary at the nth decimal. The circuit breaker's
+   computed values (`success_rate`, `health_score`, `avg_latency_ms`) do not
+   produce such boundaries in practice (verified against the Python
+   `get_status()` output across all 11 slots in the parity test), so the JSON
+   output is byte-identical.
+
+5. **`time.time()` vs `chrono::Utc::now()`.** The Python original uses
+   `time.time()` (epoch seconds as `float`) for cooldown timing. The Rust port
+   uses `chrono::Utc::now()` converted to epoch seconds as `f64`
+   (`timestamp() as f64 + timestamp_subsec_nanos() as f64 / 1e9`), which is
+   numerically equivalent. The clock is injectable via the `Clock` type alias
+   (`Arc<dyn Fn() -> f64 + Send + Sync>`) so tests can advance time
+   deterministically without sleeping.
+
+## Phase 1 parity anchor: nin_internet_cut_classifier.py
+
+`nin_internet_cut_classifier.py` now has a Rust replacement in
+`src/nin_internet_cut_classifier.rs` that mirrors the module's pure helpers
+(`_parse_bridge`, `_classify`, `_load_all_bridges`) and the orchestration
+functions (`main`, `_write_empty`) including all module-level constants
+(`BRIDGE_SOURCES`, `GREEN_OUT`, `YELLOW_OUT`, `COMBINED_OUT`, `REPORT_OUT`,
+`GREEN_SNIS`, `YELLOW_SNIS`, `GREEN_TRANSPORTS`, `YELLOW_TRANSPORTS`,
+`RED_TRANSPORTS`, `NIN_SAFE_PORTS`, `IRAN_CDN_CIDR_RAW`, and the report-text
+constants). The parity suite in `tests/nin_internet_cut_classifier_parity.rs`
+and `tests/parity/nin_internet_cut_classifier_parity.rs` invokes the original
+Python module via `std::process::Command` on 5 fixed scenarios (parse_bridge
+over 28 input lines, classify over 22 bridge lines, load_all_bridges
+dedup+skip, end-to-end main() with mixed bridges, and main() with empty
+input) and asserts identical JSON output (parsed Value comparison so object
+key order is irrelevant). 15 additional pure-Rust tests cover every
+documented classify branch plus threshold boundaries and the empty-input
+edge case. The Python file is retained because no other Rust module imports
+the classifier yet and deletion is still gated on maintained parity
+evidence.
+
+### Behavioral differences flagged for review
+
+1. **`serde_json::Map` key ordering differs (alphabetical vs insertion
+   order).** Without the `preserve_order` Cargo feature, `serde_json::Map`
+   is backed by a `BTreeMap` and serializes keys in alphabetical order.
+   Python's `dict` preserves insertion order, so `json.dumps(report,
+   indent=2)` writes keys in the order they were inserted. The Rust port
+   therefore emits a report JSON file with alphabetically-sorted keys
+   (`bridges`, `classification_logic`, `generated_at`, `green_count`, …)
+   while Python emits insertion-order keys (`generated_at`, `total_bridges`,
+   `green_count`, …). This is a raw-string difference only —
+   `serde_json::Value::Object` equality is order-independent, so the
+   parity tests parse both JSON outputs and compare Values, which always
+   agrees. Downstream consumers that JSON-parse the report (rather than
+   string-matching it) see identical data.
+
+2. **Structured-logger integration is a no-op in Rust.** The Python
+   original imports `monitoring.structured_logger.record_silent_failure`
+   inside two `except ValueError` blocks (CIDR parsing at module load and
+   IPv4Address parsing inside `_classify`). That module is not part of the
+   Rust migration scope, so the Rust port routes the same conditions
+   through `eprintln!` (CIDR parse failure on `IranCidrTable::from_cidrs`)
+   or silent fall-through (invalid IP in `classify`). Classification
+   behavior is unaffected — the structured logger is a pure side effect
+   with no influence on tier assignment.
+
+3. **Regex crate is not in the dependency manifest; patterns are
+   hand-rolled.** The Python original uses Python's `re` module for the
+   transport prefix, IPv4:port, IPv6:port, and SNI patterns. The task
+   spec restricts the Rust crate set to `serde_json`, `chrono`, and
+   `thiserror`, so `src/nin_internet_cut_classifier.rs` implements four
+   hand-rolled scanners (`parse_transport_prefix`, `find_ipv4_port`,
+   `find_ipv6_port`, `find_sni`) that reproduce the Python regex
+   semantics for the specific patterns in use. Edge cases verified by
+   Python subprocess parity: 5-octet inputs match the last 4 octets;
+   word boundaries reject IPs preceded/followed by word chars; leftmost
+   match wins; case-insensitive prefix matching; greedy `\d{1,3}` and
+   `\d{2,5}` quantifiers. The hand-rolled scanners do NOT support
+   non-ASCII word characters in `\b` (Python's Unicode `\w`); bridge
+   lines are ASCII so this is not exercised.
+
+4. **`datetime.isoformat()` omits fractional seconds when microseconds
+   are zero; Rust's `format_iso` always emits 6 digits.** Python's
+   `datetime(2024, 1, 1, 12, 0, 0, 0, tzinfo=UTC).isoformat()` produces
+   `"2024-01-01T12:00:00+00:00"` (no fractional part). The Rust port's
+   `format_iso` uses chrono's `%Y-%m-%dT%H:%M:%S%.6f%:z` which always
+   produces 6 fractional digits: `"2024-01-01T12:00:00.000000+00:00"`.
+   In production, `chrono::Utc::now()` returns a time with non-zero
+   microseconds (with very high probability), so the two formats agree.
+   The parity tests sidestep the issue by using a fixed time with non-zero
+   microseconds (`2024-01-01T12:00:00.123456+00:00`), which both
+   implementations format identically. A future fix would conditionally
+   omit the fractional part when `nanosecond() == 0`, but this is
+   cosmetic — the parsed `DateTime<Utc>` is identical either way.
+
+## Phase 1 parity anchor: adaptive_selector.py + adaptive_transport.py
+
+`adaptive_selector.py` and `adaptive_transport.py` now have Rust replacements
+in `src/adaptive_selector.rs` and `src/adaptive_transport.rs`. Both modules
+mirror every public function/class, every branch, every threshold, and every
+default value. The parity suites in
+`tests/adaptive_selector_parity.rs` (22 tests) and
+`tests/adaptive_transport_parity.rs` (19 tests) invoke the original Python
+modules via `std::process::Command` and assert identical JSON output (parsed
+`Value` comparison so object key ordering is irrelevant). Identical copies
+exist in `tests/parity/` per project convention.
+
+The Python files are retained because no other Rust module imports them yet
+and deletion is still gated on maintained parity evidence.
+
+### Behavioral differences flagged for review
+
+1. **Timestamp fields stripped in parity comparison.** The Python original
+   calls `datetime.now(UTC).isoformat()` inside `save_weights`,
+   `save_best_transports`, and `select_transport_for_nin_cut`. The Rust port
+   accepts an injectable `now: DateTime<Utc>` parameter, but the Python
+   helper cannot be injected with a fixed timestamp without monkey-patching
+   `datetime`. The parity tests therefore strip `updated_at`, `generated_at`,
+   and `ts` fields from both Python and Rust outputs before comparing. In
+   production, both sides produce ISO-8601 timestamps with the same format
+   (`2024-01-01T12:00:00.123456+00:00`) when microseconds are non-zero.
+
+2. **`serde_json::Map` key ordering differs (alphabetical vs insertion
+   order).** Without the `preserve_order` Cargo feature, `serde_json::Map`
+   is backed by a `BTreeMap` and serializes keys in alphabetical order.
+   Python's `dict` preserves insertion order, so `json.dumps(payload,
+   indent=2)` writes keys in insertion order. This is a raw-string difference
+   only — `serde_json::Value::Object` equality is order-independent, so the
+   parity tests parse both JSON outputs and compare Values, which always
+   agrees. Downstream consumers that JSON-parse the output (rather than
+   string-matching it) see identical data.
+
+3. **Structured-logger integration is a no-op in Rust.** The Python
+   `adaptive_transport._load_weight_history` imports
+   `monitoring.structured_logger.record_silent_failure` inside an `except`
+   block. That module is not part of the Rust migration scope, so the Rust
+   port silently returns `[]` on parse errors. Behavior is unaffected — the
+   structured logger is a pure side effect with no influence on the returned
+   history list. Similarly, all `logging.info`/`logging.warning` calls in
+   both Python modules are no-ops in the Rust port (no `tracing` dependency
+   in the allowed crate set).
+
+4. **Non-numeric `ooni_factor` raises in Python, returns typed error in
+   Rust.** The Python `adaptive_selector.score` calls `float(ooni_factor)`
+   which raises `TypeError`/`ValueError` for non-numeric, non-None values
+   (arrays, objects). The Rust port returns
+   `AdaptiveSelectorError::InvalidOoniFactor` so callers can decide whether
+   to log or skip the record. For numeric values (int, float, numeric
+   string, bool), both sides coerce identically via `python_float()`.
+
+5. **`datetime.isoformat()` omits fractional seconds when microseconds are
+   zero; Rust's `to_rfc3339()` does too.** Python's
+   `datetime(2024,1,1,12,0,0,0,tzinfo=UTC).isoformat()` produces
+   `"2024-01-01T12:00:00+00:00"` (no fractional part). Rust's
+   `DateTime::to_rfc3339()` also omits fractional seconds when nanoseconds
+   are zero, producing the same string. The parity tests use a fixed time
+   with non-zero microseconds (`2024-01-01T12:00:00.123456+00:00`) which
+   both implementations format identically, sidestepping any edge-case
+   difference.
+
+# Migration Notes
+
+## scraper.py — Phase 2 network primitive
+
+`scraper.py` now has a Rust replacement in `src/scraper.rs` that mirrors
+every public function in the Python source. The parity suite in
+`tests/scraper_parity.rs` and `tests/parity/scraper_parity.rs` invokes the
+original Python module on the same JSON input for 12 scenarios
+(normalization, validation, HTML parsing, MOAT response parsing, static
+bridges, transport/IP inference, history load/save, update, prune,
+write_sorted, classify_zip_folder) and asserts byte-identical JSON output.
+6 additional Rust-only tests cover the mock-HTTP fetcher paths and the
+typed-error branches.
+
+### Flagged behavior not ported 1:1
+
+- **`build_zip(stats)` ZIP archive write**: requires a `zip` crate which is
+  not in the workspace dependency set. The pure decision logic
+  (`classify_zip_folder(name, recent_hours)`) is ported and parity-tested;
+  the actual `zipfile.ZipFile(...).write(...)` side effect is not. Callers
+  that need the archive must compose `classify_zip_folder` with their own
+  ZIP implementation.
+
+- **`main()` orchestration**: the Python `main()` function composes the
+  above primitives with asyncio (`fetch_github_async`), GitHub source
+  fetch, `update_readme`, `build_zip`, and writes `data/latest-results.json`.
+  The Rust port exposes all primitive functions but does not provide a
+  single `main()` entry point. Callers must compose
+  `fetch_torproject` + `fetch_moat` + `get_static` + `merge_raw_into_history`
+  + `prune_history` + `save_history` + `write_bridge_files` +
+  `write_testing_json` + `update_readme` themselves. The asyncio-based
+  GitHub fetch is not ported (would require tokio or a blocking equivalent).
+
+- **`monitoring.structured_logger.record_silent_failure` calls**: the
+  Python source calls `record_silent_failure('scraper:LINE', exc)` inside
+  every `except Exception` block. The Rust port replaces these with
+  `tracing::warn!` / `tracing::info!` calls (a no-op by default unless the
+  caller installs a `tracing-subscriber`).
+
+- **Minimal HTML parser fidelity**: `parse_bridgelines_html` is implemented
+  with a minimal hand-written HTML extractor (`find_element_text_by_id`,
+  `find_all_elements_text`, `strip_tags_to_text`, `find_matching_close_tag`)
+  rather than pulling in the `scraper` or `html5ever` crates. The extractor
+  handles the well-formed HTML returned by `bridges.torproject.org` and the
+  test fixtures used in the parity tests. Malformed HTML (unclosed tags,
+  entity references, CDATA sections, comments containing tag-like
+  substrings) may produce different output from BeautifulSoup. If the
+  upstream HTML format changes, re-run the parity tests to detect drift.
+
+- **Production `ReqwestHttpFetch` requires the `network` Cargo feature**:
+  the default build does not compile `reqwest`. Tests use the mock
+  `MockHttpFetch` implementation; production callers must enable the
+  `network` feature (`cargo build --features network`) to get the
+  reqwest-backed HTTP client.
+
+- **`StdTcpProbe` requires `host:port` to parse as a `SocketAddr`**: the
+  Python `socket.create_connection((host, port))` performs DNS resolution
+  internally. The Rust `std::net::TcpStream::connect_timeout` requires a
+  pre-resolved `SocketAddr`. Production callers that need DNS resolution
+  should resolve the host via `std::net::ToSocketAddrs` before calling
+  `tcp_reachable`, or wrap `StdTcpProbe` in a resolver-aware adapter.
+
+## onionhop_collector.py — Phase 2 network primitive
+
+`onionhop_collector.py` now has a Rust replacement in
+`src/onionhop_collector.rs` that mirrors every public function in the
+Python source. The parity suite in `tests/onionhop_collector_parity.rs`
+and `tests/parity/onionhop_collector_parity.rs` invokes the original
+Python module on the same JSON input for 14 scenarios (is_valid,
+strip_prefix, transport_token, detect_transport, detect_ip_version,
+is_fronted, extract_front_host, extract_endpoint, parse_iso_safe,
+entry_last_seen, load_history, cleanup_history, record_bridge,
+save_history) and asserts byte-identical JSON output. 10 additional
+Rust-only tests cover the mock-HTTP fetcher paths, the mock
+ReachabilityProbe paths, and the missing-file edge cases.
+
+### Flagged behavior not ported 1:1
+
+- **`_test_many` concurrency**: the Python original uses
+  `concurrent.futures.ThreadPoolExecutor(max_workers=min(MAX_WORKERS,
+  len(candidates)))` to probe bridges in parallel. The Rust port
+  (`test_many_with_probes`) runs probes sequentially because the
+  injectable `ReachabilityProbe` trait is `Sync`-bounded and the
+  capping/clamping behavior (MAX_TEST_PER_LIST, MAX_WORKERS) is preserved
+  exactly. Production callers that want parallelism can wrap the probe in
+  their own thread pool (e.g. `rayon::scope` or `std::thread::scope`).
+
+- **`_test_tls` SNI behavior**: the Python original determines SNI by
+  attempting `ipaddress.ip_address(host)` and using `sni = None` for IP
+  literals and `sni = host` for DNS names. The Rust `ReachabilityProbe`
+  trait delegates SNI handling to the probe implementation; the production
+  `StdTcpProbe` in `scraper.rs` does not implement TLS at all (only TCP
+  connect). A production TLS-capable probe should be added before relying
+  on `is_reachable` for fronted bridges.
+
+- **`monitoring.structured_logger.record_silent_failure` calls**: same as
+  `scraper.py` — replaced with `tracing::warn!` / `tracing::info!` calls.
+
+- **`main()` orchestration**: the Python `main()` function composes
+  `_cleanup_history` + `_load_history` + pooled-transport fetch loop +
+  fronted-transport loop + `_save_history` + log lines. The Rust port
+  exposes all primitive functions but does not provide a single `main()`
+  entry point.
+
+- **`save_history` sort_keys**: the Python original uses
+  `json.dumps(history, indent=2, sort_keys=True, ensure_ascii=False)`.
+  The Rust port manually sorts the keys into a new `serde_json::Map` before
+  `to_string_pretty` because `serde_json::Map` (without the `preserve_order`
+  feature) already iterates in `BTreeMap`-sorted order. The resulting JSON
+  is byte-identical to Python's output for the test fixtures; very large
+  histories with non-string keys would diverge, but history keys are
+  always bridge-line strings.
+
+- **`_log` timestamp format**: the Python `_log` uses
+  `datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")` and writes to stdout
+  via `print(..., flush=True)`. The Rust `log` function uses
+  `Utc::now().format("%Y-%m-%d %H:%M:%S")` and emits via `tracing::info!`,
+  which writes to stderr by default. The timestamp format is preserved;
+  the output stream differs (stdout vs stderr) and the message prefix is
+  `[onionhop] [stamp] msg` in both.

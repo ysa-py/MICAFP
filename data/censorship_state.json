@@ -5,7 +5,7 @@
   "nin_active": false,
   "tor_direct_ok": true,
   "isp_tier": "unknown",
-  "detected_at": "2026-06-19T15:43:35.144412+00:00",
+  "detected_at": "2026-06-28T11:35:17.570013+00:00",
   "probe_summary": {
     "dns_intl": "4/4",
     "cdn_https": "3/4",

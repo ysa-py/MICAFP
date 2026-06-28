@@ -1,16 +1,20 @@
 # JA3/TLS Fingerprint Rotation Report
-**Generated:** 2026-06-28 15:21:51 UTC  
+**Generated:** 2026-06-28 07:08:15 UTC  
 
 ## Summary
 
-- JA3 hashes checked against SIAM blocklist: **0**
-- Blocked hashes detected: **0**
-- Rotation needed: **NO**
+- JA3 hashes checked against SIAM blocklist: **1**
+- Blocked hashes detected: **1**
+- Rotation needed: **YES**
 - SIAM blocked-hash database size: **9**
 
 ## Blocked Hash Details
 
-> No blocked JA3 hashes detected in current baseline. Continue monitoring every 72 hours.
+### `a0e9f5d64349fb13191bc781f81f42e1`
+- **Profile:** Tor Browser 11.x / obfs4 default
+- **Action:** `random_padding`
+- **Padding bytes:** 20
+- **SIAM defeat note:** Add random TLS padding extension (RFC 7685) to alter JA3 hash.
 
 ## Universal Recommendations
 

@@ -69,6 +69,21 @@ jobs:
           bash scripts/check_shell_entrypoints.sh
           python scripts/security_scan.py
 
+      - name: Set up Rust (parity-test gate)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 'stable'
+          components: rustfmt, clippy
+
+      - name: Rust parity tests (Python→Rust migration gate)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          cargo fmt --all -- --check
+          cargo clippy --workspace --all-targets -- -D warnings
+          cargo test --workspace
+
       - name: Revert failed generated changes and write analysis
         if: failure()
         run: |

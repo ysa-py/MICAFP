@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-28T15:21:51.285913+00:00",
-  "total_configs": 257,
-  "average_dpi_score": 0.7625,
+  "generated_at": "2026-06-27T21:35:19.555959+00:00",
+  "total_configs": 255,
+  "average_dpi_score": 0.7629,
   "snis_used": [
     "www.aparat.com",
     "www.digikala.com",
@@ -1084,278 +1084,260 @@
       "dpi_score": 0.7
     },
     {
-      "ip": "71.212.145.164",
-      "port": 2555,
-      "sni": "cdn.telewebion.com",
-      "dpi_score": 0.7
-    },
-    {
       "ip": "72.10.162.51",
       "port": 12693,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "72.56.118.69",
       "port": 25986,
-      "sni": "www.digikala.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "72.65.246.86",
       "port": 19002,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "72.77.94.224",
       "port": 4158,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "73.24.147.174",
       "port": 37399,
-      "sni": "www.digikala.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "75.134.104.193",
       "port": 46735,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "75.182.211.20",
       "port": 9444,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "76.156.82.113",
       "port": 8214,
-      "sni": "www.digikala.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "78.159.118.224",
       "port": 19998,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "78.199.154.217",
       "port": 34161,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "78.63.213.108",
       "port": 9130,
-      "sni": "www.digikala.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "79.116.17.19",
       "port": 4443,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "79.116.183.146",
       "port": 4443,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "80.31.93.110",
       "port": 8888,
-      "sni": "www.digikala.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "80.96.58.89",
       "port": 9130,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "81.245.216.98",
       "port": 6969,
-      "sni": "www.aparat.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "81.97.134.30",
       "port": 587,
-      "sni": "www.digikala.com",
-      "dpi_score": 0.7
-    },
-    {
-      "ip": "82.127.83.55",
-      "port": 2000,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.165.34.70",
       "port": 443,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 1.0
     },
     {
       "ip": "82.168.192.237",
       "port": 5657,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.64.115.17",
       "port": 990,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.64.115.17",
       "port": 993,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.64.193.83",
       "port": 12867,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.65.66.15",
       "port": 16380,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.66.251.91",
       "port": 30030,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.67.140.199",
       "port": 46767,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "82.67.177.210",
       "port": 443,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 1.0
     },
     {
       "ip": "83.113.75.134",
       "port": 12345,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "83.229.15.194",
       "port": 65535,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "83.229.15.208",
       "port": 65535,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "84.120.92.142",
       "port": 9003,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "84.22.109.77",
       "port": 8088,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "84.52.216.169",
       "port": 8090,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "85.121.176.36",
       "port": 8080,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "85.121.5.22",
       "port": 9130,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "85.165.253.3",
       "port": 9076,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "86.119.0.151",
       "port": 25262,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "86.30.100.123",
       "port": 42957,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "86.94.218.55",
       "port": 9085,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "87.104.241.106",
       "port": 14015,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "87.106.143.190",
       "port": 23188,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "87.106.159.211",
       "port": 25047,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "87.106.210.134",
       "port": 8444,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "87.121.52.247",
       "port": 9216,
-      "sni": "www.digikala.com",
-      "dpi_score": 0.7
-    },
-    {
-      "ip": "88.72.203.54",
-      "port": 8080,
       "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
@@ -1516,14 +1498,14 @@
       "dpi_score": 0.7
     },
     {
-      "ip": "95.141.43.207",
-      "port": 15216,
+      "ip": "94.63.2.31",
+      "port": 25565,
       "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
-      "ip": "95.179.192.8",
-      "port": 8080,
+      "ip": "95.141.43.207",
+      "port": 15216,
       "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
@@ -1531,24 +1513,30 @@
       "ip": "95.179.192.8",
       "port": 8080,
       "sni": "www.digikala.com",
+      "dpi_score": 0.7
+    },
+    {
+      "ip": "95.179.192.8",
+      "port": 8080,
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     },
     {
       "ip": "95.215.204.173",
       "port": 10993,
-      "sni": "cdn.telewebion.com",
+      "sni": "www.aparat.com",
       "dpi_score": 0.7
     },
     {
       "ip": "95.216.37.112",
       "port": 59745,
-      "sni": "www.aparat.com",
+      "sni": "www.digikala.com",
       "dpi_score": 0.7
     },
     {
       "ip": "97.115.72.184",
       "port": 3786,
-      "sni": "www.digikala.com",
+      "sni": "cdn.telewebion.com",
       "dpi_score": 0.7
     }
   ]

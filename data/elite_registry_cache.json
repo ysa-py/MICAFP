@@ -1,6 +1,6 @@
 {
-  "last_refresh": 1781876207.0144534,
-  "refresh_count": 2,
+  "last_refresh": 1782626344.5583882,
+  "refresh_count": 3,
   "models": {
     "@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
       "model_id": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
@@ -159,5 +159,5 @@
       "is_available": true
     }
   },
-  "saved_at": "2026-06-19T13:36:47.014501+00:00"
+  "saved_at": "2026-06-28T05:59:04.558435+00:00"
 }

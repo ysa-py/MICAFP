@@ -491,10 +491,58 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
+  rust-parity-gate:
+    name: Rust Parity Tests (Python→Rust migration gate)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Bootstrap environment defaults
+        run: |
+          set -euo pipefail
+          bash scripts/github_actions_env_bootstrap.sh
+
+      - name: Set up Python (parity tests subprocess-invoke Python originals)
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml requests aiohttp structlog tenacity rich
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 'stable'
+          components: rustfmt, clippy
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-parity-${{ hashFiles('Cargo.toml', 'Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (deny warnings)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Parity tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: cargo test --workspace
+
   cleanup:
     name: AI Ultra-Pro Cleanup
     if: always()
-    needs: [check-all-providers]
+    needs: [check-all-providers, rust-parity-gate]
     uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
     secrets: inherit
     with:

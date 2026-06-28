@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-28T15:02:05.136209+00:00",
-  "total_bridges": 1454,
+  "generated_at": "2026-06-27T21:16:00.203690+00:00",
+  "total_bridges": 1443,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -1548,15 +1548,6 @@
     },
     {
       "bridge_line": "194.61.120.17:8080 C3AA3D6FF5D0E639EFCB9AC964A4136076611054",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -4031,25 +4022,7 @@
       "notes": []
     },
     {
-      "bridge_line": "Bridge 128.52.137.187:443 296A293A81CE4D77F33B801B2CD13FB7FD7EE469",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
       "bridge_line": "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "Bridge 168.235.74.31:11111 503E5E825A576CF017B4B49492F56A852E877E91",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -4077,15 +4050,6 @@
     },
     {
       "bridge_line": "Bridge 188.68.55.68:8443 AAB7DAE2F38A907951899A53A3EE781D180D8CAB",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "Bridge 194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -7145,15 +7109,6 @@
       "notes": []
     },
     {
-      "bridge_line": "obfs4 71.212.145.164:2555 9FB06D6117620EB060A29FE93E3CE889197A6EF7 cert=PDRVZCA3a3Vss8lMr3slhNMC4Hd7Af6uqQ8yf/ME9+NK+/o+obQv+CgekbuORmoSxU/uHA iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
       "bridge_line": "obfs4 71.54.168.76:29003 47E05016F24C7C3947ED3AB80AF224363118302F cert=ColKK1RnQXuaCGyiTZ6AhsKGGaPkQOYrNZ/l/AgZiwsc66AwR3+41yJnVXZJ0YnBIP12CA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -8270,15 +8225,6 @@
       "notes": []
     },
     {
-      "bridge_line": "obfs4 87.167.226.57:45439 469CC6FA33961F5322C5D00007B42EF3D5B398CC cert=1r/SSKByXjRsy140delLG8r8n7m3GFGjsdGFajSSwAd6MeObBXWIVjRqOAmaUUNENMayLA iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
       "bridge_line": "obfs4 87.195.159.238:55766 97A77E789F724E9E008BEEED993CC0B6DB2D085F cert=T/WxxliJll2OdV5HxO1kVk1ifaGu5QubDcFsnCWdfq5gpWtikdahyGHPw2wbiX/GgTLaKA iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -8316,15 +8262,6 @@
     },
     {
       "bridge_line": "obfs4 88.163.148.25:30030 4E6201AB5CE3C498E50F0A6CED7F7B7D0E656D34 cert=2UiKrAPvJ3BMfadLSHLmEmtUKpNsYDVE+VB5ikSfWv4MFjiekHRfMrEm+ix+VtVamL6yFw iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "obfs4 88.72.203.54:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -9935,15 +9872,6 @@
       "notes": []
     },
     {
-      "bridge_line": "obfs4 [2a00:10:6540:6501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
       "bridge_line": "obfs4 [2a00:10:6b0e:8901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
@@ -9954,15 +9882,6 @@
     },
     {
       "bridge_line": "obfs4 [2a00:10:6b13:e501:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "obfs4 [2a00:10:6b23:901:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -9990,15 +9909,6 @@
     },
     {
       "bridge_line": "obfs4 [2a00:10:6f29:2201:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "obfs4 [2a00:10:6f37:8d01:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -10350,15 +10260,6 @@
     },
     {
       "bridge_line": "obfs4 [2a01:4f9:c010:c2c9::1]:9003 E39E2A16023AC199A1927B0F86008FBE51C02058 cert=ILRHQaiIIX4AfvyAT631YBUcqxKFUBJ0cgnZZL4UAFlH8E2lLAhp2GGqcn70qZIxq64FYA iat-mode=0",
-      "ech_detected": false,
-      "pq_detected": false,
-      "ech_source": "",
-      "pq_source": "",
-      "bonus": 0.0,
-      "notes": []
-    },
-    {
-      "bridge_line": "obfs4 [2a01:4f9:c011:6d47::1]:9443 761A7017012F15ABEDD85BFA3925AB46A99584AF cert=D4NJqrY6dn68XRRy89t35C3VmbPt4qoppmNdfnGtD/ILSvy3LQ/Dw1eL7IYx29wrimWIdg iat-mode=0",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",

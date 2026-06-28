@@ -2,7 +2,7 @@
   "level": 3,
   "label": "Elevated — Tor Blocked",
   "confidence": 0.838,
-  "detected_at": "2026-06-19T15:43:35.144773+00:00",
+  "detected_at": "2026-06-28T11:35:17.570630+00:00",
   "isp_tier": "unknown",
   "nin_active": false,
   "dpi_systems_active": [

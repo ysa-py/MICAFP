@@ -315,6 +315,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 'stable'
+          components: rustfmt, clippy
 
       # FIX: Cargo.lock was missing from the repository, causing hashFiles() to
       # return '' and the cache key to never match. We now generate Cargo.lock
@@ -337,7 +338,8 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             bridge-probe/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('bridge-probe/Cargo.lock', 'bridge-probe/Cargo.toml') }}
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('bridge-probe/Cargo.lock', 'bridge-probe/Cargo.toml', 'Cargo.toml', 'Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
 
       - name: Build bridge-probe (release)
@@ -363,6 +365,61 @@ jobs:
           name: bridge-probe-bin
           path: artifact-bin/
           retention-days: 1
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # NEW: Rust parity-tests gate. Runs the Python→Rust migration parity
+  # suite (tests/parity/*.rs) which subprocess-invokes the Python original
+  # on the same input and asserts byte-identical output. This is the
+  # migration's quality gate — every ported module must pass here before
+  # the corresponding Python file can be deleted.
+  # ────────────────────────────────────────────────────────────────────────────
+  rust-parity-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Bootstrap environment defaults
+        run: |
+          set -euo pipefail
+          bash scripts/github_actions_env_bootstrap.sh
+
+      - name: Set up Python (for parity-test subprocess calls)
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python deps (parity tests import Python originals)
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install pyyaml requests aiohttp structlog tenacity rich
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 'stable'
+          components: rustfmt, clippy
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-parity-${{ hashFiles('Cargo.toml', 'Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (deny warnings)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Parity tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: cargo test --workspace
 
   # ────────────────────────────────────────────────────────────────────────────
   build-go:
@@ -464,7 +521,7 @@ jobs:
   scrape-and-test:
     # ────────────────────────────────────────────────────────────────────────────
     runs-on: ubuntu-latest
-    needs: [quality-gate, build-rust, build-go]
+    needs: [quality-gate, build-rust, build-go, rust-parity-tests]
     timeout-minutes: 50
 
     steps:
@@ -1092,7 +1149,7 @@ jobs:
   cleanup:
     name: AI Ultra-Pro Cleanup
     if: always()
-    needs: [quality-gate, build-rust, build-go, scrape-and-test, package-final-artifact]
+    needs: [quality-gate, build-rust, build-go, rust-parity-tests, scrape-and-test, package-final-artifact]
     uses: ./.github/workflows/ai-ultra-pro-cleanup.yml
     secrets: inherit
     with:

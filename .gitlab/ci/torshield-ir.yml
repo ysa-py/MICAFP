@@ -65,6 +65,26 @@ torshield-ir:build-rust:
     paths:
       - bridge-probe/target/release/bridge-probe
 
+# Rust parity-tests gate for the Python→Rust migration.
+# Runs the same `cargo test --workspace` suite as the GitHub Actions
+# `rust-parity-tests` job. The image needs both Rust and Python because
+# the parity tests subprocess-invoke the Python originals.
+torshield-ir:rust-parity-tests:
+  stage: quality
+  image: rust:1.80
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  before_script:
+    - apt-get update -y && apt-get install -y python3 python3-pip
+    - python3 -m pip install --break-system-packages pyyaml requests aiohttp structlog tenacity rich
+    - rustup component add rustfmt clippy
+  script:
+    - cargo fmt --all -- --check
+    - cargo clippy --workspace --all-targets -- -D warnings
+    - PYTHONPATH=$CI_PROJECT_DIR cargo test --workspace
+
 torshield-ir:scrape:
   stage: scrape
   extends: .python-base
@@ -72,7 +92,7 @@ torshield-ir:scrape:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
-  needs: [ "torshield-ir:quality", "torshield-ir:build-go", "torshield-ir:build-rust" ]
+  needs: [ "torshield-ir:quality", "torshield-ir:build-go", "torshield-ir:build-rust", "torshield-ir:rust-parity-tests" ]
   script:
     - python main.py --mode full
     - python ooni_correlator.py || true

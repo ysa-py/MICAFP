@@ -345,6 +345,47 @@ jobs:
           path: bridge-probe-bin
       - notify-slack-on-failure
 
+  # ══════════════════════════════════════════════════════════════════════════
+  # 3b) BUILD — Rust parity-tests gate for the Python→Rust migration.
+  # Runs `cargo test --workspace` against the main torshield-ir-ultra crate
+  # (which subprocess-invokes the Python originals via PYTHONPATH).
+  # ══════════════════════════════════════════════════════════════════════════
+  rust-parity-tests:
+    executor: rust-180
+    steps:
+      - checkout-with-history
+      - run:
+          name: "Install Python deps (parity tests subprocess-invoke Python originals)"
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y python3 python3-pip
+            python3 -m pip install --user --break-system-packages pyyaml requests aiohttp structlog tenacity rich || \
+              python3 -m pip install --user pyyaml requests aiohttp structlog tenacity rich
+      - run:
+          name: "Install rustfmt + clippy"
+          command: |
+            rustup component add rustfmt clippy
+      - restore_cache:
+          keys:
+            - cargo-parity-{{ checksum "Cargo.toml" }}-v1
+            - cargo-parity-v1
+      - run:
+          name: "Format check"
+          command: cargo fmt --all -- --check
+      - run:
+          name: "Clippy (deny warnings)"
+          command: cargo clippy --workspace --all-targets -- -D warnings
+      - run:
+          name: "Parity tests (Python→Rust migration gate)"
+          command: PYTHONPATH=$PWD cargo test --workspace
+      - save_cache:
+          key: cargo-parity-{{ checksum "Cargo.toml" }}-v1
+          paths:
+            - ~/.cargo/registry
+            - ~/.cargo/git
+            - target
+      - notify-slack-on-failure
+
   build-go:
     executor: go-122
     steps:
@@ -585,10 +626,11 @@ workflows:
           requires: [ env-bootstrap ]
       - go-quality-gate
       - build-rust
+      - rust-parity-tests
       - build-go:
           requires: [ env-bootstrap ]
       - scrape:
-          requires: [ quality-gate, build-rust, build-go ]
+          requires: [ quality-gate, build-rust, rust-parity-tests, build-go ]
           filters: { branches: { only: [ main, master ] } }
       - ai-rerank:
           requires: [ scrape ]
