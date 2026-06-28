@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-06-28T12:49:20.540029+00:00",
-  "total_scored": 1452,
+  "generated_at": "2026-06-28T15:21:57.023369+00:00",
+  "total_scored": 1454,
   "tier_summary": {
     "PHANTOM": 6,
     "STEALTH": 228,
     "COVERT": 764,
-    "DETECTED": 454
+    "DETECTED": 456
   },
   "transport_summary": {
     "webtunnel": 185,
     "snowflake": 4,
     "obfs4": 809,
-    "vanilla": 454
+    "vanilla": 456
   },
   "results": [
     {
@@ -27054,6 +27054,26 @@
       "recommendation": "🚫 بلاک می‌شود — سیستم SIAM کاملاً تشخیص می‌دهد | Will be blocked by SIAM system"
     },
     {
+      "bridge_line": "194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
+      "transport": "vanilla",
+      "port": 6398,
+      "iran_siam_score": 0.2171,
+      "bypass_tier": "DETECTED",
+      "layers_bypassed": 1,
+      "evasion_flags": [],
+      "layer_scores": {
+        "L1_packet_length": 0.02,
+        "L2_iat_timing": 0.05,
+        "L3_flow_features": 0.04,
+        "L4_ja3_tls": 0.75,
+        "L5_cert_sni": 0.05,
+        "L6_alpn_anomaly": 0.03,
+        "L7_temporal": 0.02,
+        "L8_as_graph": 0.55
+      },
+      "recommendation": "🚫 بلاک می‌شود — سیستم SIAM کاملاً تشخیص می‌دهد | Will be blocked by SIAM system"
+    },
+    {
       "bridge_line": "195.128.100.42:64103 AD899E211E04AA9DB5820EA6031F8E40E5FB158E",
       "transport": "vanilla",
       "port": 64103,
@@ -30377,6 +30397,26 @@
       "bridge_line": "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A",
       "transport": "vanilla",
       "port": 5316,
+      "iran_siam_score": 0.2171,
+      "bypass_tier": "DETECTED",
+      "layers_bypassed": 1,
+      "evasion_flags": [],
+      "layer_scores": {
+        "L1_packet_length": 0.02,
+        "L2_iat_timing": 0.05,
+        "L3_flow_features": 0.04,
+        "L4_ja3_tls": 0.75,
+        "L5_cert_sni": 0.05,
+        "L6_alpn_anomaly": 0.03,
+        "L7_temporal": 0.02,
+        "L8_as_graph": 0.55
+      },
+      "recommendation": "🚫 بلاک می‌شود — سیستم SIAM کاملاً تشخیص می‌دهد | Will be blocked by SIAM system"
+    },
+    {
+      "bridge_line": "Bridge 194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
+      "transport": "vanilla",
+      "port": 6398,
       "iran_siam_score": 0.2171,
       "bypass_tier": "DETECTED",
       "layers_bypassed": 1,
