@@ -687,6 +687,10 @@
     "score": 56.0,
     "transport": "vanilla"
   },
+  "194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30": {
+    "score": 51.0,
+    "transport": "vanilla"
+  },
   "195.128.100.42:64103 AD899E211E04AA9DB5820EA6031F8E40E5FB158E": {
     "score": 51.0,
     "transport": "vanilla"
@@ -1805,6 +1809,10 @@
   },
   "Bridge 188.68.55.68:8443 AAB7DAE2F38A907951899A53A3EE781D180D8CAB": {
     "score": 49.0,
+    "transport": "vanilla"
+  },
+  "Bridge 194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30": {
+    "score": 51.0,
     "transport": "vanilla"
   },
   "Bridge 217.217.249.205:9001 57CE78F6F2C5377429AD653639443DB1653F0D16": {

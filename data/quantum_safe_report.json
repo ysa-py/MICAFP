@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-28T12:30:13.428923+00:00",
-  "total_bridges": 1452,
+  "generated_at": "2026-06-28T15:02:05.136209+00:00",
+  "total_bridges": 1454,
   "ech_capable": 0,
   "pq_capable": 0,
   "both_capable": 0,
@@ -1548,6 +1548,15 @@
     },
     {
       "bridge_line": "194.61.120.17:8080 C3AA3D6FF5D0E639EFCB9AC964A4136076611054",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",
@@ -4068,6 +4077,15 @@
     },
     {
       "bridge_line": "Bridge 188.68.55.68:8443 AAB7DAE2F38A907951899A53A3EE781D180D8CAB",
+      "ech_detected": false,
+      "pq_detected": false,
+      "ech_source": "",
+      "pq_source": "",
+      "bonus": 0.0,
+      "notes": []
+    },
+    {
+      "bridge_line": "Bridge 194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
       "ech_detected": false,
       "pq_detected": false,
       "ech_source": "",

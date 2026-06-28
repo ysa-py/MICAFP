@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-28T12:30:12.957122+00:00",
+  "updated_at": "2026-06-28T15:02:04.651474+00:00",
   "weights": {
     "vanilla": 0.0,
     "webtunnel": 0.0054,
@@ -19,8 +19,8 @@
     "vanilla": {
       "working": 0,
       "blocked": 0,
-      "unknown": 908,
-      "total": 908
+      "unknown": 912,
+      "total": 912
     },
     "webtunnel": {
       "working": 2,

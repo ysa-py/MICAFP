@@ -10523,6 +10523,14 @@
       "flags": []
     },
     {
+      "bridge_line": "194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
+      "transport": "vanilla",
+      "port": 6398,
+      "anti_ai_dpi_score": 0.05,
+      "iran_ml_dpi_risk": "CRITICAL",
+      "flags": []
+    },
+    {
       "bridge_line": "195.154.114.42:29008 67B11CA635C74B6E618753693F527BE5C54FA77A",
       "transport": "vanilla",
       "port": 29008,
@@ -11798,6 +11806,14 @@
       "bridge_line": "Bridge 188.213.91.150:5316 E8ABF16521B23C52CE633C6A2C985D226CFE1A8A",
       "transport": "vanilla",
       "port": 5316,
+      "anti_ai_dpi_score": 0.05,
+      "iran_ml_dpi_risk": "CRITICAL",
+      "flags": []
+    },
+    {
+      "bridge_line": "Bridge 194.76.168.99:6398 2BFBEEA0AD4FB38F61C64CEDA21673961566BF30",
+      "transport": "vanilla",
+      "port": 6398,
       "anti_ai_dpi_score": 0.05,
       "iran_ml_dpi_risk": "CRITICAL",
       "flags": []

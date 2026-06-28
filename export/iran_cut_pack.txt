@@ -1,5 +1,5 @@
 # TorShield-IR — Internet Cut Pack (شبکه ملی / NIN Mode)
-# Generated: 2026-06-28 12:30 UTC
+# Generated: 2026-06-28 15:02 UTC
 # Bridges: 4  (survivable during full international internet cut)
 # Order: Snowflake → WebTunnel (CDN) → meek-lite (Azure)
 #
