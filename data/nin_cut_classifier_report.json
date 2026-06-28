@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-28T08:24:05.029437+00:00",
-  "total_bridges": 633,
+  "generated_at": "2026-06-28T11:02:53.179497+00:00",
+  "total_bridges": 637,
   "green_count": 6,
-  "yellow_count": 253,
-  "red_count": 374,
+  "yellow_count": 254,
+  "red_count": 377,
   "scenario": "Complete international internet blackout. Only traffic through Iranian domestic ASNs reachable. GREEN = high confidence reachable, YELLOW = CDN-dependent, RED = blocked.",
   "classification_logic": {
     "GREEN": "Snowflake, meek_lite (CDN by design) OR WebTunnel via Iranian/Cloudflare CDN SNI",
@@ -1204,6 +1204,14 @@
       "tier": "RED"
     },
     {
+      "raw": "83.151.206.122:9001 9E8B19CA2B5D504668242DB2B1D20BAB5DC6744E",
+      "transport": "vanilla",
+      "ip": "83.151.206.122",
+      "port": 9001,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
       "raw": "84.22.109.77:1312 CEF423251E83353BD875CB5327B458F4C8751170",
       "transport": "vanilla",
       "ip": "84.22.109.77",
@@ -2056,6 +2064,14 @@
       "transport": "obfs4",
       "ip": "179.214.0.29",
       "port": 8668,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
+      "raw": "obfs4 181.118.218.29:4443 F1555089C07B70D7B9513FE19F2A630D03460FAC cert=T6S21IP6FyvyuE/07jJYmhp8Qtv6gUbUK6Pk2SPsnzHSt62zUBkbXFCmXdBdm8bl7syUEw iat-mode=0",
+      "transport": "obfs4",
+      "ip": "181.118.218.29",
+      "port": 4443,
       "sni": "",
       "tier": "RED"
     },
@@ -2980,6 +2996,14 @@
       "tier": "RED"
     },
     {
+      "raw": "obfs4 71.212.145.164:2555 9FB06D6117620EB060A29FE93E3CE889197A6EF7 cert=PDRVZCA3a3Vss8lMr3slhNMC4Hd7Af6uqQ8yf/ME9+NK+/o+obQv+CgekbuORmoSxU/uHA iat-mode=0",
+      "transport": "obfs4",
+      "ip": "71.212.145.164",
+      "port": 2555,
+      "sni": "",
+      "tier": "RED"
+    },
+    {
       "raw": "obfs4 72.10.162.51:12693 8F219F64DC11351F00C3A50B64990EE50E784F74 cert=/I3NYd0UcxUh83Xmsj2j8GNOeNBHmJ8jspO0/3ijqKxAlIBedJ9/AC80fXkY6IyEwXYzQQ iat-mode=1",
       "transport": "obfs4",
       "ip": "72.10.162.51",
@@ -3330,6 +3354,14 @@
       "port": 9216,
       "sni": "",
       "tier": "RED"
+    },
+    {
+      "raw": "obfs4 88.72.203.54:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0",
+      "transport": "obfs4",
+      "ip": "88.72.203.54",
+      "port": 8080,
+      "sni": "",
+      "tier": "YELLOW"
     },
     {
       "raw": "obfs4 88.87.54.244:8080 2B2F89D522FB81758453A5DF9D30B330A706647B cert=jYWrkq03zXjbiqoyIUPZMpgXt2fNCA87sIyP0yvebHAqcF5I/ixawQE9ymlA0ZZvvqdnPQ iat-mode=0",
