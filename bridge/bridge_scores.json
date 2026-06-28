@@ -1783,8 +1783,16 @@
     "score": 39.0,
     "transport": "vanilla"
   },
+  "Bridge 128.52.137.187:443 296A293A81CE4D77F33B801B2CD13FB7FD7EE469": {
+    "score": 56.0,
+    "transport": "vanilla"
+  },
   "Bridge 141.95.3.138:1025 409DF1FC6323D24CFAEF2DF6707A52339D0F2C91": {
     "score": 44.0,
+    "transport": "vanilla"
+  },
+  "Bridge 168.235.74.31:11111 503E5E825A576CF017B4B49492F56A852E877E91": {
+    "score": 51.0,
     "transport": "vanilla"
   },
   "Bridge 185.194.93.135:9001 F8C2F613EC974A042603490EE7F64DD8D1663377": {
@@ -3651,6 +3659,10 @@
     "score": 65.0,
     "transport": "obfs4"
   },
+  "obfs4 87.167.226.57:45439 469CC6FA33961F5322C5D00007B42EF3D5B398CC cert=1r/SSKByXjRsy140delLG8r8n7m3GFGjsdGFajSSwAd6MeObBXWIVjRqOAmaUUNENMayLA iat-mode=0": {
+    "score": 65.0,
+    "transport": "obfs4"
+  },
   "obfs4 87.195.159.238:55766 97A77E789F724E9E008BEEED993CC0B6DB2D085F cert=T/WxxliJll2OdV5HxO1kVk1ifaGu5QubDcFsnCWdfq5gpWtikdahyGHPw2wbiX/GgTLaKA iat-mode=0": {
     "score": 65.0,
     "transport": "obfs4"
@@ -4403,6 +4415,10 @@
     "score": 70.0,
     "transport": "obfs4"
   },
+  "obfs4 [2a00:10:6f37:8d01:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0": {
+    "score": 70.0,
+    "transport": "obfs4"
+  },
   "obfs4 [2a00:10:6f3b:f201:be24:11ff:feea:70d5]:8080 47CD157813D346BCC2AC317B2BD6D0E938713747 cert=WA56UpJ3QJK48Mdc7km6AfQ9WFr5jjDH+QO6TvepZ/fdntRzG+/njxIO9SjoE0MlJ6+hYw iat-mode=0": {
     "score": 70.0,
     "transport": "obfs4"
@@ -4556,6 +4572,10 @@
     "transport": "obfs4"
   },
   "obfs4 [2a01:4f9:c010:c2c9::1]:9003 E39E2A16023AC199A1927B0F86008FBE51C02058 cert=ILRHQaiIIX4AfvyAT631YBUcqxKFUBJ0cgnZZL4UAFlH8E2lLAhp2GGqcn70qZIxq64FYA iat-mode=0": {
+    "score": 65.0,
+    "transport": "obfs4"
+  },
+  "obfs4 [2a01:4f9:c011:6d47::1]:9443 761A7017012F15ABEDD85BFA3925AB46A99584AF cert=D4NJqrY6dn68XRRy89t35C3VmbPt4qoppmNdfnGtD/ILSvy3LQ/Dw1eL7IYx29wrimWIdg iat-mode=0": {
     "score": 65.0,
     "transport": "obfs4"
   },

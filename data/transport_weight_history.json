@@ -538,5 +538,23 @@
       "vanilla": 4,
       "unknown": 6
     }
+  },
+  {
+    "ts": "2026-06-28T03:52:30.747637+00:00",
+    "weights": {
+      "vanilla": 0.0,
+      "webtunnel": 0.005434782608695652,
+      "obfs4": 0.0,
+      "snowflake": 0.9945652173913043,
+      "": 0.0
+    },
+    "scores": {
+      "snowflake": 30,
+      "webtunnel": 20,
+      "obfs4": 18,
+      "meek_lite": 16,
+      "vanilla": 4,
+      "unknown": 6
+    }
   }
 ]

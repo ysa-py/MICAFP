@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T23:36:04.933615+00:00",
+  "generated_at": "2026-06-28T04:10:53.724201+00:00",
   "provider_count": 1,
   "consensus_score": 0.98,
   "selected_strategies": [
@@ -17,7 +17,7 @@
         "obfs4_iat_boost",
         "ja3_randomize"
       ],
-      "reasoning": "obfs4's high AI detectability and NIN incompatibility necessitate protocol mutations to evade SIAM DPI's ML classifiers and maintain connectivity.",
+      "reasoning": "obfs4's AI detectability and high block rate necessitate timing and fingerprint mutations to evade SIAM's ML classifiers.",
       "_provider": "Provider 10 -- Mistral-Large-2"
     }
   ]
