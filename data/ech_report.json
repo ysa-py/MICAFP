@@ -1791,8 +1791,8 @@
       "tls_version": null,
       "ech_supported": false,
       "ech_grease": false,
-      "tls_probe_status": "timeout",
-      "tls_error_type": "TimeoutError"
+      "tls_probe_status": "connection_refused",
+      "tls_error_type": "ConnectionRefusedError"
     },
     {
       "bridge_line": "121.127.33.34:443 19BFCD8AD90626A7B5293B9914ACC203C48A111A",
