@@ -1,0 +1,157 @@
+@import 'tailwindcss';
+
+/*
+  MICAFP Enterprise Console — B2 Design Tokens
+  Background: dark neutral #0A0E14 -> #1A1F29
+  Accent: single deep emerald / petrol. One accent only.
+  Type: Inter (body) + JetBrains Mono (numeric/technical)
+  Medium radius, minimal shadows for depth (no glow).
+*/
+
+:root {
+  /* Surfaces (dark neutral ramp) */
+  --background: #0a0e14;
+  --surface: #10151d;
+  --surface-2: #151b24;
+  --surface-3: #1a1f29;
+  --elevated: #1e2530;
+
+  /* Text */
+  --foreground: #e5e9f0;
+  --muted-foreground: #8a93a3;
+  --faint-foreground: #5b6472;
+
+  /* Borders */
+  --border: #232b37;
+  --border-strong: #2e3846;
+
+  /* Single accent: deep emerald / petrol */
+  --accent: #2fbf87;
+  --accent-strong: #23a374;
+  --accent-foreground: #04120c;
+  --accent-soft: rgba(47, 191, 135, 0.12);
+  --accent-ring: rgba(47, 191, 135, 0.35);
+
+  /* Semantic status (used only for real state, muted enterprise tones) */
+  --status-ok: #2fbf87;
+  --status-warn: #d6a54a;
+  --status-danger: #d66a5a;
+  --status-info: #5a92d6;
+
+  --radius: 0.625rem;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-elevated: var(--elevated);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-faint-foreground: var(--faint-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-status-ok: var(--status-ok);
+  --color-status-warn: var(--status-warn);
+  --color-status-danger: var(--status-danger);
+  --color-status-info: var(--status-info);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background-color: var(--background);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numeric/technical values use mono per B2 */
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Depth without glow: minimal shadow only */
+.depth-1 {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.depth-2 {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Connection-state ring transition 600-800ms per B2 */
+.state-transition {
+  transition: stroke 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    fill 700ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* UI transition 200-400ms per B2 */
+.ui-transition {
+  transition: all 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes ring-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-rise {
+  animation: fade-rise 360ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+  border: 2px solid var(--background);
+}
